@@ -1,0 +1,25 @@
+{
+  "name": "sentinelai-x-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "login-script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sofiiii1411/sentinelAI_X.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/sofiiii1411/sentinelAI_X/issues"
+  },
+  "homepage": "https://github.com/sofiiii1411/sentinelAI_X#readme",
+  "dependencies": {
+    "xlsx": "^0.18.5"
+  }
+}

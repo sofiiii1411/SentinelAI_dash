@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>SentinelAI-X | Secure Access — Distributed Laboratory Security System</title>
+  <meta name="description" content="SentinelAI-X — The Intelligence Behind Laboratory Security. Detect. Analyze. Protect." />
+  <link rel="icon" type="image/svg+xml" href="logo.svg" />
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-heading: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-body);
+      background-color: #fafbfd;
+      background-image: 
+        radial-gradient(circle at 10% 12%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 35% 85%, rgba(52, 211, 153, 0.10) 0%, transparent 45%),
+        radial-gradient(circle at 75% 15%, rgba(244, 114, 182, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 90% 80%, rgba(167, 139, 250, 0.12) 0%, transparent 48%),
+        linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #fdfdff 100%);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    /* Ambient Outer Pastel Glows */
+    .ambient-halo-top-left {
+      position: fixed;
+      top: -12vw;
+      left: -12vw;
+      width: 50vw;
+      height: 50vw;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.20) 0%, rgba(52, 211, 153, 0.14) 40%, transparent 70%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .ambient-halo-bottom-right {
+      position: fixed;
+      bottom: -12vw;
+      right: -12vw;
+      width: 52vw;
+      height: 52vw;
+      background: radial-gradient(circle, rgba(244, 114, 182, 0.20) 0%, rgba(167, 139, 250, 0.16) 45%, transparent 70%);
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Viewport Stage: Single point view on desktop */
+    .viewport-stage {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 1280px;
+      padding: clamp(0.75rem, 2vh, 1.8rem) clamp(1rem, 2.5vw, 2.5rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      height: 100dvh;
+      max-height: 100vh;
+    }
+
+    /* Animated Multi-vibrant Border Frame */
+    .master-card-glow-frame {
+      width: 100%;
+      position: relative;
+      border-radius: 32px;
+      padding: 2.5px;
+      background: linear-gradient(120deg, 
+        rgba(56, 189, 248, 0.70), 
+        rgba(52, 211, 153, 0.60), 
+        rgba(251, 191, 36, 0.55), 
+        rgba(244, 114, 182, 0.65), 
+        rgba(167, 139, 250, 0.65), 
+        rgba(56, 189, 248, 0.70));
+      background-size: 300% 300%;
+      animation: movingVibrantBorder 6s ease infinite;
+      box-shadow: 
+        0 24px 65px -15px rgba(99, 102, 241, 0.16),
+        0 10px 30px -8px rgba(244, 114, 182, 0.14),
+        0 0 35px 0 rgba(56, 189, 248, 0.15);
+    }
+
+    @keyframes movingVibrantBorder {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Master Card Container: Left Artwork + Right Sign-In Card */
+    .master-card-container {
+      width: 100%;
+      background: #f8fafc;
+      background-image: 
+        radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.08) 0%, transparent 45%),
+        radial-gradient(circle at 85% 82%, rgba(217, 70, 239, 0.07) 0%, transparent 48%),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
+      border-radius: 29px;
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+      max-height: calc(100vh - clamp(1.5rem, 4vh, 3.6rem));
+      max-height: calc(100dvh - clamp(1.5rem, 4vh, 3.6rem));
+    }
+
+    /* Left Column: Crystal Clear Artwork in Full View */
+    .left-brand-column {
+      padding: clamp(0.5rem, 1.2vw, 1.2rem);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      border-top-left-radius: 29px;
+      border-bottom-left-radius: 29px;
+      height: 100%;
+    }
+
+    .left-brand-image-artwork {
+      width: 100%;
+      height: 100%;
+      max-height: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      object-position: center;
+      display: block;
+      border-radius: 22px;
+      image-rendering: -webkit-optimize-contrast;
+      image-rendering: high-quality;
+      box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Right Column: Clean Presentation Sign In Card */
+    .right-auth-column {
+      padding: clamp(1rem, 2.5vh, 2.5rem) clamp(1rem, 2vw, 2.5rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      height: 100%;
+    }
+
+    /* Floating Sign In Card with Multi-vibrant Blue, Violet & Pink Border */
+    .elevated-auth-subcard {
+      width: 100%;
+      max-width: 440px;
+      min-height: min(580px, 92%);
+      background: #ffffff;
+      border-radius: 28px;
+      position: relative;
+      padding: clamp(2rem, 4vh, 3.2rem) clamp(1.8rem, 2.4vw, 2.6rem);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 
+        0 24px 50px -12px rgba(0, 112, 243, 0.16),
+        0 10px 24px -6px rgba(236, 72, 153, 0.12),
+        0 0 25px rgba(139, 92, 246, 0.10);
+      /* Multi-vibrant Blue, Violet & Pink Border Line */
+      border: 2px solid transparent;
+      background-clip: padding-box, border-box;
+      background-origin: padding-box, border-box;
+      background-image: 
+        linear-gradient(to bottom, #ffffff, #ffffff), 
+        linear-gradient(135deg, #00d2ff 0%, #3b82f6 28%, #8b5cf6 58%, #ec4899 85%, #f43f5e 100%);
+    }
+
+    /* Shield Icon Container */
+    .shield-icon-container {
+      width: clamp(62px, 7.5vh, 74px);
+      height: clamp(68px, 8vh, 80px);
+      margin-bottom: clamp(0.5rem, 1vh, 0.8rem);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .shield-icon-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 8px 20px rgba(0, 112, 243, 0.38));
+    }
+
+    /* Eyebrow: SECURE ACCESS */
+    .eyebrow-secure-access {
+      font-family: var(--font-heading);
+      font-size: clamp(0.8rem, 1.25vh, 0.9rem);
+      font-weight: 800;
+      letter-spacing: 0.28em;
+      background: linear-gradient(90deg, #0284c7 0%, #2563eb 60%, #db2777 85%, #f43f5e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      text-align: center;
+      margin-bottom: 0.25rem;
+    }
+
+    /* Multi-vibrant Accent Line */
+    .secure-access-multicolor-line {
+      width: 54px;
+      height: 3px;
+      background: linear-gradient(90deg, #0284c7 0%, #2563eb 50%, #f43f5e 100%);
+      border-radius: 99px;
+      margin: 0.2rem auto clamp(0.6rem, 1.3vh, 1rem) auto;
+    }
+
+    /* Sign In Header */
+    .heading-sign-in {
+      font-family: var(--font-heading);
+      font-size: clamp(1.85rem, 3.2vh, 2.4rem);
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.025em;
+      margin-bottom: 0.25rem;
+      text-align: center;
+      line-height: 1.15;
+    }
+
+    .sub-access-desc {
+      font-size: clamp(0.82rem, 1.3vh, 0.94rem);
+      color: #64748b;
+      margin-bottom: clamp(1rem, 2.2vh, 1.7rem);
+      text-align: center;
+      font-weight: 500;
+    }
+
+    /* Form Fields */
+    .login-form-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(0.75rem, 1.6vh, 1.2rem);
+    }
+
+    .form-field-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      width: 100%;
+    }
+
+    .field-label-text {
+      font-size: clamp(0.78rem, 1.2vh, 0.86rem);
+      font-weight: 700;
+      color: #334155;
+      letter-spacing: 0.01em;
+    }
+
+    .field-input-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .field-icon {
+      position: absolute;
+      left: 1.05rem;
+      color: #94a3b8;
+      pointer-events: none;
+      width: 18px;
+      height: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .text-input-field {
+      width: 100%;
+      height: clamp(44px, 5.4vh, 52px);
+      padding-left: 2.9rem;
+      padding-right: 2.9rem;
+      font-family: var(--font-body);
+      font-size: clamp(0.88rem, 1.35vh, 0.96rem);
+      font-weight: 500;
+      color: #0f172a;
+      background-color: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 14px;
+      outline: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .text-input-field:hover {
+      border-color: #cbd5e1;
+      background-color: #ffffff;
+    }
+
+    .text-input-field:focus {
+      background-color: #ffffff;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3.5px rgba(59, 130, 246, 0.16), 0 2px 8px rgba(59, 130, 246, 0.06);
+    }
+
+    .eye-icon-button {
+      position: absolute;
+      right: 0.85rem;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      transition: color 0.2s ease;
+    }
+
+    .eye-icon-button:hover {
+      color: #334155;
+    }
+
+    .forgot-link-wrapper {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: -0.15rem;
+      margin-bottom: 0.2rem;
+    }
+
+    .forgot-anchor-btn {
+      font-size: clamp(0.78rem, 1.2vh, 0.86rem);
+      font-weight: 600;
+      color: #2563eb;
+      text-decoration: none;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .forgot-anchor-btn:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
+    }
+
+    /* Gradient Login Submit Button */
+    .login-submit-button {
+      width: 100%;
+      height: clamp(46px, 5.6vh, 52px);
+      background: linear-gradient(90deg, #1d6bf3 0%, #6366f1 50%, #9333ea 100%);
+      border: none;
+      border-radius: 14px;
+      color: #ffffff;
+      font-family: var(--font-heading);
+      font-size: clamp(0.96rem, 1.45vh, 1.06rem);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      box-shadow: 0 10px 24px -4px rgba(99, 102, 241, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 0.4rem;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .login-submit-button:hover {
+      background: linear-gradient(90deg, #2563eb 0%, #4f46e5 50%, #a855f7 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -4px rgba(99, 102, 241, 0.55);
+    }
+
+    .auth-error-banner {
+      padding: 0.5rem 0.75rem;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: 8px;
+      color: #b91c1c;
+      font-size: 0.8rem;
+      text-align: center;
+      font-weight: 600;
+      width: 100%;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Mobile & Tablet Phone View: Responsive Curved Design without Empty Space */
+    @media (max-width: 900px), (orientation: portrait) {
+      html, body {
+        height: auto;
+        min-height: 100vh;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .viewport-stage {
+        height: auto;
+        min-height: 100vh;
+        max-height: none;
+        padding: 1.2rem 0.8rem 3rem 0.8rem;
+        align-items: flex-start;
+      }
+
+      .master-card-glow-frame {
+        border-radius: 30px;
+        padding: 2px;
+        max-width: 480px;
+        margin: 0 auto;
+      }
+
+      .master-card-container {
+        grid-template-columns: 1fr;
+        border-radius: 28px;
+        max-height: none;
+        height: auto;
+        padding: 1rem 0.8rem 1.6rem 0.8rem;
+        gap: 1.2rem;
+      }
+
+      .left-brand-column {
+        border-radius: 24px;
+        height: auto;
+        padding: 0;
+        background: transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+      }
+
+      .left-brand-image-artwork {
+        border-radius: 24px;
+        width: 100%;
+        max-width: 360px;
+        aspect-ratio: 1 / 1;
+        max-height: none;
+        object-fit: contain;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+      }
+
+      .right-auth-column {
+        padding: 0;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+      }
+
+      .elevated-auth-subcard {
+        width: 100%;
+        max-width: 380px;
+        min-height: auto;
+        border-radius: 28px;
+        padding: 1.8rem 1.4rem;
+        margin: 0 auto;
+      }
+    }
+
+    /* ==========================================================================
+       FORGOT PASSWORD & 4-DIGIT OTP RECOVERY MODAL (VIOLET, BLUE & PINK THEME)
+       ========================================================================== */
+    .auth-modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(1rem, 2.5vh, 2rem);
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
+    }
+
+    .auth-modal-backdrop.hidden {
+      opacity: 0 !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+      display: none !important;
+    }
+
+    .auth-modal-card {
+      width: 100%;
+      max-width: 440px;
+      background: #ffffff;
+      border-radius: 28px;
+      position: relative;
+      padding: clamp(1.8rem, 3.5vh, 2.5rem) clamp(1.5rem, 2.2vw, 2.2rem);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 
+        0 25px 60px -12px rgba(15, 23, 42, 0.4),
+        0 0 35px rgba(139, 92, 246, 0.25),
+        0 0 20px rgba(236, 72, 153, 0.2);
+      /* Mixed Violet, Blue & Pink 2px Gradient Border */
+      border: 2px solid transparent;
+      background-clip: padding-box, border-box;
+      background-origin: padding-box, border-box;
+      background-image: 
+        linear-gradient(to bottom, #ffffff, #ffffff), 
+        linear-gradient(135deg, #00d2ff 0%, #3b82f6 28%, #8b5cf6 58%, #ec4899 85%, #f43f5e 100%);
+      transform: scale(1);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .auth-modal-backdrop.hidden .auth-modal-card {
+      transform: scale(0.94);
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 1.1rem;
+      right: 1.1rem;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #f1f5f9;
+      border: none;
+      color: #64748b;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+      transform: rotate(90deg);
+    }
+
+    .modal-shield-badge {
+      width: 58px;
+      height: 58px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.12) 0%, rgba(139, 92, 246, 0.15) 50%, rgba(236, 72, 153, 0.15) 100%);
+      border: 1.5px solid rgba(139, 92, 246, 0.3);
+      color: #7c3aed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.9rem;
+      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2);
+    }
+
+    .modal-step-section {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .modal-eyebrow {
+      font-family: var(--font-heading);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.24em;
+      background: linear-gradient(90deg, #0284c7 0%, #7c3aed 50%, #ec4899 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-transform: uppercase;
+      margin-bottom: 0.2rem;
+    }
+
+    .modal-title {
+      font-family: var(--font-heading);
+      font-size: clamp(1.4rem, 2.4vh, 1.7rem);
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.35rem;
+    }
+
+    .modal-subtitle {
+      font-size: 0.85rem;
+      color: #64748b;
+      line-height: 1.45;
+      margin-bottom: 1.2rem;
+      max-width: 360px;
+    }
+
+    .modal-form-wrap {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.9rem;
+    }
+
+    .modal-field-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      width: 100%;
+      text-align: left;
+    }
+
+    .modal-field-label {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    /* 4-Digit OTP Row */
+    .otp-inputs-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin: 0.4rem 0 0.8rem 0;
+      width: 100%;
+    }
+
+    .otp-digit-box {
+      width: 58px;
+      height: 62px;
+      border-radius: 16px;
+      border: 2px solid #e2e8f0;
+      background: #f8fafc;
+      font-family: var(--font-heading);
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #0f172a;
+      text-align: center;
+      outline: none;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .otp-digit-box:focus {
+      background: #ffffff;
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2), 0 4px 12px rgba(236, 72, 153, 0.1);
+      transform: translateY(-2px);
+    }
+
+    .otp-hint-banner {
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.08) 0%, rgba(139, 92, 246, 0.10) 50%, rgba(236, 72, 153, 0.08) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: 12px;
+      padding: 0.6rem 0.9rem;
+      font-size: 0.82rem;
+      color: #334155;
+      margin-bottom: 0.75rem;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .otp-code-highlight {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      background: linear-gradient(90deg, #0284c7, #7c3aed, #ec4899);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .vibrant-modal-submit-btn {
+      width: 100%;
+      height: 48px;
+      background: linear-gradient(90deg, #1d6bf3 0%, #7c3aed 48%, #ec4899 100%);
+      border: none;
+      border-radius: 14px;
+      color: #ffffff;
+      font-family: var(--font-heading);
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 24px -4px rgba(124, 58, 237, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 0.3rem;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .vibrant-modal-submit-btn:hover {
+      background: linear-gradient(90deg, #2563eb 0%, #6d28d9 48%, #db2777 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -4px rgba(124, 58, 237, 0.55);
+    }
+
+    .modal-secondary-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-top: 0.3rem;
+    }
+
+    .modal-text-action-btn {
+      background: none;
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #7c3aed;
+      cursor: pointer;
+      padding: 0;
+      transition: color 0.2s ease;
+    }
+
+    .modal-text-action-btn:hover {
+      color: #2563eb;
+      text-decoration: underline;
+    }
+
+    .action-dot {
+      color: #cbd5e1;
+      font-size: 0.8rem;
+    }
+
+    .success-icon-badge {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: rgba(16, 185, 129, 0.12);
+      border: 2px solid #10b981;
+      color: #10b981;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.9rem;
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient Outer Glowing Auras -->
+  <div class="ambient-halo-top-left" aria-hidden="true"></div>
+  <div class="ambient-halo-bottom-right" aria-hidden="true"></div>
+
+  <div class="viewport-stage">
+    
+    <!-- Multi-vibrant Animated Border Frame -->
+    <div class="master-card-glow-frame">
+      
+      <!-- Master Container -->
+      <main class="master-card-container" aria-label="SentinelAI-X Security Access Portal">
+      
+        <!-- LEFT COLUMN: HD Brand Artwork -->
+        <section class="left-brand-column" aria-label="Distributed Laboratory Security System">
+          <img 
+            src="assets/sentinel-left-brand.png" 
+            alt="SentinelAI-X Distributed Laboratory Security System" 
+            class="left-brand-image-artwork"
+            onerror="this.onerror=null; this.src='assets/lab-network.png';"
+          />
+        </section>
+
+        <!-- RIGHT COLUMN: Exact Sign In Card -->
+        <section class="right-auth-column" aria-label="Secure Access Sign In">
+          
+          <div class="elevated-auth-subcard">
+            
+            <div class="shield-icon-container" aria-hidden="true">
+              <img 
+                src="assets/shield-badge-clean.png" 
+                alt="SentinelAI-X Shield" 
+                onerror="this.onerror=null; this.src='assets/shield-badge-exact.png';"
+              />
+            </div>
+
+            <p class="eyebrow-secure-access">S E C U R E &nbsp; A C C E S S</p>
+            <div class="secure-access-multicolor-line" aria-hidden="true"></div>
+
+            <h2 class="heading-sign-in">Sign In</h2>
+            <p class="sub-access-desc">Access your laboratory security dashboard</p>
+
+            <form id="sentinel-login-form" class="login-form-container" novalidate autocomplete="off">
+              
+              <!-- Email Address Field -->
+              <div class="form-field-item">
+                <label for="user-email" class="field-label-text">Email Address</label>
+                <div class="field-input-box">
+                  <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="3" />
+                    <path d="m22 7-10 6L2 7" />
+                  </svg>
+                  <input 
+                    id="user-email" 
+                    name="email" 
+                    type="email" 
+                    class="text-input-field" 
+                    placeholder="" 
+                    value="" 
+                    autocomplete="email" 
+                    required 
+                    aria-label="Email Address"
+                  />
+                </div>
+              </div>
+
+              <!-- Password Field Group -->
+              <div class="form-field-item">
+                <label for="user-password" class="field-label-text">Password</label>
+                <div class="field-input-box">
+                  <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2.5" />
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                  </svg>
+                  <input 
+                    id="user-password" 
+                    name="password" 
+                    type="password" 
+                    class="text-input-field" 
+                    placeholder="" 
+                    value="" 
+                    autocomplete="new-password" 
+                    required 
+                    aria-label="Password"
+                  />
+                  <button type="button" id="password-visibility-btn" class="eye-icon-button" aria-label="Toggle password visibility">
+                    <svg id="eye-icon-show" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                      <circle cx="12" cy="12" r="3" />
+                    </svg>
+                    <svg id="eye-icon-hide" class="hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M10.7 5.1A10.9 10.9 0 0 1 12 5c6.4 0 10 7 10 7a17.8 17.8 0 0 1-2.2 3.1M6.6 6.6A17.6 17.6 0 0 0 2 12s3.6 7 10 7a10.8 10.8 0 0 0 4.2-.8" />
+                      <path d="m2 2 20 20" />
+                      <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Forgot Password Link -->
+              <div class="forgot-link-wrapper">
+                <a href="#forgot" id="forgot-pass-trigger" class="forgot-anchor-btn">Forgot Password?</a>
+              </div>
+
+              <!-- Error Alert Banner -->
+              <div id="login-error-msg" class="auth-error-banner hidden" role="alert"></div>
+
+              <!-- Login Button -->
+              <button type="submit" id="login-btn" class="login-submit-button">
+                <span id="login-btn-text">Login</span>
+              </button>
+
+            </form>
+
+          </div>
+
+        </section>
+
+      </main>
+    </div>
+
+  </div>
+
+  <!-- ==========================================================================
+       FORGOT PASSWORD & 4-DIGIT OTP RECOVERY MODAL (VIOLET, BLUE & PINK THEME)
+       ========================================================================== -->
+  <div id="forgot-password-modal" class="auth-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title-dyn">
+    <div class="auth-modal-card">
+      
+      <!-- Close Modal Button -->
+      <button type="button" id="modal-close-btn" class="modal-close-btn" aria-label="Close recovery dialog">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- STEP 1: Enter Authorized Email -->
+      <div id="modal-step-1" class="modal-step-section">
+        <div class="modal-shield-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2.5" />
+            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+        </div>
+        <span class="modal-eyebrow">Recovery Verification</span>
+        <h3 id="modal-title-dyn" class="modal-title">Forgot Password?</h3>
+        <p class="modal-subtitle">Enter your authorized laboratory Gmail address to receive a secure 4-digit OTP code.</p>
+
+        <form id="form-step-1-email" class="modal-form-wrap" novalidate>
+          <div class="modal-field-item">
+            <label for="recovery-email-input" class="modal-field-label">Registered Gmail Address</label>
+            <div class="field-input-box">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="3" />
+                <path d="m22 7-10 6L2 7" />
+              </svg>
+              <input 
+                id="recovery-email-input" 
+                type="email" 
+                class="text-input-field" 
+                placeholder="e.g. lab1.sentinelai@gmail.com" 
+                required 
+                autocomplete="email"
+              />
+            </div>
+          </div>
+
+          <div id="modal-error-1" class="auth-error-banner hidden" role="alert"></div>
+
+          <button type="submit" id="btn-send-otp" class="vibrant-modal-submit-btn">
+            <span>Send 4-Digit OTP</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- STEP 2: Enter 4-Digit OTP -->
+      <div id="modal-step-2" class="modal-step-section hidden">
+        <div class="modal-shield-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+            <path d="m9 12 2 2 4-4" />
+          </svg>
+        </div>
+        <span class="modal-eyebrow">Security Code Verification</span>
+        <h3 class="modal-title">Enter 4-Digit OTP</h3>
+        <p class="modal-subtitle">We sent a 4-digit code to <strong id="modal-target-email-label" style="color: #7c3aed; word-break: break-all;"></strong></p>
+
+        <!-- Live OTP Dispatch Toast / Display for Instant Pairing -->
+        <div class="otp-hint-banner" id="otp-live-hint-banner">
+          <span>Security OTP Code:</span>
+          <span id="modal-live-otp-text" class="otp-code-highlight">••••</span>
+        </div>
+
+        <form id="form-step-2-otp" class="modal-form-wrap" novalidate>
+          <div class="otp-inputs-row">
+            <input type="text" id="otp-digit-1" class="otp-digit-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" autofocus />
+            <input type="text" id="otp-digit-2" class="otp-digit-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+            <input type="text" id="otp-digit-3" class="otp-digit-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+            <input type="text" id="otp-digit-4" class="otp-digit-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
+          </div>
+
+          <div id="modal-error-2" class="auth-error-banner hidden" role="alert"></div>
+
+          <button type="submit" id="btn-verify-otp" class="vibrant-modal-submit-btn">
+            <span>Verify 4-Digit OTP</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12l5 5L20 7"></path>
+            </svg>
+          </button>
+
+          <div class="modal-secondary-actions">
+            <button type="button" id="btn-resend-otp-link" class="modal-text-action-btn">Resend OTP</button>
+            <span class="action-dot">•</span>
+            <button type="button" id="btn-change-email-link" class="modal-text-action-btn">Change Email</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- STEP 3: Reset Password & Confirm Password (Violet, Blue & Pink Theme) -->
+      <div id="modal-step-3" class="modal-step-section hidden">
+        <div class="modal-shield-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 2l-2 2m-1-1l-3 3 2 2 3-3-2-2z" />
+            <path d="M3 21h4l10-10-4-4L3 17v4z" />
+          </svg>
+        </div>
+        <span class="modal-eyebrow">Credential Reset</span>
+        <h3 class="modal-title">Reset Password</h3>
+        <p class="modal-subtitle">Enter and confirm your new secure password for SentinelAI-X.</p>
+
+        <form id="form-step-3-reset" class="modal-form-wrap" novalidate>
+          
+          <!-- New Password -->
+          <div class="modal-field-item">
+            <label for="modal-new-pwd" class="modal-field-label">New Password</label>
+            <div class="field-input-box">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2.5" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              <input 
+                id="modal-new-pwd" 
+                type="password" 
+                class="text-input-field" 
+                placeholder="Enter new password" 
+                required 
+                autocomplete="new-password"
+              />
+              <button type="button" id="toggle-modal-new-pwd" class="eye-icon-button" aria-label="Toggle new password visibility">
+                <svg id="eye-modal-new-show" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <svg id="eye-modal-new-hide" class="hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.7 5.1A10.9 10.9 0 0 1 12 5c6.4 0 10 7 10 7a17.8 17.8 0 0 1-2.2 3.1M6.6 6.6A17.6 17.6 0 0 0 2 12s3.6 7 10 7a10.8 10.8 0 0 0 4.2-.8" />
+                  <path d="m2 2 20 20" />
+                  <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="modal-field-item">
+            <label for="modal-confirm-pwd" class="modal-field-label">Confirm Password</label>
+            <div class="field-input-box">
+              <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2.5" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              <input 
+                id="modal-confirm-pwd" 
+                type="password" 
+                class="text-input-field" 
+                placeholder="Confirm new password" 
+                required 
+                autocomplete="new-password"
+              />
+              <button type="button" id="toggle-modal-confirm-pwd" class="eye-icon-button" aria-label="Toggle confirm password visibility">
+                <svg id="eye-modal-confirm-show" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+                <svg id="eye-modal-confirm-hide" class="hidden" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M10.7 5.1A10.9 10.9 0 0 1 12 5c6.4 0 10 7 10 7a17.8 17.8 0 0 1-2.2 3.1M6.6 6.6A17.6 17.6 0 0 0 2 12s3.6 7 10 7a10.8 10.8 0 0 0 4.2-.8" />
+                  <path d="m2 2 20 20" />
+                  <path d="M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div id="modal-error-3" class="auth-error-banner hidden" role="alert"></div>
+
+          <button type="submit" id="btn-save-password" class="vibrant-modal-submit-btn">
+            <span>Reset & Confirm Password</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 13l4 4L19 7" />
+            </svg>
+          </button>
+        </form>
+      </div>
+
+      <!-- STEP 4: Success Screen -->
+      <div id="modal-step-4" class="modal-step-section hidden">
+        <div class="success-icon-badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+        <span class="modal-eyebrow">Password Updated</span>
+        <h3 class="modal-title">Password Reset Complete!</h3>
+        <p class="modal-subtitle">Your password has been successfully updated. You can now sign in with your new credentials.</p>
+
+        <button type="button" id="btn-success-return" class="vibrant-modal-submit-btn" style="margin-top: 1rem;">
+          <span>Return to Sign In</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Main Login Elements
+      const emailInput = document.getElementById("user-email");
+      const passwordInput = document.getElementById("user-password");
+      const togglePasswordBtn = document.getElementById("password-visibility-btn");
+      const eyeShowIcon = document.getElementById("eye-icon-show");
+      const eyeHideIcon = document.getElementById("eye-icon-hide");
+      const errorAlert = document.getElementById("login-error-msg");
+      const loginBtn = document.getElementById("login-btn");
+      const loginBtnText = document.getElementById("login-btn-text");
+      const forgotPassTrigger = document.getElementById("forgot-pass-trigger");
+
+      // Modal Elements
+      const modalBackdrop = document.getElementById("forgot-password-modal");
+      const modalCloseBtn = document.getElementById("modal-close-btn");
+
+      // Step Containers
+      const step1Wrap = document.getElementById("modal-step-1");
+      const step2Wrap = document.getElementById("modal-step-2");
+      const step3Wrap = document.getElementById("modal-step-3");
+      const step4Wrap = document.getElementById("modal-step-4");
+
+      // Step 1 Elements
+      const formStep1 = document.getElementById("form-step-1-email");
+      const recoveryEmailInput = document.getElementById("recovery-email-input");
+      const errorStep1 = document.getElementById("modal-error-1");
+      const btnSendOtp = document.getElementById("btn-send-otp");
+
+      // Step 2 Elements
+      const formStep2 = document.getElementById("form-step-2-otp");
+      const targetEmailLabel = document.getElementById("modal-target-email-label");
+      const liveOtpText = document.getElementById("modal-live-otp-text");
+      const otpInputs = [
+        document.getElementById("otp-digit-1"),
+        document.getElementById("otp-digit-2"),
+        document.getElementById("otp-digit-3"),
+        document.getElementById("otp-digit-4")
+      ];
+      const errorStep2 = document.getElementById("modal-error-2");
+      const btnVerifyOtp = document.getElementById("btn-verify-otp");
+      const btnResendOtpLink = document.getElementById("btn-resend-otp-link");
+      const btnChangeEmailLink = document.getElementById("btn-change-email-link");
+
+      // Step 3 Elements
+      const formStep3 = document.getElementById("form-step-3-reset");
+      const newPwdInput = document.getElementById("modal-new-pwd");
+      const confirmPwdInput = document.getElementById("modal-confirm-pwd");
+      const toggleNewPwdBtn = document.getElementById("toggle-modal-new-pwd");
+      const eyeNewShow = document.getElementById("eye-modal-new-show");
+      const eyeNewHide = document.getElementById("eye-modal-new-hide");
+      const toggleConfirmPwdBtn = document.getElementById("toggle-modal-confirm-pwd");
+      const eyeConfirmShow = document.getElementById("eye-modal-confirm-show");
+      const eyeConfirmHide = document.getElementById("eye-modal-confirm-hide");
+      const errorStep3 = document.getElementById("modal-error-3");
+      const btnSavePassword = document.getElementById("btn-save-password");
+
+      // Step 4 Elements
+      const btnSuccessReturn = document.getElementById("btn-success-return");
+
+      // EXACT 4 AUTHORIZED SENTINELAI-X ENTERPRISE ACCOUNTS
+      let currentAuthPassword = "Sobia123@";
+      const AUTHORIZED_ACCOUNTS = {
+        "lab1.sentinelai@gmail.com": {
+          email: "lab1.sentinelai@gmail.com",
+          name: "Lab 1 Administrator",
+          role: "LAB 1 ADMIN",
+          roleKey: "lab1_admin",
+          roleLabel: "Lab 1 Admin",
+          allowedLab: "LAB 1",
+          scope: "LAB_1_ONLY",
+          clearanceLevel: 2,
+          avatar: "L1",
+          destination: "../index.html#lab1-dashboard"
+        },
+        "lab2.sentinelai@gmail.com": {
+          email: "lab2.sentinelai@gmail.com",
+          name: "Lab 2 Administrator",
+          role: "LAB 2 ADMIN",
+          roleKey: "lab2_admin",
+          roleLabel: "Lab 2 Admin",
+          allowedLab: "LAB 2",
+          scope: "LAB_2_ONLY",
+          clearanceLevel: 2,
+          avatar: "L2",
+          destination: "../index.html#lab2-dashboard"
+        },
+        "global.sentinelai@gmail.com": {
+          email: "global.sentinelai@gmail.com",
+          name: "Global Administrator",
+          role: "GLOBAL ADMIN",
+          roleKey: "global_admin",
+          roleLabel: "Global Admin",
+          allowedLab: "ALL",
+          scope: "FULL_ACCESS",
+          clearanceLevel: 4,
+          avatar: "AD",
+          destination: "../index.html#system-overview"
+        },
+        "securitysuper.sentinelai@gmail.com": {
+          email: "securitysuper.sentinelai@gmail.com",
+          name: "Security Super Admin",
+          role: "SECURITY SUPER ADMIN",
+          roleKey: "security_admin",
+          roleLabel: "Security Super Admin",
+          allowedLab: "ALL",
+          scope: "SUPER_ADMIN",
+          clearanceLevel: 5,
+          avatar: "SA",
+          destination: "../index.html#system-overview"
+        }
+      };
+
+      // State variables for password reset session
+      let activeRecoveryEmail = "";
+      let activeGeneratedOtp = "";
+      let activeResetToken = "";
+
+      function resetFormState() {
+        if (passwordInput) passwordInput.value = "";
+        if (loginBtn) loginBtn.disabled = false;
+        if (loginBtnText) loginBtnText.textContent = "Login";
+        if (errorAlert) {
+          errorAlert.textContent = "";
+          errorAlert.classList.add("hidden");
+        }
+      }
+
+      // Reset state on initial load, bfcache restore, window focus
+      resetFormState();
+      window.addEventListener("pageshow", resetFormState);
+      window.addEventListener("focus", resetFormState);
+      window.addEventListener("load", resetFormState);
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") resetFormState();
+      });
+
+      setTimeout(resetFormState, 50);
+      setTimeout(resetFormState, 300);
+
+      // Main Password visibility toggle
+      if (togglePasswordBtn && passwordInput) {
+        togglePasswordBtn.addEventListener("click", () => {
+          const isPwd = passwordInput.type === "password";
+          passwordInput.type = isPwd ? "text" : "password";
+          if (eyeShowIcon && eyeHideIcon) {
+            eyeShowIcon.classList.toggle("hidden", isPwd);
+            eyeHideIcon.classList.toggle("hidden", !isPwd);
+          }
+        });
+      }
+
+      // Real-time Firebase Audit Logger
+      const FIREBASE_DB_URL = "https://sentinelaidashboard-default-rtdb.firebaseio.com";
+      function recordFirebaseLiveAudit(email, role, loginStatus, failureReason = "") {
+        try {
+          const now = new Date();
+          const year = now.getFullYear().toString();
+          const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+          const month = monthNames[now.getMonth()];
+          const pad = n => String(n).padStart(2, '0');
+          const dateStr = `${pad(now.getDate())}-${pad(now.getMonth() + 1)}-${year}`;
+          const hours = now.getHours();
+          const ampm = hours >= 12 ? 'PM' : 'AM';
+          const formattedHours = hours % 12 || 12;
+          const timeStr = `${pad(formattedHours)}:${pad(now.getMinutes())}:${pad(now.getSeconds())} ${ampm}`;
+
+          const entry = {
+            date: dateStr,
+            time: timeStr,
+            email: email || "unknown",
+            role: role || "Unauthorized User",
+            loginStatus: loginStatus,
+            failureReason: failureReason,
+            timestamp: Date.now()
+          };
+
+          fetch(`${FIREBASE_DB_URL}/sentinelai-x/loginAudit/${year}/${month}/login_${Date.now()}.json`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(entry)
+          }).catch(() => {});
+        } catch (_) {}
+      }
+
+      // Main Login submission
+      const loginForm = document.getElementById("sentinel-login-form");
+      if (loginForm) {
+        loginForm.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const emailVal = emailInput ? emailInput.value.trim().toLowerCase() : "";
+          const pwdVal = passwordInput ? passwordInput.value : "";
+
+          if (!emailVal) {
+            showError("Please enter your registered Gmail address.");
+            return;
+          }
+          if (!pwdVal) {
+            showError("Please enter your security access password.");
+            return;
+          }
+
+          // 1. Strict Account Check (Only the 4 specified Gmail addresses)
+          const account = AUTHORIZED_ACCOUNTS[emailVal];
+          if (!account) {
+            recordFirebaseLiveAudit(emailVal, "Unauthorized User", "FAILED", "Unregistered Account");
+            showError("Access Denied — This account is not authorized to access SentinelAI-X.");
+            if (passwordInput) passwordInput.value = "";
+            return;
+          }
+
+          // 2. Strict Password Check
+          if (pwdVal !== currentAuthPassword) {
+            recordFirebaseLiveAudit(account.email, account.roleLabel, "FAILED", "Incorrect Password");
+            showError("Access Denied — Invalid security credentials.");
+            if (passwordInput) passwordInput.value = "";
+            return;
+          }
+
+          // 3. Record Successful Login in Firebase Realtime Database
+          recordFirebaseLiveAudit(account.email, account.roleLabel, "SUCCESS", "");
+
+          // 4. Clear password immediately
+          if (passwordInput) {
+            passwordInput.value = "";
+          }
+
+          // 5. Set Session with System-Determined RBAC Data
+          sessionStorage.setItem("sentinel_auth", "true");
+          sessionStorage.setItem("sentinel_user", JSON.stringify({
+            email: account.email,
+            name: account.name,
+            role: account.role,
+            roleKey: account.roleKey,
+            roleLabel: account.roleLabel,
+            allowedLab: account.allowedLab,
+            scope: account.scope,
+            clearanceLevel: account.clearanceLevel,
+            avatar: account.avatar,
+            destination: account.destination,
+            loginTime: new Date().toISOString()
+          }));
+
+          resetFormState();
+          window.location.href = account.destination;
+        });
+      }
+
+      function showError(msg) {
+        if (!errorAlert) return;
+        errorAlert.textContent = msg;
+        errorAlert.classList.remove("hidden");
+        if (loginBtn) loginBtn.disabled = false;
+        if (loginBtnText) loginBtnText.textContent = "Login";
+      }
+
+      // =========================================================================
+      // FORGOT PASSWORD MODAL CONTROLLER & MULTI-STEP LOGIC
+      // =========================================================================
+      
+      function showModalStep(stepNumber) {
+        step1Wrap.classList.toggle("hidden", stepNumber !== 1);
+        step2Wrap.classList.toggle("hidden", stepNumber !== 2);
+        step3Wrap.classList.toggle("hidden", stepNumber !== 3);
+        step4Wrap.classList.toggle("hidden", stepNumber !== 4);
+
+        if (errorStep1) errorStep1.classList.add("hidden");
+        if (errorStep2) errorStep2.classList.add("hidden");
+        if (errorStep3) errorStep3.classList.add("hidden");
+
+        if (stepNumber === 1 && recoveryEmailInput) {
+          setTimeout(() => recoveryEmailInput.focus(), 150);
+        } else if (stepNumber === 2 && otpInputs[0]) {
+          otpInputs.forEach(i => i.value = "");
+          setTimeout(() => otpInputs[0].focus(), 150);
+        } else if (stepNumber === 3 && newPwdInput) {
+          if (newPwdInput) newPwdInput.value = "";
+          if (confirmPwdInput) confirmPwdInput.value = "";
+          setTimeout(() => newPwdInput.focus(), 150);
+        }
+      }
+
+      function openRecoveryModal() {
+        if (!modalBackdrop) return;
+        modalBackdrop.classList.remove("hidden");
+        
+        // If user already typed an email into the main login form, carry it over
+        const initialEmail = emailInput ? emailInput.value.trim().toLowerCase() : "";
+        if (recoveryEmailInput) {
+          recoveryEmailInput.value = initialEmail;
+        }
+
+        showModalStep(1);
+      }
+
+      function closeRecoveryModal() {
+        if (!modalBackdrop) return;
+        modalBackdrop.classList.add("hidden");
+        activeRecoveryEmail = "";
+        activeGeneratedOtp = "";
+        activeResetToken = "";
+      }
+
+      // Trigger Open Modal
+      if (forgotPassTrigger) {
+        forgotPassTrigger.addEventListener("click", (e) => {
+          e.preventDefault();
+          openRecoveryModal();
+        });
+      }
+
+      // Close Modal Buttons & Backdrop
+      if (modalCloseBtn) {
+        modalCloseBtn.addEventListener("click", closeRecoveryModal);
+      }
+
+      if (modalBackdrop) {
+        modalBackdrop.addEventListener("click", (e) => {
+          if (e.target === modalBackdrop) {
+            closeRecoveryModal();
+          }
+        });
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modalBackdrop && !modalBackdrop.classList.contains("hidden")) {
+          closeRecoveryModal();
+        }
+      });
+
+      // --- STEP 1: SEND 4-DIGIT OTP ---
+      if (formStep1) {
+        formStep1.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const emailVal = recoveryEmailInput ? recoveryEmailInput.value.trim().toLowerCase() : "";
+
+          if (!emailVal) {
+            showModalError(errorStep1, "Please enter your registered Gmail address.");
+            return;
+          }
+
+          // Strict Access Verification: ONLY authorized emails
+          if (!AUTHORIZED_ACCOUNTS[emailVal]) {
+            showModalError(errorStep1, "Access Denied — This email is not authorized for SentinelAI-X recovery.");
+            return;
+          }
+
+          if (btnSendOtp) {
+            btnSendOtp.disabled = true;
+            btnSendOtp.querySelector("span").textContent = "Sending OTP...";
+          }
+
+          activeRecoveryEmail = emailVal;
+
+          try {
+            // Attempt API call with fallback for client-side demo
+            const res = await fetch("/api/auth/forgot-password", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: emailVal })
+            });
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+              activeGeneratedOtp = data.debugOtp || String(Math.floor(1000 + Math.random() * 9000));
+            } else {
+              // Fallback generate 4-digit OTP if offline
+              activeGeneratedOtp = String(Math.floor(1000 + Math.random() * 9000));
+            }
+          } catch (err) {
+            // Fallback generate 4-digit OTP
+            activeGeneratedOtp = String(Math.floor(1000 + Math.random() * 9000));
+          }
+
+          if (btnSendOtp) {
+            btnSendOtp.disabled = false;
+            btnSendOtp.querySelector("span").textContent = "Send 4-Digit OTP";
+          }
+
+          // Display in Step 2
+          if (targetEmailLabel) targetEmailLabel.textContent = emailVal;
+          if (liveOtpText) liveOtpText.textContent = activeGeneratedOtp;
+
+          showModalStep(2);
+        });
+      }
+
+      // --- STEP 2: 4-DIGIT OTP AUTO-ADVANCE INPUTS & VERIFICATION ---
+      otpInputs.forEach((input, index) => {
+        if (!input) return;
+
+        // Auto advance on typing
+        input.addEventListener("input", (e) => {
+          const val = e.target.value.replace(/[^0-9]/g, '');
+          e.target.value = val ? val[0] : '';
+
+          if (e.target.value && index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+            otpInputs[index + 1].select();
+          }
+
+          // Auto-submit if all 4 digits filled
+          const fullCode = otpInputs.map(i => i.value).join('');
+          if (fullCode.length === 4) {
+            handleOtpVerification();
+          }
+        });
+
+        // Jump back on backspace
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Backspace" && !e.target.value && index > 0) {
+            otpInputs[index - 1].focus();
+          } else if (e.key === "ArrowLeft" && index > 0) {
+            otpInputs[index - 1].focus();
+          } else if (e.key === "ArrowRight" && index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+          }
+        });
+
+        // Handle Paste (e.g. "8492")
+        input.addEventListener("paste", (e) => {
+          e.preventDefault();
+          const pastedData = (e.clipboardData || window.clipboardData).getData('text').trim().replace(/[^0-9]/g, '');
+          if (pastedData.length >= 4) {
+            for (let i = 0; i < 4; i++) {
+              if (otpInputs[i]) otpInputs[i].value = pastedData[i];
+            }
+            otpInputs[3].focus();
+            handleOtpVerification();
+          } else if (pastedData.length > 0) {
+            for (let i = 0; i < pastedData.length && (index + i) < 4; i++) {
+              if (otpInputs[index + i]) otpInputs[index + i].value = pastedData[i];
+            }
+            if (index + pastedData.length < 4) {
+              otpInputs[index + pastedData.length].focus();
+            }
+          }
+        });
+      });
+
+      if (formStep2) {
+        formStep2.addEventListener("submit", (e) => {
+          e.preventDefault();
+          handleOtpVerification();
+        });
+      }
+
+      async function handleOtpVerification() {
+        const enteredCode = otpInputs.map(i => i.value.trim()).join('');
+
+        if (enteredCode.length < 4) {
+          showModalError(errorStep2, "Please enter the complete 4-digit security OTP.");
+          return;
+        }
+
+        if (btnVerifyOtp) {
+          btnVerifyOtp.disabled = true;
+          btnVerifyOtp.querySelector("span").textContent = "Verifying Code...";
+        }
+
+        let isVerified = false;
+
+        try {
+          const res = await fetch("/api/auth/verify-reset-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: activeRecoveryEmail, otp: enteredCode })
+          });
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            isVerified = true;
+            activeResetToken = data.resetToken || "LOCAL-VALIDATED";
+          } else if (enteredCode === activeGeneratedOtp) {
+            isVerified = true;
+            activeResetToken = "LOCAL-VALIDATED";
+          } else {
+            showModalError(errorStep2, data.error || "Incorrect OTP code. Please try again.");
+          }
+        } catch (err) {
+          if (enteredCode === activeGeneratedOtp) {
+            isVerified = true;
+            activeResetToken = "LOCAL-VALIDATED";
+          } else {
+            showModalError(errorStep2, "Incorrect 4-digit OTP code.");
+          }
+        }
+
+        if (btnVerifyOtp) {
+          btnVerifyOtp.disabled = false;
+          btnVerifyOtp.querySelector("span").textContent = "Verify 4-Digit OTP";
+        }
+
+        if (isVerified) {
+          showModalStep(3);
+        }
+      }
+
+      // Resend OTP Link
+      if (btnResendOtpLink) {
+        btnResendOtpLink.addEventListener("click", async () => {
+          otpInputs.forEach(i => i.value = "");
+          otpInputs[0].focus();
+          
+          try {
+            const res = await fetch("/api/auth/forgot-password", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: activeRecoveryEmail })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+              activeGeneratedOtp = data.debugOtp || String(Math.floor(1000 + Math.random() * 9000));
+            } else {
+              activeGeneratedOtp = String(Math.floor(1000 + Math.random() * 9000));
+            }
+          } catch (e) {
+            activeGeneratedOtp = String(Math.floor(1000 + Math.random() * 9000));
+          }
+
+          if (liveOtpText) liveOtpText.textContent = activeGeneratedOtp;
+          if (errorStep2) {
+            errorStep2.textContent = "A new 4-digit OTP has been generated.";
+            errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
+            errorStep2.style.color = "#059669";
+            errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
+            errorStep2.classList.remove("hidden");
+          }
+        });
+      }
+
+      // Change Email Link
+      if (btnChangeEmailLink) {
+        btnChangeEmailLink.addEventListener("click", () => {
+          showModalStep(1);
+        });
+      }
+
+      // --- STEP 3: RESET PASSWORD & CONFIRM PASSWORD TOGGLES & SUBMISSION ---
+      if (toggleNewPwdBtn && newPwdInput) {
+        toggleNewPwdBtn.addEventListener("click", () => {
+          const isPwd = newPwdInput.type === "password";
+          newPwdInput.type = isPwd ? "text" : "password";
+          if (eyeNewShow && eyeNewHide) {
+            eyeNewShow.classList.toggle("hidden", isPwd);
+            eyeNewHide.classList.toggle("hidden", !isPwd);
+          }
+        });
+      }
+
+      if (toggleConfirmPwdBtn && confirmPwdInput) {
+        toggleConfirmPwdBtn.addEventListener("click", () => {
+          const isPwd = confirmPwdInput.type === "password";
+          confirmPwdInput.type = isPwd ? "text" : "password";
+          if (eyeConfirmShow && eyeConfirmHide) {
+            eyeConfirmShow.classList.toggle("hidden", isPwd);
+            eyeConfirmHide.classList.toggle("hidden", !isPwd);
+          }
+        });
+      }
+
+      if (formStep3) {
+        formStep3.addEventListener("submit", async (e) => {
+          e.preventDefault();
+          const newPwd = newPwdInput ? newPwdInput.value : "";
+          const confirmPwd = confirmPwdInput ? confirmPwdInput.value : "";
+
+          if (!newPwd) {
+            showModalError(errorStep3, "Please enter your new password.");
+            return;
+          }
+          if (newPwd.length < 6) {
+            showModalError(errorStep3, "Password must be at least 6 characters long.");
+            return;
+          }
+          if (newPwd !== confirmPwd) {
+            showModalError(errorStep3, "New password and confirm password do not match.");
+            return;
+          }
+
+          if (btnSavePassword) {
+            btnSavePassword.disabled = true;
+            btnSavePassword.querySelector("span").textContent = "Updating Password...";
+          }
+
+          try {
+            await fetch("/api/auth/confirm-new-password", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                email: activeRecoveryEmail,
+                resetToken: activeResetToken,
+                newPassword: newPwd
+              })
+            });
+          } catch (err) {
+            // Local update fallback
+          }
+
+          // Update active password in session memory
+          currentAuthPassword = newPwd;
+
+          if (btnSavePassword) {
+            btnSavePassword.disabled = false;
+            btnSavePassword.querySelector("span").textContent = "Reset & Confirm Password";
+          }
+
+          showModalStep(4);
+        });
+      }
+
+      // --- STEP 4: RETURN TO SIGN IN ---
+      if (btnSuccessReturn) {
+        btnSuccessReturn.addEventListener("click", () => {
+          closeRecoveryModal();
+          resetFormState();
+          if (emailInput && activeRecoveryEmail) {
+            emailInput.value = activeRecoveryEmail;
+          }
+          if (passwordInput) {
+            passwordInput.value = "";
+            passwordInput.focus();
+          }
+        });
+      }
+
+      function showModalError(targetEl, msg) {
+        if (!targetEl) return;
+        targetEl.textContent = msg;
+        targetEl.style.background = "";
+        targetEl.style.color = "";
+        targetEl.style.borderColor = "";
+        targetEl.classList.remove("hidden");
+      }
+    });
+  </script>
+</body>
+</html>

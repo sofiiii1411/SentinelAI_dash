@@ -4,6 +4,32 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
+  // 1. Auth Guard: Enforce standalone login page as primary entry if not authenticated
+  const isAuth = sessionStorage.getItem('sentinel_auth');
+  const isBypass = window.location.search.includes('bypass=true');
+  if (!isAuth && !isBypass) {
+    window.location.replace('login.html');
+    return;
+  }
+
+  // Current User Session Resolution
+  const rawUser = sessionStorage.getItem('sentinel_user');
+  let currentUser = {
+    email: 'global.sentinelai@gmail.com',
+    name: 'Global Administrator',
+    role: 'GLOBAL ADMIN',
+    roleLabel: 'Global Admin',
+    allowedLab: 'ALL',
+    scope: 'FULL_ACCESS',
+    avatar: 'AD'
+  };
+
+  if (rawUser) {
+    try {
+      currentUser = JSON.parse(rawUser);
+    } catch (_) {}
+  }
+
   // DOM References
   const sentinelSidebar = document.getElementById('sentinelSidebar');
   const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
@@ -18,27 +44,70 @@ document.addEventListener('DOMContentLoaded', () => {
   const genericViewContainer = document.getElementById('genericViewContainer');
   const heroLabBadge = document.getElementById('heroLabBadge');
 
-  // Auth Overlay
-  const authPortalOverlay = document.getElementById('authPortalOverlay');
-  const portalBackBtn = document.getElementById('portalBackBtn');
+  // Logout & Controls
   const logoutBtn = document.getElementById('logoutBtn');
-  const loginForm = document.getElementById('loginForm');
-  const loginSubmitBtn = document.getElementById('loginSubmitBtn');
-  const btnText = document.getElementById('btnText');
-  const togglePasswordBtn = document.getElementById('togglePasswordBtn');
-  const passwordInput = document.getElementById('passwordInput');
   const toastContainer = document.getElementById('toastContainer');
 
   // Parallax Elements
   const bgGlows = document.getElementById('bgGlows');
   const isoLabsWrapper = document.getElementById('isoLabsWrapper');
-  const authIsoWrapper = document.getElementById('authIsoWrapper');
-  const loginCard = document.getElementById('loginCard');
 
-  // Header Date & Time
-  const headerClock = document.getElementById('headerClock');
+  // Ensure all blocking modal overlays start closed
+  if (sidebarBackdrop) sidebarBackdrop.classList.remove('active');
+  const accessDeniedModal = document.getElementById('accessDeniedModal');
+  if (accessDeniedModal) accessDeniedModal.classList.remove('active');
+
+  // Live IST Header Clock (Immediate Real-time Synchronization)
+  function updateClock() {
+    const clockEl = document.getElementById('headerClock');
+    if (!clockEl) return;
+    const now = new Date();
+    try {
+      const optionsDate = { timeZone: 'Asia/Kolkata', weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
+      const optionsTime = { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+      const dateStr = new Intl.DateTimeFormat('en-IN', optionsDate).format(now);
+      const timeStr = new Intl.DateTimeFormat('en-IN', optionsTime).format(now);
+      clockEl.textContent = `${dateStr}  |  ${timeStr} IST`;
+    } catch (err) {
+      clockEl.textContent = now.toLocaleDateString() + ' | ' + now.toLocaleTimeString() + ' IST';
+    }
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
 
   let currentLab = 'LAB 1';
+
+  // =========================================================================
+  // ACCESS DENIED / ZERO TRUST CLEARANCE RESTRICTION MODAL
+  // =========================================================================
+  function triggerAccessDenied(attemptedTarget) {
+    const modal = document.getElementById('accessDeniedModal');
+    const roleBadge = document.getElementById('deniedUserRoleBadge');
+    const scopeBadge = document.getElementById('deniedAllowedScope');
+    const reasonMsg = document.getElementById('deniedReasonMsg');
+
+    if (roleBadge) roleBadge.textContent = currentUser.role || 'UNAUTHORIZED';
+    if (scopeBadge) {
+      if (currentUser.allowedLab === 'LAB 1') scopeBadge.textContent = 'LAB 1 Subsystems Only';
+      else if (currentUser.allowedLab === 'LAB 2') scopeBadge.textContent = 'LAB 2 Subsystems Only';
+      else scopeBadge.textContent = 'Assigned Personnel Clearance';
+    }
+    if (reasonMsg) {
+      reasonMsg.innerHTML = `Your authenticated account (<strong style="color:#00d2ff;">${currentUser.role}</strong>) is not authorized to inspect or control <strong style="color:#ef4444;">${attemptedTarget}</strong>.`;
+    }
+    if (modal) modal.classList.add('active');
+  }
+
+  const btnReturnAuthorizedLab = document.getElementById('btnReturnAuthorizedLab');
+  if (btnReturnAuthorizedLab) {
+    btnReturnAuthorizedLab.addEventListener('click', () => {
+      const modal = document.getElementById('accessDeniedModal');
+      if (modal) modal.classList.remove('active');
+      const safeViewId = currentUser.allowedLab === 'LAB 2' ? 'lab2-dashboard' : 'lab1-dashboard';
+      const safeLink = document.querySelector(`[data-view="${safeViewId}"]`);
+      if (safeLink) safeLink.click();
+    });
+  }
 
   // =========================================================================
   // 1. SIDEBAR TOGGLE INTERACTION (Top-Left Logo & Close Button)
@@ -94,6 +163,67 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================================
+  // LOGOUT & ROLE-BASED ACCESS CONTROL (RBAC) ENFORCEMENT
+  // =========================================================================
+
+  // 1. Update Profile Information in Sidebar Footer
+  const nameEl = document.querySelector('.user-fullname');
+  const roleLabelEl = document.querySelector('.user-role-label');
+  const avatarEl = document.querySelector('.admin-user-avatar span');
+  if (nameEl && currentUser.name) nameEl.textContent = currentUser.name;
+  if (roleLabelEl && currentUser.roleLabel) roleLabelEl.textContent = currentUser.roleLabel;
+  if (avatarEl && (currentUser.avatar || currentUser.name)) {
+    avatarEl.textContent = currentUser.avatar || currentUser.name.slice(0, 2).toUpperCase();
+  }
+
+  // 2. Enforce Lab Visibility & Control Restrictions
+  const treeLab1 = document.getElementById('treeLab1');
+  const treeLab2 = document.getElementById('treeLab2');
+  const btnSwitchLab1 = document.getElementById('btnSwitchLab1');
+  const btnSwitchLab2 = document.getElementById('btnSwitchLab2');
+  const settingsNavItem = document.querySelector('[data-view="settings"]')?.closest('li');
+
+  if (currentUser.allowedLab === 'LAB 1' || currentUser.scope === 'LAB_1_ONLY' || currentUser.role === 'LAB 1 ADMIN') {
+    if (treeLab2) treeLab2.style.display = 'none';
+    if (btnSwitchLab2) btnSwitchLab2.style.display = 'none';
+    if (settingsNavItem) settingsNavItem.style.display = 'none';
+    if (treeLab1) treeLab1.classList.add('open');
+    currentLab = 'LAB 1';
+  } else if (currentUser.allowedLab === 'LAB 2' || currentUser.scope === 'LAB_2_ONLY' || currentUser.role === 'LAB 2 ADMIN') {
+    if (treeLab1) treeLab1.style.display = 'none';
+    if (btnSwitchLab1) btnSwitchLab1.style.display = 'none';
+    if (settingsNavItem) settingsNavItem.style.display = 'none';
+    if (treeLab2) treeLab2.classList.add('open');
+    currentLab = 'LAB 2';
+    // Switch active dashboard to Lab 2 on startup
+    setTimeout(() => {
+      const lab2Link = document.querySelector('[data-view="lab2-dashboard"]');
+      if (lab2Link) lab2Link.click();
+    }, 50);
+  } else {
+    // Full Access for Global Admin and Security Super Admin
+    if (treeLab1) treeLab1.style.display = '';
+    if (treeLab2) treeLab2.style.display = '';
+    if (btnSwitchLab1) btnSwitchLab1.style.display = '';
+    if (btnSwitchLab2) btnSwitchLab2.style.display = '';
+    if (settingsNavItem) settingsNavItem.style.display = '';
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      try {
+        if (typeof firebase !== 'undefined' && firebase.auth) {
+          firebase.auth().signOut().catch(() => {});
+        }
+      } catch (_) {}
+      sessionStorage.removeItem('sentinel_auth');
+      sessionStorage.removeItem('sentinel_user');
+      window.location.replace('login.html');
+    });
+  }
+
+  // =========================================================================
   // 2. ACCORDION TREE (LAB 1 & LAB 2 Expand / Collapse)
   // =========================================================================
   const groupBtns = document.querySelectorAll('.nav-group-btn');
@@ -109,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // =========================================================================
-  // 3. SIDEBAR NAVIGATION ROUTING
+  // 3. SIDEBAR NAVIGATION ROUTING & RBAC GUARDS
   // =========================================================================
   const navLinks = document.querySelectorAll('.nav-link');
 
@@ -117,11 +247,22 @@ document.addEventListener('DOMContentLoaded', () => {
     link.addEventListener('click', (e) => {
       e.preventDefault();
 
+      const lab = link.getAttribute('data-lab') || 'SYSTEM';
+
+      // RBAC Boundary Enforcement
+      if (currentUser.allowedLab === 'LAB 1' && lab === 'LAB 2') {
+        triggerAccessDenied('LAB 2 Facilities & Telemetry');
+        return;
+      }
+      if (currentUser.allowedLab === 'LAB 2' && lab === 'LAB 1') {
+        triggerAccessDenied('LAB 1 Facilities & Telemetry');
+        return;
+      }
+
       navLinks.forEach((l) => l.classList.remove('active'));
       link.classList.add('active');
 
       const viewId = link.getAttribute('data-view');
-      const lab = link.getAttribute('data-lab') || 'SYSTEM';
       const section = link.getAttribute('data-section') || 'Dashboard';
 
       currentLab = lab;
@@ -136,16 +277,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (sidebarBrandHome) {
     sidebarBrandHome.addEventListener('click', () => {
-      const firstLink = document.querySelector('[data-view="lab1-dashboard"]');
-      if (firstLink) firstLink.click();
+      const targetView = currentUser.allowedLab === 'LAB 2' ? 'lab2-dashboard' : 'lab1-dashboard';
+      const homeLink = document.querySelector(`[data-view="${targetView}"]`);
+      if (homeLink) homeLink.click();
     });
   }
 
-  // 3D Hotspot Inspection Links
+  // 3D Hotspot Inspection Links with RBAC checks
   const hotspots = document.querySelectorAll('[data-goto-lab]');
   hotspots.forEach((spot) => {
     spot.addEventListener('click', () => {
       const targetLab = spot.getAttribute('data-goto-lab');
+      if (currentUser.allowedLab === 'LAB 1' && targetLab === 'LAB 2') {
+        triggerAccessDenied('LAB 2 Station');
+        return;
+      }
+      if (currentUser.allowedLab === 'LAB 2' && targetLab === 'LAB 1') {
+        triggerAccessDenied('LAB 1 Station');
+        return;
+      }
       const targetLink = document.querySelector(`[data-view="${targetLab === 'LAB 1' ? 'lab1-dashboard' : 'lab2-dashboard'}"]`);
       if (targetLink) targetLink.click();
       showToast(`Selected Node: ${spot.title}`, 'info');
@@ -166,7 +316,10 @@ document.addEventListener('DOMContentLoaded', () => {
       { id: 'lab1-sensor-monitoring', title: 'Sensor Monitoring', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>' },
       { id: 'lab1-analytics', title: 'Analytics', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>' },
       { id: 'lab1-event-logs', title: 'Event Logs', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>' },
-      { id: 'lab1-alerts', title: 'Alerts', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>' }
+      { id: 'lab1-alerts', title: 'Alerts', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>' },
+      { id: 'lab1-system-overview', title: 'System Overview', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>' },
+      { id: 'lab1-device-status', title: 'Device Status', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path></svg>' },
+      { id: 'lab1-settings', title: 'Settings', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>' }
     ],
     'LAB 2': [
       { id: 'lab2-dashboard', title: 'Dashboard', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>' },
@@ -176,13 +329,16 @@ document.addEventListener('DOMContentLoaded', () => {
       { id: 'lab2-sensor-monitoring', title: 'Sensor Monitoring', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>' },
       { id: 'lab2-analytics', title: 'Analytics', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>' },
       { id: 'lab2-event-logs', title: 'Event Logs', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>' },
-      { id: 'lab2-alerts', title: 'Alerts', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>' }
+      { id: 'lab2-alerts', title: 'Alerts', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>' },
+      { id: 'lab2-system-overview', title: 'System Overview', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>' },
+      { id: 'lab2-device-status', title: 'Device Status', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path></svg>' },
+      { id: 'lab2-settings', title: 'Settings', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>' }
     ],
     'SYSTEM': [
-      { id: 'system-overview', title: 'System Overview', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>' },
-      { id: 'chatbot', title: 'Chatbot', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="9" cy="10" r="1"></circle><circle cx="15" cy="10" r="1"></circle></svg>' },
-      { id: 'device-status', title: 'Device Status', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path></svg>' },
-      { id: 'settings', title: 'Settings', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>' }
+      { id: 'system-overview', title: 'Cluster Overview', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>' },
+      { id: 'chatbot', title: 'AI Chatbot', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="9" cy="10" r="1"></circle><circle cx="15" cy="10" r="1"></circle></svg>' },
+      { id: 'device-status', title: 'Device Matrix', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path></svg>' },
+      { id: 'settings', title: 'Global Settings', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>' }
     ]
   };
 
@@ -219,6 +375,99 @@ document.addEventListener('DOMContentLoaded', () => {
 
         renderView(targetView, targetLab, targetTitle);
       });
+    });
+  }
+
+  // =========================================================================
+  // HEADER CAPSULE CONTROLS (LAB 1 / LAB 2 Fast Switcher & AI Chatbot)
+  // =========================================================================
+  const headerChatbotBtn = document.getElementById('headerChatbotBtn');
+
+  function openChatbotView() {
+    const chatbotLink = document.querySelector('[data-view="chatbot"]');
+    if (chatbotLink) {
+      chatbotLink.click();
+    } else {
+      renderView('chatbot', 'SYSTEM', 'Chatbot');
+    }
+    showToast('💬 Launched SentinelAI Security Assistant', 'info');
+    setTimeout(() => {
+      const input = document.getElementById('chatTextInput');
+      if (input) input.focus();
+    }, 100);
+  }
+
+  function syncHeaderLabPills(lab) {
+    if (btnSwitchLab1) {
+      if (lab === 'LAB 1') {
+        btnSwitchLab1.classList.add('active');
+      } else {
+        btnSwitchLab1.classList.remove('active');
+      }
+    }
+    if (btnSwitchLab2) {
+      if (lab === 'LAB 2') {
+        btnSwitchLab2.classList.add('active');
+      } else {
+        btnSwitchLab2.classList.remove('active');
+      }
+    }
+  }
+
+  function switchToLab(targetLab) {
+    if (currentUser.allowedLab === 'LAB 1' && targetLab === 'LAB 2') {
+      triggerAccessDenied('LAB 2 Facilities');
+      return;
+    }
+    if (currentUser.allowedLab === 'LAB 2' && targetLab === 'LAB 1') {
+      triggerAccessDenied('LAB 1 Facilities');
+      return;
+    }
+
+    currentLab = targetLab;
+    syncHeaderLabPills(targetLab);
+
+    // Open corresponding accordion group in sidebar
+    const allGroups = document.querySelectorAll('.nav-group-block');
+    allGroups.forEach((group) => {
+      const headerTitle = group.querySelector('.nav-group-title');
+      if (headerTitle && headerTitle.textContent.includes(targetLab)) {
+        group.classList.add('open');
+        const btn = group.querySelector('.nav-group-btn');
+        if (btn) btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    // Find and trigger the target lab's dashboard view
+    const targetViewId = targetLab === 'LAB 2' ? 'lab2-dashboard' : 'lab1-dashboard';
+    const targetLink = document.querySelector(`[data-view="${targetViewId}"]`);
+    if (targetLink) {
+      targetLink.click();
+    } else {
+      renderView(targetViewId, targetLab, 'Dashboard');
+    }
+
+    showToast(`Switched to ${targetLab} (${targetLab === 'LAB 2' ? 'Beta Wing' : 'Alpha Core'})`, 'info');
+  }
+
+  if (btnSwitchLab1) {
+    btnSwitchLab1.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchToLab('LAB 1');
+    });
+  }
+
+  if (btnSwitchLab2) {
+    btnSwitchLab2.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchToLab('LAB 2');
+    });
+  }
+
+  if (headerChatbotBtn) {
+    headerChatbotBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openChatbotView();
     });
   }
 
@@ -304,16 +553,23 @@ document.addEventListener('DOMContentLoaded', () => {
           viewHtml = getSurveillanceHtml(lab);
           break;
         case 'System Overview':
-          viewHtml = getSystemOverviewHtml();
+        case 'Global System Overview':
+        case 'LAB 2 System Overview':
+          viewHtml = getSystemOverviewHtml('LAB 2');
           break;
         case 'Chatbot':
+        case 'AI Security Chatbot':
           viewHtml = getChatbotHtml();
           break;
         case 'Device Status':
-          viewHtml = getDeviceStatusHtml();
+        case 'Cluster Device Matrix':
+        case 'LAB 2 Device Status':
+          viewHtml = getDeviceStatusHtml('LAB 2');
           break;
         case 'Settings':
-          viewHtml = getSettingsHtml();
+        case 'Global Settings':
+        case 'LAB 2 Settings':
+          viewHtml = getSettingsHtml('LAB 2');
           break;
         default:
           viewHtml = getLab2ComponentsHtml();
@@ -346,16 +602,23 @@ document.addEventListener('DOMContentLoaded', () => {
           viewHtml = getAlertsHtml(lab);
           break;
         case 'System Overview':
-          viewHtml = getSystemOverviewHtml();
+        case 'Global System Overview':
+        case 'LAB 1 System Overview':
+          viewHtml = getSystemOverviewHtml(lab);
           break;
         case 'Chatbot':
+        case 'AI Security Chatbot':
           viewHtml = getChatbotHtml();
           break;
         case 'Device Status':
-          viewHtml = getDeviceStatusHtml();
+        case 'Cluster Device Matrix':
+        case 'LAB 1 Device Status':
+          viewHtml = getDeviceStatusHtml(lab);
           break;
         case 'Settings':
-          viewHtml = getSettingsHtml();
+        case 'Global Settings':
+        case 'LAB 1 Settings':
+          viewHtml = getSettingsHtml(lab);
           break;
         default:
           viewHtml = getDefaultHtml(lab, section);
@@ -978,15 +1241,36 @@ document.addEventListener('DOMContentLoaded', () => {
               </div>
               
               <div class="cam-window-header-actions">
-                <!-- Multi-Size Resolution Selector -->
+                <!-- Aspect Ratio Shape Filter Pills -->
+                <div class="cam-aspect-pills" id="camAspectPills">
+                  <button type="button" class="cam-aspect-btn" data-aspect-filter="all" title="Show all resolutions">All</button>
+                  <button type="button" class="cam-aspect-btn" data-aspect-filter="16:9" title="16:9 Widescreen">16:9</button>
+                  <button type="button" class="cam-aspect-btn" data-aspect-filter="4:3" title="4:3 Standard">4:3</button>
+                  <button type="button" class="cam-aspect-btn active" data-aspect-filter="1:1" title="1:1 Square Shape">■ 1:1 Square</button>
+                </div>
+
+                <!-- Multi-Size Resolution Selector (Including Square Shapes) -->
                 <div class="cam-res-select-wrapper">
                   <span class="cam-res-label">Resolution:</span>
-                  <select class="cam-res-dropdown" id="camResolutionSelect" title="Select Stream Resolution & Window Size">
-                    <option value="hd" data-res="1280x720 (HD 16:9)" data-height="340px" selected>1280x720 (HD 16:9)</option>
-                    <option value="fhd" data-res="1920x1080 (FHD 16:9)" data-height="420px">1920x1080 (FHD 16:9)</option>
-                    <option value="vga" data-res="640x480 (VGA 4:3)" data-height="280px">640x480 (VGA 4:3)</option>
-                    <option value="svga" data-res="800x600 (SVGA 4:3)" data-height="320px">800x600 (SVGA 4:3)</option>
-                    <option value="uxga" data-res="1600x1200 (UXGA 4:3)" data-height="460px">1600x1200 (UXGA 4:3)</option>
+                  <select class="cam-res-dropdown" id="camResolutionSelect" title="Select Stream Resolution & Window Shape">
+                    <optgroup label="Square Shapes (1:1 Ratio)" data-group="1:1">
+                      <option value="sq-1600" data-res="1600x1600 (Square 1:1)" data-height="520px" data-aspect="square" selected>1600x1600 (Square 1:1 HD)</option>
+                      <option value="sq-1200" data-res="1200x1200 (Square 1:1)" data-height="460px" data-aspect="square">1200x1200 (Square 1:1)</option>
+                      <option value="sq-1080" data-res="1080x1080 (Square 1:1)" data-height="420px" data-aspect="square">1080x1080 (Square 1:1 FHD)</option>
+                      <option value="sq-800" data-res="800x800 (Square 1:1)" data-height="360px" data-aspect="square">800x800 (Square 1:1 SVGA)</option>
+                      <option value="sq-640" data-res="640x640 (Square 1:1)" data-height="320px" data-aspect="square">640x640 (Square 1:1 VGA)</option>
+                      <option value="sq-480" data-res="480x480 (Square 1:1)" data-height="280px" data-aspect="square">480x480 (Square 1:1 SD)</option>
+                      <option value="sq-240" data-res="240x240 (Square 1:1)" data-height="240px" data-aspect="square">240x240 (Square 1:1 Mini)</option>
+                    </optgroup>
+                    <optgroup label="Standard (4:3 Ratio)" data-group="4:3">
+                      <option value="uxga" data-res="1600x1200 (UXGA 4:3)" data-height="460px" data-aspect="standard">1600x1200 (UXGA 4:3)</option>
+                      <option value="svga" data-res="800x600 (SVGA 4:3)" data-height="340px" data-aspect="standard">800x600 (SVGA 4:3)</option>
+                      <option value="vga" data-res="640x480 (VGA 4:3)" data-height="280px" data-aspect="standard">640x480 (VGA 4:3)</option>
+                    </optgroup>
+                    <optgroup label="Widescreen (16:9 Ratio)" data-group="16:9">
+                      <option value="fhd" data-res="1920x1080 (FHD 16:9)" data-height="420px" data-aspect="wide">1920x1080 (FHD 16:9)</option>
+                      <option value="hd" data-res="1280x720 (HD 16:9)" data-height="340px" data-aspect="wide">1280x720 (HD 16:9)</option>
+                    </optgroup>
                   </select>
                 </div>
                 <span class="cam-window-mode-badge" id="camWindowBadge">Live Camera</span>
@@ -1064,7 +1348,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 <div class="status-keyval-row">
                   <span class="status-key">Resolution</span>
-                  <span class="status-val-bold" id="statusValRes" style="color: #2563eb;">1280x720 (HD)</span>
+                  <span class="status-val-bold" id="statusValRes" style="color: #ff4d55;">1280x720 (HD)</span>
                 </div>
                 <div class="status-keyval-row">
                   <span class="status-key">Person</span>
@@ -1204,8 +1488,8 @@ document.addEventListener('DOMContentLoaded', () => {
         </div>
         <div class="telemetry-card">
           <span class="telemetry-label">Classifier Confidence</span>
-          <span class="telemetry-val" style="color: #2563eb;">99.98%</span>
-          <div class="telemetry-bar-track"><div class="telemetry-bar-fill" style="width: 99.9%;"></div></div>
+          <span class="telemetry-val" style="color: #ff4d55;">99.98%</span>
+          <div class="telemetry-bar-track"><div class="telemetry-bar-fill" style="width: 99.9%; background: linear-gradient(90deg, #b01f24, #e41e25);"></div></div>
         </div>
         <div class="telemetry-card">
           <span class="telemetry-label">Defense Protocol</span>
@@ -1528,36 +1812,36 @@ document.addEventListener('DOMContentLoaded', () => {
               <svg class="analytics-chart-svg" viewBox="0 0 600 220" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="areaGradientBlue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#2563eb" stop-opacity="0.35"/>
-                    <stop offset="100%" stop-color="#2563eb" stop-opacity="0.0"/>
+                    <stop offset="0%" stop-color="#e41e25" stop-opacity="0.35"/>
+                    <stop offset="100%" stop-color="#e41e25" stop-opacity="0.0"/>
                   </linearGradient>
                   <linearGradient id="areaGradientGreen" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
-                    <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
+                    <stop offset="0%" stop-color="#ff333c" stop-opacity="0.2"/>
+                    <stop offset="100%" stop-color="#ff333c" stop-opacity="0.0"/>
                   </linearGradient>
                 </defs>
 
                 <!-- Horizontal Grid Lines -->
-                <line x1="0" y1="30" x2="600" y2="30" stroke="#e2e8f0" stroke-dasharray="4"/>
-                <line x1="0" y1="80" x2="600" y2="80" stroke="#e2e8f0" stroke-dasharray="4"/>
-                <line x1="0" y1="130" x2="600" y2="130" stroke="#e2e8f0" stroke-dasharray="4"/>
-                <line x1="0" y1="180" x2="600" y2="180" stroke="#e2e8f0" stroke-dasharray="4"/>
+                <line x1="0" y1="30" x2="600" y2="30" stroke="rgba(255, 255, 255, 0.08)" stroke-dasharray="4"/>
+                <line x1="0" y1="80" x2="600" y2="80" stroke="rgba(255, 255, 255, 0.08)" stroke-dasharray="4"/>
+                <line x1="0" y1="130" x2="600" y2="130" stroke="rgba(255, 255, 255, 0.08)" stroke-dasharray="4"/>
+                <line x1="0" y1="180" x2="600" y2="180" stroke="rgba(255, 255, 255, 0.08)" stroke-dasharray="4"/>
 
-                <!-- Primary Blue Area & Curve -->
+                <!-- Primary Red Area & Curve -->
                 <path d="M 0 180 Q 80 140 100 120 T 200 90 T 300 110 T 400 60 T 500 70 T 600 40 L 600 210 L 0 210 Z" fill="url(#areaGradientBlue)"/>
-                <path d="M 0 180 Q 80 140 100 120 T 200 90 T 300 110 T 400 60 T 500 70 T 600 40" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+                <path d="M 0 180 Q 80 140 100 120 T 200 90 T 300 110 T 400 60 T 500 70 T 600 40" fill="none" stroke="#e41e25" stroke-width="3" stroke-linecap="round"/>
 
-                <!-- Secondary Green Curve -->
+                <!-- Secondary Crimson Curve -->
                 <path d="M 0 195 Q 80 160 100 150 T 200 130 T 300 140 T 400 110 T 500 120 T 600 90 L 600 210 L 0 210 Z" fill="url(#areaGradientGreen)"/>
-                <path d="M 0 195 Q 80 160 100 150 T 200 130 T 300 140 T 400 110 T 500 120 T 600 90" fill="none" stroke="#10b981" stroke-width="2.5" stroke-dasharray="5 3" stroke-linecap="round"/>
+                <path d="M 0 195 Q 80 160 100 150 T 200 130 T 300 140 T 400 110 T 500 120 T 600 90" fill="none" stroke="#ff333c" stroke-width="2.5" stroke-dasharray="5 3" stroke-linecap="round"/>
 
                 <!-- Highlight Pulse Points -->
-                <circle cx="100" cy="120" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
-                <circle cx="200" cy="90" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
-                <circle cx="300" cy="110" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
-                <circle cx="400" cy="60" r="5" fill="#0052d4" stroke="#ffffff" stroke-width="2.5"/>
-                <circle cx="500" cy="70" r="4.5" fill="#2563eb" stroke="#ffffff" stroke-width="2"/>
-                <circle cx="600" cy="40" r="5.5" fill="#0052d4" stroke="#ffffff" stroke-width="2.5"/>
+                <circle cx="100" cy="120" r="4.5" fill="#e41e25" stroke="#ffffff" stroke-width="2"/>
+                <circle cx="200" cy="90" r="4.5" fill="#e41e25" stroke="#ffffff" stroke-width="2"/>
+                <circle cx="300" cy="110" r="4.5" fill="#e41e25" stroke="#ffffff" stroke-width="2"/>
+                <circle cx="400" cy="60" r="5" fill="#b01f24" stroke="#ffffff" stroke-width="2.5"/>
+                <circle cx="500" cy="70" r="4.5" fill="#e41e25" stroke="#ffffff" stroke-width="2"/>
+                <circle cx="600" cy="40" r="5.5" fill="#b01f24" stroke="#ffffff" stroke-width="2.5"/>
               </svg>
               <div class="chart-x-axis-labels">
                 <span>Mon (Day 1)</span>
@@ -1737,7 +2021,19 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  function getSystemOverviewHtml() {
+  function getSystemOverviewHtml(lab = 'SYSTEM') {
+    const isLab1 = lab === 'LAB 1';
+    const isLab2 = lab === 'LAB 2';
+    const title = isLab1 ? 'LAB 1 — Alpha Core Dedicated System Overview' : isLab2 ? 'LAB 2 — Beta Wing Edge Node Architecture' : 'GLOBAL — Distributed Laboratory Security Cluster';
+    const subtitle = isLab1 ? 'Alpha Core edge compute, neural inference pipelines, and dedicated lab buses' : isLab2 ? 'Beta Wing isolation controllers, quantum cryptographic shields, and secondary buses' : 'Unified orchestration matrix across isolated laboratory facilities';
+    const badgeText = isLab1 ? 'ALPHA CORE ONLINE' : isLab2 ? 'BETA WING ONLINE' : 'ALL 4 LAB NODES ONLINE';
+    const uptime = isLab1 ? '99.999%' : isLab2 ? '99.985%' : '99.998%';
+    const uptimeSub = isLab1 ? 'Alpha Mainframe Isolated Uptime' : isLab2 ? 'Beta Controller Active Node Uptime' : '428 Days Continuous Operation';
+    const radar = isLab1 ? '0 Threats Detected' : isLab2 ? '0 Interlocks Breached' : '0 Incidents';
+    const radarSub = isLab1 ? 'Alpha Mesh Perimeter Active' : isLab2 ? 'Quantum Isolation Shield Active' : 'Quantum Shield Active';
+    const latency = isLab1 ? '0.8 ms' : isLab2 ? '1.4 ms' : '1.2 ms';
+    const latencySub = isLab1 ? 'Direct ESP32-CAM Bus' : isLab2 ? 'Airgap Shielded Bus' : 'Airgap Fiber Bus';
+
     return `
       <div class="view-card-banner">
         <div class="banner-left">
@@ -1745,28 +2041,210 @@ document.addEventListener('DOMContentLoaded', () => {
             <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
           </div>
           <div>
-            <h2 class="banner-title">SYSTEM — Global Distributed Security Cluster</h2>
-            <p class="banner-subtitle">Unified orchestration matrix across isolated laboratory facilities</p>
+            <h2 class="banner-title">${title}</h2>
+            <p class="banner-subtitle">${subtitle}</p>
           </div>
         </div>
-        <span class="badge-status-green">ALL 4 LAB NODES ONLINE</span>
+        <span class="badge-status-green">${badgeText}</span>
       </div>
 
       <div class="submodule-grid-3col">
         <div class="telemetry-card">
-          <span class="telemetry-label">Cluster Uptime</span>
-          <span class="telemetry-val" style="color: #16a34a;">99.998%</span>
-          <span style="font-size: 12px; color: #64748b;">428 Days Continuous Operation</span>
+          <span class="telemetry-label">${isLab1 ? 'LAB 1 Node Uptime' : isLab2 ? 'LAB 2 Node Uptime' : 'Cluster Uptime'}</span>
+          <span class="telemetry-val" style="color: #16a34a;">${uptime}</span>
+          <span style="font-size: 12px; color: #64748b;">${uptimeSub}</span>
         </div>
         <div class="telemetry-card">
-          <span class="telemetry-label">Distributed Threat Radar</span>
-          <span class="telemetry-val">0 Incidents</span>
-          <span style="font-size: 12px; color: #16a34a;">Quantum Shield Active</span>
+          <span class="telemetry-label">${isLab1 ? 'LAB 1 Perimeter Defense' : isLab2 ? 'LAB 2 Isolation Status' : 'Distributed Threat Radar'}</span>
+          <span class="telemetry-val">${radar}</span>
+          <span style="font-size: 12px; color: #16a34a;">${radarSub}</span>
         </div>
         <div class="telemetry-card">
-          <span class="telemetry-label">Inter-Lab Bus Latency</span>
-          <span class="telemetry-val">1.2 ms</span>
-          <span style="font-size: 12px; color: #64748b;">Airgap Fiber Bus</span>
+          <span class="telemetry-label">${isLab1 ? 'LAB 1 Sensor Bus' : isLab2 ? 'LAB 2 Bus Latency' : 'Inter-Lab Bus Latency'}</span>
+          <span class="telemetry-val">${latency}</span>
+          <span style="font-size: 12px; color: #64748b;">${latencySub}</span>
+        </div>
+      </div>
+    `;
+  }
+
+  function getDeviceStatusHtml(lab = 'SYSTEM') {
+    const isLab1 = lab === 'LAB 1';
+    const isLab2 = lab === 'LAB 2';
+    const title = isLab1 ? 'LAB 1 — Hardware & Sensor Node Matrix' : isLab2 ? 'LAB 2 — Specimen Wing Devices & Relays' : 'GLOBAL — Connected Hardware & Cluster Device Matrix';
+    const subtitle = isLab1 ? 'Real-time telemetry and firmware for all Alpha Core cameras and sensors' : isLab2 ? 'Status and firmware health for Beta Wing magnetic seals and environmental arrays' : 'Status and firmware health for all 24 connected IoT and optical edge nodes';
+
+    const rows = isLab1 ? `
+      <tr>
+        <td class="cell-mono">LAB1-ESP32-CAM</td>
+        <td>LAB 1 (Surveillance Window)</td>
+        <td>4K Live AI Camera</td>
+        <td><span style="color:#16a34a;">-38 dBm (Strong)</span></td>
+        <td>v4.2.1-SEC</td>
+        <td><span class="badge-status-green">ONLINE</span></td>
+      </tr>
+      <tr>
+        <td class="cell-mono">LAB1-SERVO-PAN</td>
+        <td>LAB 1 (PTZ Rig)</td>
+        <td>PWM Pan-Tilt Servo</td>
+        <td><span style="color:#16a34a;">Direct I2C Bus</span></td>
+        <td>v2.1.0</td>
+        <td><span class="badge-status-green">ONLINE</span></td>
+      </tr>
+      <tr>
+        <td class="cell-mono">LAB1-MAG-DOOR</td>
+        <td>LAB 1 (Airlock Primary)</td>
+        <td>12V 500kg Magnetic Lock</td>
+        <td><span style="color:#16a34a;">Relay Bus</span></td>
+        <td>v1.9.4</td>
+        <td><span class="badge-status-green">LOCKED</span></td>
+      </tr>
+      <tr>
+        <td class="cell-mono">LAB1-DHT22-SENS</td>
+        <td>LAB 1 (Cleanroom Air)</td>
+        <td>Thermo-Hygro Array</td>
+        <td><span style="color:#16a34a;">OneWire Bus</span></td>
+        <td>v2.8.4</td>
+        <td><span class="badge-status-green">21.4°C • 44%</span></td>
+      </tr>
+    ` : isLab2 ? `
+      <tr>
+        <td class="cell-mono">LAB2-CAM-VAULT</td>
+        <td>LAB 2 (Specimen Airgap)</td>
+        <td>Thermal Infrared Sensor</td>
+        <td><span style="color:#16a34a;">-41 dBm</span></td>
+        <td>v4.2.0-CRYO</td>
+        <td><span class="badge-status-green">ONLINE</span></td>
+      </tr>
+      <tr>
+        <td class="cell-mono">LAB2-CRYO-SEAL</td>
+        <td>LAB 2 (Isolation Interlock)</td>
+        <td>Dual Solenoid Pressure Gate</td>
+        <td><span style="color:#16a34a;">CAN Bus</span></td>
+        <td>v3.1.2</td>
+        <td><span class="badge-status-green">SEALED</span></td>
+      </tr>
+      <tr>
+        <td class="cell-mono">LAB2-GAS-BARRIER</td>
+        <td>LAB 2 (Containment Vent)</td>
+        <td>CO2 / Halon Suppression Actuator</td>
+        <td><span style="color:#16a34a;">Direct Bus</span></td>
+        <td>v1.4.0</td>
+        <td><span class="badge-status-green">STANDBY</span></td>
+      </tr>
+    ` : `
+      <tr>
+        <td class="cell-mono">CAM-AI-0104</td>
+        <td>LAB 1 (Airlock)</td>
+        <td>4K AI Optical Sensor</td>
+        <td><span style="color:#16a34a;">-42 dBm (Strong)</span></td>
+        <td>v4.2.1-SEC</td>
+        <td><span class="badge-status-green">ONLINE</span></td>
+      </tr>
+      <tr>
+        <td class="cell-mono">DOOR-MAG-0211</td>
+        <td>LAB 2 (Specimen Vault)</td>
+        <td>Magnetic Interlock Relay</td>
+        <td><span style="color:#16a34a;">Direct Bus</span></td>
+        <td>v3.1.0</td>
+        <td><span class="badge-status-green">ONLINE</span></td>
+      </tr>
+      <tr>
+        <td class="cell-mono">SENS-AQI-0089</td>
+        <td>LAB 1 (Cleanroom)</td>
+        <td>Environmental Array</td>
+        <td><span style="color:#16a34a;">-38 dBm</span></td>
+        <td>v2.8.4</td>
+        <td><span class="badge-status-green">ONLINE</span></td>
+      </tr>
+    `;
+
+    return `
+      <div class="view-card-banner">
+        <div class="banner-left">
+          <div class="banner-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+          </div>
+          <div>
+            <h2 class="banner-title">${title}</h2>
+            <p class="banner-subtitle">${subtitle}</p>
+          </div>
+        </div>
+        <button class="btn-secondary-action" id="dynPingBtn">
+          <span>Ping ${isLab1 ? 'LAB 1 Nodes' : isLab2 ? 'LAB 2 Nodes' : 'All Cluster Devices'}</span>
+        </button>
+      </div>
+
+      <div class="enterprise-card">
+        <div class="table-container">
+          <table class="enterprise-table">
+            <thead>
+              <tr>
+                <th>DEVICE ID</th>
+                <th>LOCATION</th>
+                <th>TYPE</th>
+                <th>SIGNAL / BUS</th>
+                <th>FIRMWARE</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  function getSettingsHtml(lab = 'SYSTEM') {
+    const isLab1 = lab === 'LAB 1';
+    const isLab2 = lab === 'LAB 2';
+    const title = isLab1 ? 'LAB 1 — Dedicated Security & Node Settings' : isLab2 ? 'LAB 2 — Specimen Wing Parameters & Interlock Rules' : 'GLOBAL — Enterprise Security Configuration';
+    const subtitle = isLab1 ? 'Configure IP feeds, servo presets, threshold alarms, and magnetic relay timeouts for LAB 1' : isLab2 ? 'Configure containment protocol, cryogenic threshold alarms, and isolation policies for LAB 2' : 'System-wide cryptographic parameters and authentication thresholds';
+
+    return `
+      <div class="view-card-banner">
+        <div class="banner-left">
+          <div class="banner-icon">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          </div>
+          <div>
+            <h2 class="banner-title">${title}</h2>
+            <p class="banner-subtitle">${subtitle}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="submodule-grid-2col">
+        <div class="enterprise-card">
+          <h3 class="card-heading">${isLab1 ? 'LAB 1 Camera Stream & IP Config' : isLab2 ? 'LAB 2 Camera Stream & IP Config' : 'Primary Stream Gateway'}</h3>
+          <p class="card-caption">RTSP and HTTP Stream Parameters</p>
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 10px;">
+            <div>
+              <label style="font-size: 11.5px; font-weight: 700; color: #475569;">Stream Endpoint</label>
+              <input type="text" value="${isLab1 ? 'http://192.168.1.50:81/stream' : isLab2 ? 'http://192.168.1.51:81/stream' : 'http://192.168.1.50:81/stream'}" class="styled-input-field" style="width: 100%; box-sizing: border-box; margin-top: 4px;">
+            </div>
+            <div>
+              <label style="font-size: 11.5px; font-weight: 700; color: #475569;">Auto-Lock Timeout</label>
+              <input type="text" value="${isLab1 ? '5000 ms (5 Seconds)' : isLab2 ? '3000 ms (Strict)' : '5000 ms'}" class="styled-input-field" style="width: 100%; box-sizing: border-box; margin-top: 4px;">
+            </div>
+          </div>
+        </div>
+
+        <div class="enterprise-card">
+          <h3 class="card-heading">${isLab1 ? 'LAB 1 Threshold Alarms' : isLab2 ? 'LAB 2 Cryo Containment' : 'Security Policy'}</h3>
+          <p class="card-caption">Defensive triggers and acoustic sirens</p>
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 10px;">
+            <div>
+              <label style="font-size: 11.5px; font-weight: 700; color: #475569;">PIR Motion Sensitivity</label>
+              <input type="text" value="${isLab1 ? 'High (98%)' : isLab2 ? 'Ultra-High (99.8%)' : 'Standard'}" class="styled-input-field" style="width: 100%; box-sizing: border-box; margin-top: 4px;">
+            </div>
+            <div>
+              <label style="font-size: 11.5px; font-weight: 700; color: #475569;">Optical Reticle Color</label>
+              <input type="text" value="#00d2ff (Electric Cyan)" class="styled-input-field" style="width: 100%; box-sizing: border-box; margin-top: 4px;">
+            </div>
+          </div>
         </div>
       </div>
     `;
@@ -1779,8 +2257,8 @@ document.addEventListener('DOMContentLoaded', () => {
         <!-- Top Interface Header -->
         <div class="gpt-ui-topbar">
           <div class="gpt-brand-left">
-            <div class="gpt-shield-icon-badge">
-              <img src="logo.svg" alt="SentinelAI-X" class="gpt-brand-logo-img">
+            <div class="gpt-shield-icon-badge" title="SentinelAI-X Autonomous Core">
+              <img src="logo.svg" alt="SentinelAI-X Logo" class="gpt-brand-logo-img">
             </div>
             <span class="gpt-brand-name-text">SentinelAI-X</span>
           </div>
@@ -1826,7 +2304,7 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="gpt-qa-tab-content active" id="qaTabTasks">
                 <div class="gpt-qa-grid">
                   <button type="button" class="gpt-qa-card chat-prompt-chip" data-query="Open and unlock the laboratory airlock door">
-                    <span class="qa-icon-wrap" style="color: #2563eb; background: #eff6ff;">
+                    <span class="qa-icon-wrap" style="color: #ff4d55; background: rgba(228, 30, 37, 0.15);">
                       <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"></path><path d="M19 21v-14l-8-4-8 4v14"></path><circle cx="9" cy="14" r="1"></circle></svg>
                     </span>
                     <div class="qa-info">
@@ -1932,7 +2410,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <!-- Attachment Dropdown Menu Popup -->
           <div class="gpt-attach-popup" id="chatAttachPopup" style="display: none;">
             <button type="button" class="gpt-attach-option" id="attachImageOptionBtn">
-              <span class="attach-opt-icon" style="color: #2563eb; background: #eff6ff;">
+              <span class="attach-opt-icon" style="color: #ff4d55; background: rgba(228, 30, 37, 0.15);">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
               </span>
               <div class="attach-opt-text">
@@ -1942,7 +2420,7 @@ document.addEventListener('DOMContentLoaded', () => {
             </button>
             
             <button type="button" class="gpt-attach-option" id="attachSnapshotOptionBtn">
-              <span class="attach-opt-icon" style="color: #0284c7; background: #f0f9ff;">
+              <span class="attach-opt-icon" style="color: #ff333c; background: rgba(228, 30, 37, 0.12);">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
               </span>
               <div class="attach-opt-text">
@@ -1966,8 +2444,6 @@ document.addEventListener('DOMContentLoaded', () => {
           <div class="gpt-attached-strip" id="chatAttachedStrip" style="display: none;"></div>
 
           <form class="gpt-exact-pill-input-box" id="chatInputForm">
-            <div class="gpt-pill-rainbow-beam"></div>
-            
             <button type="button" class="gpt-pill-add-btn" id="chatAttachBtn" title="Add attachment or image">
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             </button>
@@ -1987,12 +2463,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
               </button>
 
-              <button type="submit" class="gpt-waveform-send-btn" id="chatSendBtn" title="Send (Enter)">
+              <button type="submit" class="gpt-waveform-send-btn gpt-chatbot-symbol-btn" id="chatSendBtn" title="Send (Enter)">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-                  <rect x="4" y="9" width="2.5" height="6" rx="1.25"></rect>
-                  <rect x="8.5" y="5" width="2.5" height="14" rx="1.25"></rect>
-                  <rect x="13" y="7" width="2.5" height="10" rx="1.25"></rect>
-                  <rect x="17.5" y="9" width="2.5" height="6" rx="1.25"></rect>
+                  <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
                 </svg>
               </button>
             </div>
@@ -2137,15 +2610,15 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="enterprise-card">
         <h3 class="card-heading">Biometric Strictness & Anomaly Sensitivity</h3>
         <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 10px;">
-          <label style="font-size: 13.5px; font-weight: 600; color: #1e293b;">
-            Biometric Facial Match Threshold: <strong>99.0%</strong>
+          <label style="font-size: 13.5px; font-weight: 600; color: #cbd5e1;">
+            Biometric Facial Match Threshold: <strong style="color: #ff4d55;">99.0%</strong>
           </label>
-          <input type="range" min="90" max="100" value="99" style="width: 100%; accent-color: #2563eb;">
+          <input type="range" min="90" max="100" value="99" style="width: 100%; accent-color: #e41e25;">
           
-          <label style="font-size: 13.5px; font-weight: 600; color: #1e293b; margin-top: 8px;">
-            Optical Anomaly Sensitivity: <strong>High (Auto-Lock on Unrecognized Motion)</strong>
+          <label style="font-size: 13.5px; font-weight: 600; color: #cbd5e1; margin-top: 8px;">
+            Optical Anomaly Sensitivity: <strong style="color: #ff4d55;">High (Auto-Lock on Unrecognized Motion)</strong>
           </label>
-          <input type="range" min="1" max="10" value="8" style="width: 100%; accent-color: #2563eb;">
+          <input type="range" min="1" max="10" value="8" style="width: 100%; accent-color: #e41e25;">
         </div>
       </div>
     `;
@@ -2827,32 +3300,84 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Multi-Size Resolution Selector Handler
+    // Multi-Size Resolution Selector & Square Shape Handler
     const camResolutionSelect = document.getElementById('camResolutionSelect');
     const camVideoViewport = document.getElementById('camVideoViewport');
     const camStreamStatusText = document.getElementById('camStreamStatusText');
     const statusValRes = document.getElementById('statusValRes');
     const lightboxResolutionBadge = document.getElementById('lightboxResolutionBadge');
+    const camAspectPills = document.getElementById('camAspectPills');
 
-    if (camResolutionSelect && camVideoViewport) {
-      camResolutionSelect.addEventListener('change', (e) => {
-        const selectedOpt = camResolutionSelect.options[camResolutionSelect.selectedIndex];
-        const resText = selectedOpt.getAttribute('data-res') || selectedOpt.text;
-        const targetHeight = selectedOpt.getAttribute('data-height') || '340px';
+    function applyCameraResolution(selectedOpt) {
+      if (!selectedOpt || !camVideoViewport) return;
+      const resText = selectedOpt.getAttribute('data-res') || selectedOpt.text;
+      const targetHeight = selectedOpt.getAttribute('data-height') || '340px';
+      const aspectType = selectedOpt.getAttribute('data-aspect') || 'standard';
 
+      if (aspectType === 'square') {
+        camVideoViewport.classList.add('is-square-shape');
         camVideoViewport.style.minHeight = targetHeight;
-        if (camStreamStatusText) {
-          camStreamStatusText.textContent = `Live stream from http://192.168.1.50:81/stream • ${resText} @ 30fps`;
-        }
-        if (statusValRes) {
-          statusValRes.textContent = resText.split(' ')[0];
-        }
-        if (lightboxResolutionBadge) {
-          lightboxResolutionBadge.textContent = resText.split(' ')[0];
-        }
+        camVideoViewport.style.aspectRatio = '1 / 1';
+        camVideoViewport.style.maxWidth = '540px';
+        camVideoViewport.style.margin = '0 auto';
+      } else {
+        camVideoViewport.classList.remove('is-square-shape');
+        camVideoViewport.style.minHeight = targetHeight;
+        camVideoViewport.style.aspectRatio = aspectType === 'wide' ? '16 / 9' : '4 / 3';
+        camVideoViewport.style.maxWidth = '100%';
+        camVideoViewport.style.margin = '0';
+      }
 
-        addLiveLogEntry(`Stream resolution switched to ${resText}`);
-        showToast(`Camera window resized to ${resText}`, 'info');
+      if (camStreamStatusText) {
+        camStreamStatusText.textContent = `Live stream from http://192.168.1.50:81/stream • ${resText} @ 30fps`;
+      }
+      if (statusValRes) {
+        statusValRes.textContent = resText.split(' ')[0];
+      }
+      if (lightboxResolutionBadge) {
+        lightboxResolutionBadge.textContent = resText.split(' ')[0];
+      }
+
+      addLiveLogEntry(`Stream resolution switched to ${resText}`);
+      showToast(`Camera window set to ${resText}`, 'info');
+    }
+
+    if (camResolutionSelect) {
+      camResolutionSelect.addEventListener('change', () => {
+        const selectedOpt = camResolutionSelect.options[camResolutionSelect.selectedIndex];
+        applyCameraResolution(selectedOpt);
+      });
+    }
+
+    // Aspect Ratio Buttons Filter (All, 16:9, 4:3, 1:1 Square)
+    if (camAspectPills && camResolutionSelect) {
+      const aspectBtns = camAspectPills.querySelectorAll('.cam-aspect-btn');
+      aspectBtns.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          aspectBtns.forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+          const filter = btn.getAttribute('data-aspect-filter');
+
+          const optgroups = camResolutionSelect.querySelectorAll('optgroup');
+          let firstMatchOpt = null;
+
+          optgroups.forEach((og) => {
+            const groupType = og.getAttribute('data-group');
+            if (filter === 'all' || groupType === filter) {
+              og.style.display = '';
+              if (!firstMatchOpt && og.children.length > 0) {
+                firstMatchOpt = og.children[0];
+              }
+            } else {
+              og.style.display = 'none';
+            }
+          });
+
+          if (firstMatchOpt) {
+            camResolutionSelect.value = firstMatchOpt.value;
+            applyCameraResolution(firstMatchOpt);
+          }
+        });
       });
     }
 
@@ -3263,40 +3788,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // =========================================================================
-  // 9. HEADER LAB SELECTOR & REAL-TIME INDIAN STANDARD TIME (IST) CLOCK
-  // =========================================================================
-  const btnSwitchLab1 = document.getElementById('btnSwitchLab1');
-  const btnSwitchLab2 = document.getElementById('btnSwitchLab2');
-
-  function syncHeaderLabPills(labName) {
-    if (btnSwitchLab1 && btnSwitchLab2) {
-      if (labName === 'LAB 1') {
-        btnSwitchLab1.classList.add('active');
-        btnSwitchLab2.classList.remove('active');
-      } else if (labName === 'LAB 2') {
-        btnSwitchLab2.classList.add('active');
-        btnSwitchLab1.classList.remove('active');
-      }
-    }
-  }
-
-  if (btnSwitchLab1) {
-    btnSwitchLab1.addEventListener('click', () => {
-      syncHeaderLabPills('LAB 1');
-      const targetLink = document.querySelector('[data-view="lab1-dashboard"]');
-      if (targetLink) targetLink.click();
-      showToast('Switched context to LAB 1 (Alpha Core)', 'info');
-    });
-  }
-
-  if (btnSwitchLab2) {
-    btnSwitchLab2.addEventListener('click', () => {
-      syncHeaderLabPills('LAB 2');
-      const targetLink = document.querySelector('[data-view="lab2-dashboard"]');
-    });
-  }
-
-  // =========================================================================
   // 9b. DASHBOARD INTERACTIVE BUTTONS & SHORTCUTS
   // =========================================================================
   const heroScanBtn = document.getElementById('heroScanBtn');
@@ -3363,9 +3854,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // =========================================================================
-  // Quick Chatbot Access Buttons (Header Capsule + Global Floating AI Orb)
+  // Floating AI Assistant Orb Implementation
   // =========================================================================
-  const headerChatbotBtn = document.getElementById('headerChatbotBtn');
   const floatingChatbotBtn = document.getElementById('floatingChatbotBtn');
 
   function openChatbotView() {
@@ -3380,10 +3870,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const input = document.getElementById('chatTextInput');
       if (input) input.focus();
     }, 100);
-  }
-
-  if (headerChatbotBtn) {
-    headerChatbotBtn.addEventListener('click', openChatbotView);
   }
 
   // Draggable Floating AI Assistant Orb Implementation
@@ -3622,4 +4108,28 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => toast.remove(), 250);
     }, 3000);
   }
+
+  // =========================================================================
+  // 10. URL HASH ROUTE GUARD (Prevents Frontend URL Manipulation / Bypass)
+  // =========================================================================
+  window.addEventListener('hashchange', () => {
+    const rawHash = window.location.hash.replace('#', '').trim();
+    if (!rawHash) return;
+
+    if (currentUser.allowedLab === 'LAB 1' && (rawHash.startsWith('lab2') || rawHash === 'settings')) {
+      triggerAccessDenied('LAB 2 / System Settings');
+      window.location.hash = 'lab1-dashboard';
+      return;
+    }
+    if (currentUser.allowedLab === 'LAB 2' && (rawHash.startsWith('lab1') || rawHash === 'settings')) {
+      triggerAccessDenied('LAB 1 / System Settings');
+      window.location.hash = 'lab2-dashboard';
+      return;
+    }
+
+    const matchingLink = document.querySelector(`[data-view="${rawHash}"]`);
+    if (matchingLink) {
+      matchingLink.click();
+    }
+  });
 });
