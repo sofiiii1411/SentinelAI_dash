@@ -1,0 +1,14 @@
+[build]
+  publish = "."
+
+# Direct root to login portal as primary entry
+[[redirects]]
+  from = "/"
+  to = "/login.html"
+  status = 200
+
+# Fallback rule
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
