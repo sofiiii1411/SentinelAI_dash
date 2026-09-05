@@ -745,36 +745,48 @@
         }
       }
 
-      // THEME 2: Harmonic Flow Waves
+      // THEME 2: Harmonic Flow Waves with Multi-vibrant Shifting Colors
       function renderHarmonicAurora() {
         const waveConfigs = [
-          { yRatio: 0.22, amp: 30, freq: 0.0035, speed: 0.012, colorIdx: 0, lineWidth: 2.5 },
-          { yRatio: 0.38, amp: 36, freq: 0.0028, speed: 0.009, colorIdx: 1, lineWidth: 2.2 },
-          { yRatio: 0.62, amp: 40, freq: 0.0032, speed: 0.011, colorIdx: 2, lineWidth: 2.5 },
-          { yRatio: 0.78, amp: 32, freq: 0.0040, speed: 0.014, colorIdx: 3, lineWidth: 2.0 },
-          { yRatio: 0.50, amp: 26, freq: 0.0025, speed: 0.008, colorIdx: 4, lineWidth: 2.0 }
+          { yRatio: 0.18, amp: 30, freq: 0.0032, speed: 0.014, hueOffset: 0, lineWidth: 2.8, glowBlur: 14 },
+          { yRatio: 0.32, amp: 38, freq: 0.0026, speed: 0.010, hueOffset: 60, lineWidth: 2.5, glowBlur: 12 },
+          { yRatio: 0.48, amp: 44, freq: 0.0029, speed: 0.012, hueOffset: 120, lineWidth: 2.8, glowBlur: 15 },
+          { yRatio: 0.65, amp: 36, freq: 0.0035, speed: 0.015, hueOffset: 180, lineWidth: 2.4, glowBlur: 12 },
+          { yRatio: 0.80, amp: 42, freq: 0.0024, speed: 0.009, hueOffset: 240, lineWidth: 2.6, glowBlur: 14 },
+          { yRatio: 0.92, amp: 28, freq: 0.0038, speed: 0.016, hueOffset: 300, lineWidth: 2.2, glowBlur: 10 }
         ];
 
         waveConfigs.forEach((cfg) => {
-          const colorObj = BRAND_COLORS[cfg.colorIdx];
           const yCenter = height * cfg.yRatio;
           const time = tick * cfg.speed;
 
+          const grad = ctx.createLinearGradient(0, yCenter - cfg.amp, width, yCenter + cfg.amp);
+          const baseHue = (tick * 0.65 + cfg.hueOffset) % 360;
+
+          grad.addColorStop(0.00, `hsla(${(baseHue + 0) % 360}, 85%, 52%, 0.85)`);
+          grad.addColorStop(0.16, `hsla(${(baseHue + 60) % 360}, 90%, 52%, 0.85)`);
+          grad.addColorStop(0.33, `hsla(${(baseHue + 120) % 360}, 85%, 50%, 0.85)`);
+          grad.addColorStop(0.50, `hsla(${(baseHue + 180) % 360}, 90%, 54%, 0.85)`);
+          grad.addColorStop(0.66, `hsla(${(baseHue + 240) % 360}, 88%, 52%, 0.85)`);
+          grad.addColorStop(0.83, `hsla(${(baseHue + 300) % 360}, 90%, 52%, 0.85)`);
+          grad.addColorStop(1.00, `hsla(${(baseHue + 360) % 360}, 85%, 52%, 0.85)`);
+
           ctx.beginPath();
-          const step = 16;
+          const step = 14;
           for (let x = 0; x <= width + step; x += step) {
             const wave1 = Math.sin(x * cfg.freq + time) * cfg.amp;
-            const wave2 = Math.cos(x * (cfg.freq * 0.6) + time * 0.8) * (cfg.amp * 0.4);
-            const y = yCenter + wave1 + wave2;
+            const wave2 = Math.cos(x * (cfg.freq * 0.65) + time * 0.75) * (cfg.amp * 0.45);
+            const wave3 = Math.sin(x * 0.0015 + time * 0.5) * (cfg.amp * 0.25);
+            const y = yCenter + wave1 + wave2 + wave3;
 
             if (x === 0) ctx.moveTo(x, y);
             else ctx.lineTo(x, y);
           }
 
-          ctx.strokeStyle = colorObj.stroke;
+          ctx.strokeStyle = grad;
           ctx.lineWidth = cfg.lineWidth;
-          ctx.shadowColor = colorObj.glow;
-          ctx.shadowBlur = 12;
+          ctx.shadowColor = `hsla(${baseHue}, 90%, 55%, 0.4)`;
+          ctx.shadowBlur = cfg.glowBlur;
           ctx.stroke();
           ctx.shadowBlur = 0;
         });
