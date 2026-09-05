@@ -1585,6 +1585,15 @@
         activeRecoveryEmail = "";
         activeGeneratedOtp = "";
         activeResetToken = "";
+        if (typeof resendCooldownTimer !== 'undefined' && resendCooldownTimer) {
+          clearInterval(resendCooldownTimer);
+        }
+        if (btnResendOtpLink) {
+          btnResendOtpLink.disabled = false;
+          btnResendOtpLink.style.opacity = "";
+          btnResendOtpLink.style.pointerEvents = "";
+          btnResendOtpLink.textContent = "Resend OTP";
+        }
       }
 
       // Trigger Open Modal
@@ -1759,46 +1768,103 @@
         }, 300);
       }
 
-      // Resend OTP Link
+      // Resend OTP Link with Loading State & Real-time Delivery
+      let resendCooldownTimer = null;
       if (btnResendOtpLink) {
-        btnResendOtpLink.addEventListener("click", async () => {
-          otpInputs.forEach(i => i.value = "");
-          otpInputs[0].focus();
-          
+        btnResendOtpLink.addEventListener("click", async (e) => {
+          e.preventDefault();
+          if (btnResendOtpLink.disabled || btnResendOtpLink.classList.contains("disabled")) return;
+
+          const emailTarget = activeRecoveryEmail || 
+                              (recoveryEmailInput ? recoveryEmailInput.value.trim().toLowerCase() : "") ||
+                              (targetEmailLabel ? targetEmailLabel.textContent.trim().toLowerCase() : "");
+
+          if (!emailTarget) {
+            showModalError(errorStep2, "Please return to Step 1 and enter your registered email address.");
+            return;
+          }
+          activeRecoveryEmail = emailTarget;
+
+          // Clear previous digits and refocus first box
+          otpInputs.forEach(i => { if (i) i.value = ""; });
+          if (otpInputs[0]) otpInputs[0].focus();
+
+          // Set immediate loading visual feedback on the button
+          btnResendOtpLink.disabled = true;
+          const origText = "Resend OTP";
+          btnResendOtpLink.textContent = "Sending new OTP...";
+          btnResendOtpLink.style.opacity = "0.7";
+          btnResendOtpLink.style.pointerEvents = "none";
+
+          if (errorStep2) {
+            errorStep2.textContent = "Dispatching fresh 4-digit OTP to your Gmail inbox...";
+            errorStep2.style.background = "rgba(59, 130, 246, 0.1)";
+            errorStep2.style.color = "#2563eb";
+            errorStep2.style.borderColor = "rgba(59, 130, 246, 0.3)";
+            errorStep2.classList.remove("hidden");
+          }
+
+          // Generate fresh 4-digit OTP code
           const newCode = String(Math.floor(1000 + Math.random() * 9000));
           activeGeneratedOtp = newCode;
 
           try {
             if (typeof emailjs !== 'undefined') {
-              await emailjs.send("service_70mhtv8", "template_njrbnce", {
-                email: activeRecoveryEmail,
-                to_email: activeRecoveryEmail,
-                user_email: activeRecoveryEmail,
-                recipient: activeRecoveryEmail,
+              const res = await emailjs.send("service_70mhtv8", "template_njrbnce", {
+                email: emailTarget,
+                to_email: emailTarget,
+                user_email: emailTarget,
+                recipient: emailTarget,
+                to_name: AUTHORIZED_ACCOUNTS[emailTarget]?.name || "SentinelAI-X User",
                 otp_code: newCode,
                 passcode: newCode,
                 code: newCode,
+                otp: newCode,
                 time: "5 minutes"
               }, "hnzDsgOGflqpJ2Zsd");
-              console.log("📧 [EmailJS Resend SUCCESS] New OTP code sent to:", activeRecoveryEmail);
+              console.log("📧 [EmailJS Resend SUCCESS] New OTP code sent to:", emailTarget, res);
             }
-          } catch (e) {
-            console.warn("⚠️ [EmailJS Resend Warning]:", e);
+          } catch (err) {
+            console.warn("⚠️ [EmailJS Resend Warning]:", err);
           }
 
           if (errorStep2) {
-            errorStep2.textContent = "A new 4-digit OTP has been sent to your Gmail.";
+            errorStep2.textContent = "A fresh 4-digit OTP has been sent to your Gmail inbox.";
             errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
             errorStep2.style.color = "#059669";
             errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
             errorStep2.classList.remove("hidden");
           }
+
+          // Start 15s cooldown countdown
+          let countdown = 15;
+          btnResendOtpLink.textContent = `Resend OTP (${countdown}s)`;
+          clearInterval(resendCooldownTimer);
+          resendCooldownTimer = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+              btnResendOtpLink.textContent = `Resend OTP (${countdown}s)`;
+            } else {
+              clearInterval(resendCooldownTimer);
+              btnResendOtpLink.disabled = false;
+              btnResendOtpLink.style.opacity = "";
+              btnResendOtpLink.style.pointerEvents = "";
+              btnResendOtpLink.textContent = origText;
+            }
+          }, 1000);
         });
       }
 
       // Change Email Link
       if (btnChangeEmailLink) {
         btnChangeEmailLink.addEventListener("click", () => {
+          clearInterval(resendCooldownTimer);
+          if (btnResendOtpLink) {
+            btnResendOtpLink.disabled = false;
+            btnResendOtpLink.style.opacity = "";
+            btnResendOtpLink.style.pointerEvents = "";
+            btnResendOtpLink.textContent = "Resend OTP";
+          }
           showModalStep(1);
         });
       }
