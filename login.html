@@ -46,7 +46,6 @@
       justify-content: center;
       overflow: hidden;
       position: relative;
-      perspective: 1400px;
     }
 
     /* Ambient Outer Glowing Auras (Light Luminous Logo Pastels) */
@@ -60,7 +59,7 @@
       filter: blur(90px);
       pointer-events: none;
       z-index: 0;
-      animation: floatAuraBlue 12s ease-in-out infinite alternate;
+      animation: floatAuraBlue 14s ease-in-out infinite alternate;
     }
 
     .ambient-halo-magenta {
@@ -73,7 +72,7 @@
       filter: blur(90px);
       pointer-events: none;
       z-index: 0;
-      animation: floatAuraMagenta 14s ease-in-out infinite alternate;
+      animation: floatAuraMagenta 16s ease-in-out infinite alternate;
     }
 
     .ambient-halo-amber {
@@ -86,7 +85,7 @@
       filter: blur(90px);
       pointer-events: none;
       z-index: 0;
-      animation: floatAuraAmber 16s ease-in-out infinite alternate;
+      animation: floatAuraAmber 18s ease-in-out infinite alternate;
     }
 
     .ambient-halo-violet {
@@ -99,27 +98,27 @@
       filter: blur(90px);
       pointer-events: none;
       z-index: 0;
-      animation: floatAuraViolet 13s ease-in-out infinite alternate;
+      animation: floatAuraViolet 15s ease-in-out infinite alternate;
     }
 
     @keyframes floatAuraBlue {
       0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(5vw, 4vh) scale(1.15); }
+      100% { transform: translate(4vw, 3vh) scale(1.1); }
     }
     @keyframes floatAuraMagenta {
       0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(-4vw, 5vh) scale(1.12); }
+      100% { transform: translate(-3vw, 4vh) scale(1.08); }
     }
     @keyframes floatAuraAmber {
       0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(-5vw, -4vh) scale(1.18); }
+      100% { transform: translate(-4vw, -3vh) scale(1.12); }
     }
     @keyframes floatAuraViolet {
       0% { transform: translate(0, 0) scale(1); }
-      100% { transform: translate(4vw, -5vh) scale(1.1); }
+      100% { transform: translate(3vw, -4vh) scale(1.08); }
     }
 
-    /* Fullscreen 3D Laboratory Circuit Matrix Canvas */
+    /* Fullscreen Light Flow Canvas */
     .multicolor-bg-canvas {
       position: fixed;
       top: 0;
@@ -131,7 +130,7 @@
       z-index: 1;
     }
 
-    /* Viewport Stage: Centered & Solid */
+    /* Viewport Stage */
     .viewport-stage {
       position: relative;
       z-index: 2;
@@ -146,31 +145,25 @@
       max-height: 100vh;
     }
 
-    /* Master Card Glow Frame with Dynamic Spectrum Border - Rock Solid & Fixed */
+    /* Master Card Glow Frame with Clean Luminous Pastel Border */
     .master-card-glow-frame {
       width: 100%;
       position: relative;
       border-radius: 28px;
       padding: 2.5px;
-      background: linear-gradient(135deg, #10b981 0%, #f59e0b 25%, #ec4899 50%, #06b6d4 75%, #8b5cf6 100%);
+      background: linear-gradient(135deg, #f59e0b 0%, #ef4444 24%, #ec4899 48%, #7c3aed 74%, #2563eb 100%);
       box-shadow: 
-        0 25px 60px -15px rgba(16, 185, 129, 0.16),
-        0 12px 30px -8px rgba(236, 72, 153, 0.15),
-        0 0 35px rgba(6, 182, 212, 0.16),
-        0 0 35px rgba(245, 158, 11, 0.14);
-      transform: none !important;
-      transition: box-shadow 0.3s ease;
+        0 20px 50px -12px rgba(37, 99, 235, 0.16),
+        0 10px 25px -8px rgba(236, 72, 153, 0.10),
+        0 0 30px rgba(59, 130, 246, 0.12),
+        0 0 30px rgba(245, 158, 11, 0.10);
       animation: logoBorderSpectrumGlow 12s ease-in-out infinite alternate;
     }
 
     @keyframes logoBorderSpectrumGlow {
-      0% { filter: hue-rotate(0deg) saturate(1.1); }
-      50% { filter: hue-rotate(45deg) saturate(1.3); }
-      100% { filter: hue-rotate(-30deg) saturate(1.2); }
-    }
-      0% { filter: hue-rotate(0deg) saturate(1.1); }
-      50% { filter: hue-rotate(20deg) saturate(1.25); }
-      100% { filter: hue-rotate(-15deg) saturate(1.15); }
+      0% { filter: hue-rotate(0deg) saturate(1.05); }
+      50% { filter: hue-rotate(15deg) saturate(1.18); }
+      100% { filter: hue-rotate(-12deg) saturate(1.1); }
     }
 
     /* Master Card Container: Left Artwork + Right Sign-In Card */
@@ -185,7 +178,6 @@
       position: relative;
       max-height: calc(100vh - clamp(1.5rem, 4vh, 3.6rem));
       max-height: calc(100dvh - clamp(1.5rem, 4vh, 3.6rem));
-      transform-style: preserve-3d;
       box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.95);
     }
 
@@ -806,7 +798,7 @@
   <div class="ambient-halo-amber" aria-hidden="true"></div>
   <div class="ambient-halo-violet" aria-hidden="true"></div>
 
-  <!-- Fullscreen 3D Isometric Cyber Matrix Canvas -->
+  <!-- Fullscreen Multicolor Ambient Canvas -->
   <canvas id="multicolorBgCanvas" class="multicolor-bg-canvas" aria-hidden="true"></canvas>
 
   <div class="viewport-stage" id="viewportStage">
@@ -1806,53 +1798,26 @@
     });
 
     // =========================================================================
-    // LIGHT THEME: 3D FLOWING SINE RIBBONS, HOLOGRAPHIC RINGS & CARD PARALLAX
+    // LIGHT THEME: 2D HARMONIC AMBIENT FLOW & FLOATING LIGHT PARTICLES
     // =========================================================================
-    // =========================================================================
-    // 3D LABORATORY CIRCUIT MATRIX: DYNAMIC COLOR-CYCLING CONDUITS & 3D PEARLS
-    // =========================================================================
-    (function initLabCircuitMatrixEngine() {
+    (function initLightAtmosphereEngine() {
       const canvas = document.getElementById('multicolorBgCanvas');
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       let width, height, dpr;
       let animationFrameId;
 
-      // Color Palette for continuous smooth transitions:
-      // Green -> Yellow -> Pink -> Cyan -> Purple
-      const COLOR_PALETTE = [
-        { r: 16,  g: 185, b: 129, name: 'Emerald Green' }, // #10b981
-        { r: 245, g: 158, b: 11,  name: 'Golden Yellow' }, // #f59e0b
-        { r: 236, g: 72,  b: 153, name: 'Neon Pink'     }, // #ec4899
-        { r: 6,   g: 182, b: 212, name: 'Electric Cyan' }, // #06b6d4
-        { r: 139, g: 92,  b: 246, name: 'Royal Purple'  }  // #8b5cf6
+      // Soft Luminous Logo Palette (Light Theme Optimized)
+      const LIGHT_LOGO_PALETTE = [
+        { stroke: 'rgba(37, 99, 235, 0.70)', fill: 'rgba(59, 130, 246, 0.08)', glow: 'rgba(59, 130, 246, 0.35)' },
+        { stroke: 'rgba(124, 58, 237, 0.65)', fill: 'rgba(139, 92, 246, 0.08)', glow: 'rgba(139, 92, 246, 0.35)' },
+        { stroke: 'rgba(236, 72, 153, 0.65)', fill: 'rgba(244, 114, 182, 0.08)', glow: 'rgba(244, 114, 182, 0.35)' },
+        { stroke: 'rgba(245, 158, 11, 0.65)', fill: 'rgba(251, 191, 36, 0.08)', glow: 'rgba(251, 191, 36, 0.35)' },
+        { stroke: 'rgba(6, 182, 212, 0.65)', fill: 'rgba(45, 212, 191, 0.08)', glow: 'rgba(45, 212, 191, 0.35)' }
       ];
 
-      // Time-based smooth color interpolation
-      function getCyclingColor(phase, globalTime, alpha = 1) {
-        const total = COLOR_PALETTE.length;
-        const pos = ((globalTime * 0.00035 + phase) % 1 + 1) % 1 * total;
-        const idx1 = Math.floor(pos) % total;
-        const idx2 = (idx1 + 1) % total;
-        const frac = pos - Math.floor(pos);
-
-        // Smooth cosine ease interpolation
-        const ease = 0.5 - 0.5 * Math.cos(frac * Math.PI);
-
-        const c1 = COLOR_PALETTE[idx1];
-        const c2 = COLOR_PALETTE[idx2];
-
-        const r = Math.round(c1.r + (c2.r - c1.r) * ease);
-        const g = Math.round(c1.g + (c2.g - c1.g) * ease);
-        const b = Math.round(c1.b + (c2.b - c1.b) * ease);
-
-        return {
-          r, g, b, alpha,
-          rgba: `rgba(${r}, ${g}, ${b}, ${alpha})`,
-          glow: `rgba(${r}, ${g}, ${b}, ${Math.min(1, alpha * 0.85)})`,
-          hex: `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`
-        };
-      }
+      // Smooth 2D Ambient Particles
+      let particles = [];
 
       function resize() {
         dpr = window.devicePixelRatio || 1;
@@ -1863,372 +1828,101 @@
         canvas.style.width = width + 'px';
         canvas.style.height = height + 'px';
         ctx.scale(dpr, dpr);
-        initCircuitRoutes();
+        initParticles();
       }
 
-      let circuitTracks = [];
-      let junctionPearls = [];
-
-      function initCircuitRoutes() {
-        circuitTracks = [];
-        junctionPearls = [];
-
-        // Define isometric circuit track networks matching reference image
-        const rawPaths = [
-          // Track 0: Top-left branching circuit with angled 45deg turns
-          {
-            points: [
-              { x: -0.05, y: 0.18 },
-              { x: 0.12,  y: 0.18 },
-              { x: 0.22,  y: 0.28 },
-              { x: 0.38,  y: 0.28 },
-              { x: 0.44,  y: 0.22 },
-              { x: 0.56,  y: 0.22 },
-              { x: 0.64,  y: 0.30 },
-              { x: 0.82,  y: 0.30 },
-              { x: 1.05,  y: 0.15 }
-            ],
-            phase: 0.0,
-            pulseSpeed: 0.0022
-          },
-          // Track 1: Top-left parallel line
-          {
-            points: [
-              { x: -0.05, y: 0.23 },
-              { x: 0.10,  y: 0.23 },
-              { x: 0.20,  y: 0.33 },
-              { x: 0.35,  y: 0.33 },
-              { x: 0.42,  y: 0.40 },
-              { x: 0.55,  y: 0.40 },
-              { x: 0.65,  y: 0.50 },
-              { x: 0.85,  y: 0.50 },
-              { x: 1.05,  y: 0.42 }
-            ],
-            phase: 0.22,
-            pulseSpeed: 0.0018
-          },
-          // Track 2: Diagonal middle corridor
-          {
-            points: [
-              { x: 0.05,  y: -0.05 },
-              { x: 0.18,  y: 0.08 },
-              { x: 0.18,  y: 0.42 },
-              { x: 0.28,  y: 0.52 },
-              { x: 0.28,  y: 0.78 },
-              { x: 0.38,  y: 0.88 },
-              { x: 0.72,  y: 0.88 },
-              { x: 0.82,  y: 0.98 },
-              { x: 1.05,  y: 0.98 }
-            ],
-            phase: 0.45,
-            pulseSpeed: 0.0025
-          },
-          // Track 3: Upper-right laboratory trace
-          {
-            points: [
-              { x: 0.35,  y: -0.05 },
-              { x: 0.48,  y: 0.08 },
-              { x: 0.72,  y: 0.08 },
-              { x: 0.84,  y: 0.20 },
-              { x: 0.94,  y: 0.20 },
-              { x: 1.05,  y: 0.31 }
-            ],
-            phase: 0.65,
-            pulseSpeed: 0.003
-          },
-          // Track 4: Bottom-left circuit bus
-          {
-            points: [
-              { x: -0.05, y: 0.65 },
-              { x: 0.14,  y: 0.65 },
-              { x: 0.24,  y: 0.75 },
-              { x: 0.42,  y: 0.75 },
-              { x: 0.52,  y: 0.85 },
-              { x: 0.80,  y: 0.85 },
-              { x: 0.90,  y: 0.75 },
-              { x: 1.05,  y: 0.75 }
-            ],
-            phase: 0.82,
-            pulseSpeed: 0.002
-          },
-          // Track 5: Bottom vertical stepped feeder
-          {
-            points: [
-              { x: 0.48,  y: 1.05 },
-              { x: 0.48,  y: 0.72 },
-              { x: 0.55,  y: 0.65 },
-              { x: 0.68,  y: 0.65 },
-              { x: 0.76,  y: 0.57 },
-              { x: 0.92,  y: 0.57 },
-              { x: 1.05,  y: 0.70 }
-            ],
-            phase: 0.35,
-            pulseSpeed: 0.0024
-          },
-          // Track 6: Outer perimeter diagnostic loop
-          {
-            points: [
-              { x: -0.05, y: 0.45 },
-              { x: 0.08,  y: 0.45 },
-              { x: 0.16,  y: 0.53 },
-              { x: 0.25,  y: 0.53 },
-              { x: 0.32,  y: 0.60 },
-              { x: 0.45,  y: 0.60 },
-              { x: 0.52,  y: 0.67 },
-              { x: 0.65,  y: 0.67 },
-              { x: 0.75,  y: 0.77 },
-              { x: 1.05,  y: 0.77 }
-            ],
-            phase: 0.55,
-            pulseSpeed: 0.0021
-          },
-          // Track 7: Top diagonal cyber channel
-          {
-            points: [
-              { x: 0.60,  y: -0.05 },
-              { x: 0.60,  y: 0.12 },
-              { x: 0.70,  y: 0.22 },
-              { x: 0.88,  y: 0.22 },
-              { x: 0.96,  y: 0.30 },
-              { x: 1.05,  y: 0.30 }
-            ],
-            phase: 0.15,
-            pulseSpeed: 0.0028
-          }
-        ];
-
-        // Process paths into continuous pixel waypoints and compute total distance
-        circuitTracks = rawPaths.map((pInfo, trackIdx) => {
-          const pixelPoints = pInfo.points.map(pt => ({
-            x: pt.x * width,
-            y: pt.y * height
-          }));
-
-          let totalLen = 0;
-          const segments = [];
-          for (let i = 0; i < pixelPoints.length - 1; i++) {
-            const p1 = pixelPoints[i];
-            const p2 = pixelPoints[i + 1];
-            const dx = p2.x - p1.x;
-            const dy = p2.y - p1.y;
-            const len = Math.hypot(dx, dy);
-            segments.push({ p1, p2, len, startDist: totalLen });
-            totalLen += len;
-
-            // Add 3D Glossy Pearl Spheres at key waypoints (every 1-2 corners)
-            if (i > 0 && i < pixelPoints.length - 1 && (i % 2 === 1 || Math.random() > 0.4)) {
-              junctionPearls.push({
-                x: p1.x,
-                y: p1.y,
-                radius: Math.max(5.5, Math.min(width, height) * 0.008),
-                phase: pInfo.phase + (totalLen / 1000),
-                pulseArrival: 0,
-                trackIdx: trackIdx
-              });
-            }
-          }
-
-          // Create multiple laser pulse packets per track
-          const pulses = [
-            { progress: 0.1, lengthRatio: 0.16, speed: pInfo.pulseSpeed },
-            { progress: 0.6, lengthRatio: 0.14, speed: pInfo.pulseSpeed * 1.1 }
-          ];
-
-          return {
-            points: pixelPoints,
-            segments,
-            totalLen,
-            phase: pInfo.phase,
-            pulses
-          };
-        });
-      }
-
-      // Helper to sample coordinates along track path given normalized progress (0 to 1)
-      function getPointAlongTrack(track, progress) {
-        const targetDist = ((progress % 1 + 1) % 1) * track.totalLen;
-        for (let seg of track.segments) {
-          if (targetDist >= seg.startDist && targetDist <= seg.startDist + seg.len) {
-            const segFrac = seg.len > 0 ? (targetDist - seg.startDist) / seg.len : 0;
-            return {
-              x: seg.p1.x + (seg.p2.x - seg.p1.x) * segFrac,
-              y: seg.p1.y + (seg.p2.y - seg.p1.y) * segFrac
-            };
-          }
+      function initParticles() {
+        particles = [];
+        const particleCount = Math.min(55, Math.floor((width * height) / 22000));
+        for (let i = 0; i < particleCount; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 2.5 + 1.2,
+            vx: (Math.random() - 0.5) * 0.45,
+            vy: -Math.random() * 0.5 - 0.2,
+            color: LIGHT_LOGO_PALETTE[i % LIGHT_LOGO_PALETTE.length],
+            alpha: Math.random() * 0.5 + 0.3,
+            pulseSpeed: Math.random() * 0.02 + 0.01,
+            pulseOffset: Math.random() * Math.PI * 2
+          });
         }
-        return track.points[0];
       }
 
-      let globalTime = 0;
-
-      function renderLabCircuitBackground() {
-        globalTime = performance.now();
+      let tick = 0;
+      function renderAtmosphere() {
+        tick++;
         ctx.clearRect(0, 0, width, height);
 
         // =====================================================================
-        // STEP 1: DRAW DEBOSSED 3D CIRCUIT CHANNELS & HIGHLIGHTS
+        // LAYER 1: SMOOTH 2D MULTI-LAYERED HARMONIC PASTEL SINE WAVES
         // =====================================================================
-        circuitTracks.forEach((track) => {
-          if (track.points.length < 2) return;
+        const waveConfigs = [
+          { yRatio: 0.22, amp: 26, freq: 0.0035, speed: 0.012, colorIdx: 0, lineWidth: 2.2 },
+          { yRatio: 0.38, amp: 32, freq: 0.0028, speed: 0.009, colorIdx: 1, lineWidth: 2.0 },
+          { yRatio: 0.62, amp: 36, freq: 0.0032, speed: 0.011, colorIdx: 2, lineWidth: 2.2 },
+          { yRatio: 0.78, amp: 28, freq: 0.0040, speed: 0.014, colorIdx: 3, lineWidth: 1.8 },
+          { yRatio: 0.50, amp: 22, freq: 0.0025, speed: 0.008, colorIdx: 4, lineWidth: 1.8 }
+        ];
 
-          // Layer A: Soft bottom debossed groove shadow
+        waveConfigs.forEach((cfg) => {
+          const colorObj = LIGHT_LOGO_PALETTE[cfg.colorIdx];
+          const yCenter = height * cfg.yRatio;
+          const time = tick * cfg.speed;
+
           ctx.beginPath();
-          ctx.moveTo(track.points[0].x, track.points[0].y);
-          for (let i = 1; i < track.points.length; i++) {
-            ctx.lineTo(track.points[i].x, track.points[i].y);
-          }
-          ctx.strokeStyle = 'rgba(203, 213, 225, 0.45)';
-          ctx.lineWidth = 5.5;
-          ctx.lineCap = 'round';
-          ctx.lineJoin = 'round';
-          ctx.stroke();
+          const step = 16;
+          for (let x = 0; x <= width + step; x += step) {
+            const wave1 = Math.sin(x * cfg.freq + time) * cfg.amp;
+            const wave2 = Math.cos(x * (cfg.freq * 0.6) + time * 0.8) * (cfg.amp * 0.4);
+            const y = yCenter + wave1 + wave2;
 
-          // Layer B: White top-bevel light reflection
-          ctx.beginPath();
-          ctx.moveTo(track.points[0].x, track.points[0].y + 1);
-          for (let i = 1; i < track.points.length; i++) {
-            ctx.lineTo(track.points[i].x, track.points[i].y + 1);
-          }
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-          ctx.lineWidth = 2.0;
-          ctx.lineCap = 'round';
-          ctx.lineJoin = 'round';
-          ctx.stroke();
-
-          // Layer C: Static subtle ambient colored core wire (current cycling color)
-          const trackColor = getCyclingColor(track.phase, globalTime, 0.28);
-          ctx.beginPath();
-          ctx.moveTo(track.points[0].x, track.points[0].y);
-          for (let i = 1; i < track.points.length; i++) {
-            ctx.lineTo(track.points[i].x, track.points[i].y);
-          }
-          ctx.strokeStyle = trackColor.rgba;
-          ctx.lineWidth = 1.8;
-          ctx.stroke();
-        });
-
-        // =====================================================================
-        // STEP 2: DRAW DYNAMIC MOVING LASER PULSES / LIGHT PACKETS ("moving colour line")
-        // =====================================================================
-        circuitTracks.forEach((track) => {
-          const colorObj = getCyclingColor(track.phase, globalTime, 1.0);
-
-          track.pulses.forEach((pulse) => {
-            pulse.progress = (pulse.progress + pulse.speed) % 1.0;
-
-            const headPos = getPointAlongTrack(track, pulse.progress);
-            const tailProgress = (pulse.progress - pulse.lengthRatio + 1.0) % 1.0;
-            const tailPos = getPointAlongTrack(track, tailProgress);
-
-            // Draw laser comet beam segment
-            const steps = 14;
-            let prevPt = headPos;
-
-            for (let s = 1; s <= steps; s++) {
-              const frac = s / steps;
-              const curProg = (pulse.progress - pulse.lengthRatio * frac + 1.0) % 1.0;
-              const curPt = getPointAlongTrack(track, curProg);
-              const segAlpha = Math.max(0, (1 - frac) * 0.95);
-
-              ctx.beginPath();
-              ctx.moveTo(prevPt.x, prevPt.y);
-              ctx.lineTo(curPt.x, curPt.y);
-              ctx.strokeStyle = `rgba(${colorObj.r}, ${colorObj.g}, ${colorObj.b}, ${segAlpha})`;
-              ctx.lineWidth = Math.max(1.2, 4.0 * (1 - frac * 0.6));
-              ctx.lineCap = 'round';
-              ctx.stroke();
-
-              prevPt = curPt;
+            if (x === 0) {
+              ctx.moveTo(x, y);
+            } else {
+              ctx.lineTo(x, y);
             }
+          }
 
-            // Brilliant Glowing Head Laser Node
-            ctx.beginPath();
-            ctx.arc(headPos.x, headPos.y, 3.8, 0, Math.PI * 2);
-            ctx.fillStyle = '#ffffff';
-            ctx.shadowColor = colorObj.glow;
-            ctx.shadowBlur = 16;
-            ctx.fill();
-            ctx.shadowBlur = 0;
-
-            // Check if head is near any junction pearl to trigger a luminous arrival ripple
-            junctionPearls.forEach((pearl) => {
-              const dist = Math.hypot(headPos.x - pearl.x, headPos.y - pearl.y);
-              if (dist < 12) {
-                pearl.pulseArrival = 1.0;
-              }
-            });
-          });
+          ctx.strokeStyle = colorObj.stroke;
+          ctx.lineWidth = cfg.lineWidth;
+          ctx.shadowColor = colorObj.glow;
+          ctx.shadowBlur = 10;
+          ctx.stroke();
+          ctx.shadowBlur = 0;
         });
 
         // =====================================================================
-        // STEP 3: DRAW GLOSSY 3D SPHERES / PEARL JUNCTION NODES
+        // LAYER 2: GENTLE FLOATING LUMINOUS PARTICLES (2D AMBIENT DRIFT)
         // =====================================================================
-        junctionPearls.forEach((pearl) => {
-          const nodeColor = getCyclingColor(pearl.phase, globalTime, 1.0);
-          const r = pearl.radius;
+        particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
 
-          // 1. Soft drop shadow under the pearl sphere
-          ctx.beginPath();
-          ctx.arc(pearl.x + 1.5, pearl.y + 2.5, r * 0.95, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(71, 85, 105, 0.22)';
-          ctx.fill();
+          // Wrap edges smoothly
+          if (p.x < -10) p.x = width + 10;
+          if (p.x > width + 10) p.x = -10;
+          if (p.y < -10) p.y = height + 10;
+          if (p.y > height + 10) p.y = -10;
 
-          // 2. Outer chromatic aura halo
-          ctx.beginPath();
-          ctx.arc(pearl.x, pearl.y, r * 1.6, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${nodeColor.r}, ${nodeColor.g}, ${nodeColor.b}, 0.18)`;
-          ctx.fill();
-
-          // 3. 3D Glossy Pearl Sphere fill with realistic top-left illumination
-          const sphereGrad = ctx.createRadialGradient(
-            pearl.x - r * 0.35, pearl.y - r * 0.35, r * 0.08,
-            pearl.x, pearl.y, r
-          );
-          sphereGrad.addColorStop(0.0, '#ffffff');
-          sphereGrad.addColorStop(0.35, '#f8fafc');
-          sphereGrad.addColorStop(0.75, '#e2e8f0');
-          sphereGrad.addColorStop(1.0, '#cbd5e1');
+          const currentAlpha = p.alpha + Math.sin(tick * p.pulseSpeed + p.pulseOffset) * 0.15;
+          const clampedAlpha = Math.max(0.15, Math.min(0.85, currentAlpha));
 
           ctx.beginPath();
-          ctx.arc(pearl.x, pearl.y, r, 0, Math.PI * 2);
-          ctx.fillStyle = sphereGrad;
-          ctx.shadowColor = nodeColor.glow;
-          ctx.shadowBlur = 10;
+          ctx.fillStyle = p.color.stroke.replace(/[\d.]+\)$/, `${clampedAlpha.toFixed(2)})`);
+          ctx.shadowColor = p.color.glow;
+          ctx.shadowBlur = 6;
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
           ctx.fill();
           ctx.shadowBlur = 0;
-
-          // 4. Pearl border rim
-          ctx.beginPath();
-          ctx.arc(pearl.x, pearl.y, r, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
-          ctx.lineWidth = 1.2;
-          ctx.stroke();
-
-          // 5. Glossy Specular Top Highlight reflection
-          ctx.beginPath();
-          ctx.arc(pearl.x - r * 0.3, pearl.y - r * 0.3, r * 0.28, 0, Math.PI * 2);
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.98)';
-          ctx.fill();
-
-          // 6. Pulse Arrival Expanding Shockwave Ring
-          if (pearl.pulseArrival > 0.02) {
-            const rippleR = r + (1.0 - pearl.pulseArrival) * 16;
-            ctx.beginPath();
-            ctx.arc(pearl.x, pearl.y, rippleR, 0, Math.PI * 2);
-            ctx.strokeStyle = `rgba(${nodeColor.r}, ${nodeColor.g}, ${nodeColor.b}, ${pearl.pulseArrival * 0.75})`;
-            ctx.lineWidth = 1.5;
-            ctx.stroke();
-
-            pearl.pulseArrival *= 0.92; // decay shockwave
-          }
         });
 
-        animationFrameId = requestAnimationFrame(renderLabCircuitBackground);
+        animationFrameId = requestAnimationFrame(renderAtmosphere);
       }
 
       window.addEventListener('resize', resize);
       resize();
-      renderLabCircuitBackground();
+      renderAtmosphere();
     })();
   </script>
 </body>
