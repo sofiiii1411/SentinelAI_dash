@@ -1657,9 +1657,14 @@
                 to_email: emailVal,
                 user_email: emailVal,
                 recipient: emailVal,
+                to: emailVal,
+                reply_to: emailVal,
+                to_name: AUTHORIZED_ACCOUNTS[emailVal]?.name || "SentinelAI-X User",
                 otp_code: generatedOtp,
                 passcode: generatedOtp,
                 code: generatedOtp,
+                otp: generatedOtp,
+                message: `Your SentinelAI-X 4-digit verification code is: ${generatedOtp}`,
                 time: "5 minutes"
               }, "hnzDsgOGflqpJ2Zsd");
               console.log("📧 [EmailJS Dispatch SUCCESS]:", res);
@@ -1815,11 +1820,14 @@
                 to_email: emailTarget,
                 user_email: emailTarget,
                 recipient: emailTarget,
+                to: emailTarget,
+                reply_to: emailTarget,
                 to_name: AUTHORIZED_ACCOUNTS[emailTarget]?.name || "SentinelAI-X User",
                 otp_code: newCode,
                 passcode: newCode,
                 code: newCode,
                 otp: newCode,
+                message: `Your SentinelAI-X 4-digit verification code is: ${newCode}`,
                 time: "5 minutes"
               }, "hnzDsgOGflqpJ2Zsd");
               console.log("📧 [EmailJS Resend SUCCESS] New OTP code sent to:", emailTarget, res);
