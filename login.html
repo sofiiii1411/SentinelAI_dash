@@ -1634,7 +1634,7 @@
           // Dispatch Real Email via EmailJS directly to Gmail Inbox
           try {
             if (typeof emailjs !== 'undefined') {
-              const res = await emailjs.send("service_70mhtv8", "template_tyod0uo", {
+              const res = await emailjs.send("service_70mhtv8", "template_njrbnce", {
                 email: emailVal,
                 to_email: emailVal,
                 user_email: emailVal,
@@ -1771,7 +1771,7 @@
 
           try {
             if (typeof emailjs !== 'undefined') {
-              await emailjs.send("service_70mhtv8", "template_tyod0uo", {
+              await emailjs.send("service_70mhtv8", "template_njrbnce", {
                 email: activeRecoveryEmail,
                 to_email: activeRecoveryEmail,
                 user_email: activeRecoveryEmail,
@@ -1780,7 +1780,7 @@
                 passcode: newCode,
                 code: newCode,
                 time: "5 minutes"
-              });
+              }, "hnzDsgOGflqpJ2Zsd");
               console.log("📧 [EmailJS Resend SUCCESS] New OTP code sent to:", activeRecoveryEmail);
             }
           } catch (e) {
