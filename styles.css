@@ -39,6 +39,31 @@ html, body {
   min-height: 100vh;
   margin: 0;
   padding: 0;
+}
+
+/* Remove Netlify Injected Badge, Drawer & Feedback Widgets */
+#netlify-badge,
+.netlify-badge,
+netlify-drawer,
+[data-netlify-deploy-id],
+[class*="netlify-feedback"],
+[id*="netlify-feedback"],
+[class*="netlify-drawer"],
+[id*="netlify-drawer"],
+iframe[src*="netlify"],
+a[href*="netlify.com"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+  position: absolute !important;
+  clip: rect(0, 0, 0, 0) !important;
+  z-index: -9999 !important;
+}
+
+body {
   font-family: var(--font-sans);
   color: var(--navy-900);
   background-color: #f0f4f9;

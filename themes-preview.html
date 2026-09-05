@@ -40,6 +40,28 @@
       position: relative;
     }
 
+    /* Completely Remove Netlify Injected Badge, Drawer & Feedback Widgets */
+    #netlify-badge,
+    .netlify-badge,
+    netlify-drawer,
+    [data-netlify-deploy-id],
+    [class*="netlify-feedback"],
+    [id*="netlify-feedback"],
+    [class*="netlify-drawer"],
+    [id*="netlify-drawer"],
+    iframe[src*="netlify"],
+    a[href*="netlify.com"] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      position: absolute !important;
+      clip: rect(0, 0, 0, 0) !important;
+      z-index: -9999 !important;
+    }
+
     /* =========================================================================
        TOP THEME SELECTOR DOCK (CLEAN & PROFESSIONAL)
        ========================================================================= */
