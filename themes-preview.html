@@ -686,18 +686,20 @@
       let radarAngle = 0;
 
       function initEntities() {
-        // 1. Mesh Nodes
+        // 1. Mesh Nodes - Generously scattered across the entire background
         nodes = [];
-        const nodeCount = Math.min(55, Math.floor((width * height) / 22000));
+        const nodeCount = Math.min(135, Math.max(85, Math.floor((width * height) / 9000)));
         for (let i = 0; i < nodeCount; i++) {
           nodes.push({
             x: Math.random() * width,
             y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: (Math.random() - 0.5) * 0.5,
-            radius: Math.random() * 2.8 + 1.5,
-            baseHue: Math.random() * 360,
-            pulse: Math.random() * Math.PI * 2
+            vx: (Math.random() - 0.5) * 0.45,
+            vy: (Math.random() - 0.5) * 0.45,
+            radius: Math.random() * 2.8 + 1.6,
+            baseHue: (i * 16) % 360,
+            pulse: Math.random() * Math.PI * 2,
+            pulseSpeed: Math.random() * 0.025 + 0.015,
+            hasPing: i % 7 === 0
           });
         }
 
@@ -852,10 +854,10 @@
       }
 
       // =======================================================================
-      // THEME 2: Enterprise Sensor Mesh (High-Tech Connected Nodes)
+      // THEME 2: Enterprise Sensor Mesh (Widely Scattered Distributed Laboratory Nodes)
       // =======================================================================
       function renderEnterpriseMesh() {
-        const maxDist = 135;
+        const maxDist = 145;
         for (let i = 0; i < nodes.length; i++) {
           const n1 = nodes[i];
           n1.x += n1.vx;
@@ -863,8 +865,9 @@
           if (n1.x < 0 || n1.x > width) n1.vx *= -1;
           if (n1.y < 0 || n1.y > height) n1.vy *= -1;
 
-          const hue1 = (n1.baseHue + tick * 0.4) % 360;
+          const hue1 = (n1.baseHue + tick * 0.45) % 360;
 
+          // Connect to nearby scattered sensor nodes
           for (let j = i + 1; j < nodes.length; j++) {
             const n2 = nodes[j];
             const dx = n1.x - n2.x;
@@ -872,22 +875,47 @@
             const dist = Math.sqrt(dx * dx + dy * dy);
 
             if (dist < maxDist) {
-              const alpha = (1 - dist / maxDist) * 0.4;
+              const alpha = (1 - dist / maxDist) * 0.42;
               ctx.beginPath();
               ctx.moveTo(n1.x, n1.y);
               ctx.lineTo(n2.x, n2.y);
-              ctx.strokeStyle = `hsla(${hue1}, 80%, 50%, ${alpha.toFixed(2)})`;
-              ctx.lineWidth = 1.1;
+              ctx.strokeStyle = `hsla(${hue1}, 85%, 52%, ${alpha.toFixed(2)})`;
+              ctx.lineWidth = 1.15;
               ctx.stroke();
+
+              // Micro-data packet traveling along line
+              if ((i + j) % 5 === 0) {
+                const packetProgress = ((tick * 0.015 + (i * 0.1)) % 1);
+                const px = n1.x + (n2.x - n1.x) * packetProgress;
+                const py = n1.y + (n2.y - n1.y) * packetProgress;
+                ctx.beginPath();
+                ctx.fillStyle = `hsla(${(hue1 + 60) % 360}, 95%, 58%, 0.85)`;
+                ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+                ctx.fill();
+              }
             }
           }
 
-          // Node Beacon
+          // Sonar Ping on selected sensor nodes
+          if (n1.hasPing) {
+            const pingR = (tick * 0.6 + i * 15) % 32;
+            const pingAlpha = Math.max(0, 0.38 - pingR / 32);
+            ctx.beginPath();
+            ctx.arc(n1.x, n1.y, pingR, 0, Math.PI * 2);
+            ctx.strokeStyle = `hsla(${hue1}, 90%, 55%, ${pingAlpha.toFixed(2)})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+
+          // Node Center Beacon with pulse
+          const currentPulse = Math.sin(tick * n1.pulseSpeed + n1.pulse) * 0.7;
+          const r = Math.max(1.2, n1.radius + currentPulse);
+
           ctx.beginPath();
           ctx.fillStyle = `hsla(${hue1}, 85%, 52%, 0.9)`;
-          ctx.shadowColor = `hsla(${hue1}, 90%, 55%, 0.5)`;
-          ctx.shadowBlur = 8;
-          ctx.arc(n1.x, n1.y, n1.radius, 0, Math.PI * 2);
+          ctx.shadowColor = `hsla(${hue1}, 90%, 55%, 0.6)`;
+          ctx.shadowBlur = 9;
+          ctx.arc(n1.x, n1.y, r, 0, Math.PI * 2);
           ctx.fill();
           ctx.shadowBlur = 0;
         }
