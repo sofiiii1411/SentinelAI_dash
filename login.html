@@ -56,26 +56,29 @@
       position: relative;
     }
 
-    /* Completely Remove Netlify Injected Badge, Drawer & Feedback Widgets */
+    /* Completely Purge Netlify Badge, Floating Pill, Drawer & Injected Widgets */
     #netlify-badge,
     .netlify-badge,
     netlify-drawer,
     [data-netlify-deploy-id],
-    [class*="netlify-feedback"],
-    [id*="netlify-feedback"],
-    [class*="netlify-drawer"],
-    [id*="netlify-drawer"],
+    [class*="netlify"],
+    [id*="netlify"],
     iframe[src*="netlify"],
-    a[href*="netlify.com"] {
+    a[href*="netlify.com"],
+    div[style*="bottom"][style*="right"][style*="position: fixed"],
+    div[style*="bottom"][style*="right"][style*="position: absolute"] {
       display: none !important;
       visibility: hidden !important;
       opacity: 0 !important;
       pointer-events: none !important;
       width: 0 !important;
       height: 0 !important;
-      position: absolute !important;
+      position: fixed !important;
+      top: -9999px !important;
+      left: -9999px !important;
       clip: rect(0, 0, 0, 0) !important;
       z-index: -9999 !important;
+      transform: scale(0) !important;
     }
 
     /* Ambient Outer Glowing Auras (Light Luminous Logo Pastels) */
@@ -1222,17 +1225,23 @@
     const purgeNetlifyInjections = () => {
       const selectors = [
         '#netlify-badge', '.netlify-badge', 'netlify-drawer',
-        '[data-netlify-deploy-id]', '[class*="netlify-feedback"]',
-        '[id*="netlify-feedback"]', '[class*="netlify-drawer"]',
-        '[id*="netlify-drawer"]', 'iframe[src*="netlify"]',
+        '[data-netlify-deploy-id]', '[class*="netlify"]',
+        '[id*="netlify"]', 'iframe[src*="netlify"]',
         'a[href*="netlify.com"]'
       ];
       selectors.forEach(sel => {
         document.querySelectorAll(sel).forEach(el => el.remove());
       });
+      // Purge any floating badge element mentioning Netlify
+      document.querySelectorAll('div, a, span, button, p, section, aside, header, footer').forEach(el => {
+        if (el.textContent && el.textContent.toLowerCase().includes('powered by netlify') && el.children.length < 5) {
+          el.remove();
+        }
+      });
     };
     purgeNetlifyInjections();
     window.addEventListener('load', purgeNetlifyInjections);
+    setInterval(purgeNetlifyInjections, 300);
     if (document.body) {
       new MutationObserver(purgeNetlifyInjections).observe(document.body, { childList: true, subtree: true });
     }
