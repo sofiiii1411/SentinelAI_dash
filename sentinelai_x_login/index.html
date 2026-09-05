@@ -959,11 +959,7 @@
         <h3 class="modal-title">Enter 4-Digit OTP</h3>
         <p class="modal-subtitle">We sent a 4-digit code to <strong id="modal-target-email-label" style="color: #7c3aed; word-break: break-all;"></strong></p>
 
-        <!-- Live OTP Dispatch Toast / Display for Instant Pairing -->
-        <div class="otp-hint-banner" id="otp-live-hint-banner">
-          <span>Security OTP Code:</span>
-          <span id="modal-live-otp-text" class="otp-code-highlight">••••</span>
-        </div>
+
 
         <form id="form-step-2-otp" class="modal-form-wrap" novalidate>
           <div class="otp-inputs-row">
@@ -1252,7 +1248,7 @@
 
       // Real-time Firebase Audit Logger
       const FIREBASE_DB_URL = "https://sentinelaidashboard-default-rtdb.firebaseio.com";
-      function recordFirebaseLiveAudit(email, role, loginStatus, failureReason = "") {
+      async function recordFirebaseLiveAudit(email, role, loginStatus, failureReason = "") {
         try {
           const now = new Date();
           const year = now.getFullYear().toString();
@@ -1265,28 +1261,63 @@
           const formattedHours = hours % 12 || 12;
           const timeStr = `${pad(formattedHours)}:${pad(now.getMinutes())}:${pad(now.getSeconds())} ${ampm}`;
 
-          const entry = {
-            date: dateStr,
-            time: timeStr,
+          // 1. Fetch current loginStatus first
+          let currentStats = { totalLogins: 10, successfulLogins: 6, failedLogins: 4, failureCount: 4 };
+          try {
+            const statsRes = await fetch(`${FIREBASE_DB_URL}/loginStatus/${year}/${month}.json`);
+            if (statsRes.ok) {
+              const data = await statsRes.json();
+              if (data && typeof data === 'object') {
+                currentStats = {
+                  totalLogins: Number(data.totalLogins) || 0,
+                  successfulLogins: Number(data.successfulLogins) || 0,
+                  failedLogins: Number(data.failedLogins) || 0,
+                  failureCount: Number(data.failureCount) || 0
+                };
+              }
+            }
+          } catch (_) {}
+
+          // Increment counters
+          currentStats.totalLogins += 1;
+          if (loginStatus === 'SUCCESS') {
+            currentStats.successfulLogins += 1;
+          } else {
+            currentStats.failedLogins += 1;
+            currentStats.failureCount += 1;
+          }
+
+          // Generate sequential line-wise serial key e.g. login_511, login_512
+          const serialNumber = 500 + currentStats.totalLogins;
+          const serialKey = `login_${serialNumber}`;
+
+          const logEntry = {
             email: email || "unknown",
             role: role || "Unauthorized User",
-            loginStatus: loginStatus,
-            failureReason: failureReason,
-            timestamp: Date.now()
+            date: dateStr,
+            time: timeStr
           };
 
-          fetch(`${FIREBASE_DB_URL}/sentinelai-x/loginAudit/${year}/${month}/login_${Date.now()}.json`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(entry)
-          }).catch(() => {});
+          // 2. Save both loginLogs entry and updated loginStatus simultaneously
+          await Promise.all([
+            fetch(`${FIREBASE_DB_URL}/loginLogs/${year}/${month}/${serialKey}.json`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(logEntry)
+            }),
+            fetch(`${FIREBASE_DB_URL}/loginStatus/${year}/${month}.json`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(currentStats)
+            })
+          ]);
         } catch (_) {}
       }
 
       // Main Login submission
       const loginForm = document.getElementById("sentinel-login-form");
       if (loginForm) {
-        loginForm.addEventListener("submit", (e) => {
+        loginForm.addEventListener("submit", async (e) => {
           e.preventDefault();
           const emailVal = emailInput ? emailInput.value.trim().toLowerCase() : "";
           const pwdVal = passwordInput ? passwordInput.value : "";
@@ -1300,10 +1331,13 @@
             return;
           }
 
+          if (loginBtn) loginBtn.disabled = true;
+          if (loginBtnText) loginBtnText.textContent = "Verifying Clearance...";
+
           // 1. Strict Account Check (Only the 4 specified Gmail addresses)
           const account = AUTHORIZED_ACCOUNTS[emailVal];
           if (!account) {
-            recordFirebaseLiveAudit(emailVal, "Unauthorized User", "FAILED", "Unregistered Account");
+            await recordFirebaseLiveAudit(emailVal, "Unauthorized User", "FAILED", "Unregistered Account");
             showError("Access Denied — This account is not authorized to access SentinelAI-X.");
             if (passwordInput) passwordInput.value = "";
             return;
@@ -1311,14 +1345,14 @@
 
           // 2. Strict Password Check
           if (pwdVal !== currentAuthPassword) {
-            recordFirebaseLiveAudit(account.email, account.roleLabel, "FAILED", "Incorrect Password");
+            await recordFirebaseLiveAudit(account.email, account.roleLabel, "FAILED", "Incorrect Password");
             showError("Access Denied — Invalid security credentials.");
             if (passwordInput) passwordInput.value = "";
             return;
           }
 
           // 3. Record Successful Login in Firebase Realtime Database
-          recordFirebaseLiveAudit(account.email, account.roleLabel, "SUCCESS", "");
+          await recordFirebaseLiveAudit(account.email, account.roleLabel, "SUCCESS", "");
 
           // 4. Clear password immediately
           if (passwordInput) {

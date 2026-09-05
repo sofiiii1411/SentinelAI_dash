@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/sofiiii1411/sentinelAI_X#readme",
   "dependencies": {
+    "nodemailer": "^10.0.0",
     "xlsx": "^0.18.5"
   }
 }

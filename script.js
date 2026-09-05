@@ -337,8 +337,11 @@ document.addEventListener('DOMContentLoaded', () => {
     'SYSTEM': [
       { id: 'system-overview', title: 'Cluster Overview', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>' },
       { id: 'chatbot', title: 'AI Chatbot', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="9" cy="10" r="1"></circle><circle cx="15" cy="10" r="1"></circle></svg>' },
+      { id: 'chatbot-overview', title: 'Chatbot Overview', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>' },
+      { id: 'chatbot-analytics', title: 'Chatbot Analytics', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>' },
+      { id: 'chatbot-logs', title: 'Chatbot Logs', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>' },
       { id: 'device-status', title: 'Device Matrix', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path></svg>' },
-      { id: 'settings', title: 'Global Settings', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>' }
+      { id: 'settings', title: 'Global Settings', icon: '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>' }
     ]
   };
 
@@ -555,11 +558,24 @@ document.addEventListener('DOMContentLoaded', () => {
         case 'System Overview':
         case 'Global System Overview':
         case 'LAB 2 System Overview':
+        case 'Cluster Overview':
           viewHtml = getSystemOverviewHtml('LAB 2');
           break;
         case 'Chatbot':
         case 'AI Security Chatbot':
+        case 'Chat Interface':
           viewHtml = getChatbotHtml();
+          break;
+        case 'Chatbot Overview':
+        case 'Chatbot System Overview':
+          viewHtml = getChatbotOverviewHtml('LAB 2');
+          break;
+        case 'Chatbot Analytics':
+          viewHtml = getChatbotAnalyticsHtml('LAB 2');
+          break;
+        case 'Chatbot Logs':
+        case 'Chatbot History':
+          viewHtml = getChatbotLogsHtml('LAB 2');
           break;
         case 'Device Status':
         case 'Cluster Device Matrix':
@@ -604,11 +620,24 @@ document.addEventListener('DOMContentLoaded', () => {
         case 'System Overview':
         case 'Global System Overview':
         case 'LAB 1 System Overview':
+        case 'Cluster Overview':
           viewHtml = getSystemOverviewHtml(lab);
           break;
         case 'Chatbot':
         case 'AI Security Chatbot':
+        case 'Chat Interface':
           viewHtml = getChatbotHtml();
+          break;
+        case 'Chatbot Overview':
+        case 'Chatbot System Overview':
+          viewHtml = getChatbotOverviewHtml(lab);
+          break;
+        case 'Chatbot Analytics':
+          viewHtml = getChatbotAnalyticsHtml(lab);
+          break;
+        case 'Chatbot Logs':
+        case 'Chatbot History':
+          viewHtml = getChatbotLogsHtml(lab);
           break;
         case 'Device Status':
         case 'Cluster Device Matrix':
@@ -895,89 +924,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getLab2LogsHtml() {
-    return `
-      <div class="view-card-banner">
-        <div class="banner-left">
-          <div class="banner-icon">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-          </div>
-          <div>
-            <h2 class="banner-title">LAB 2 — Component Audit Trail</h2>
-            <p class="banner-subtitle">Real-time hardware event log for all 7 Lab 2 components</p>
-          </div>
-        </div>
-        <button class="btn-secondary-action" id="dynExportBtn">
-          <span>Export CSV</span>
-        </button>
-      </div>
-
-      <div class="enterprise-card">
-        <div class="table-container">
-          <table class="enterprise-table">
-            <thead>
-              <tr>
-                <th>TIMESTAMP (IST)</th>
-                <th>COMPONENT</th>
-                <th>EVENT DETAILS</th>
-                <th>GPIO / VALUE</th>
-                <th>STATUS</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="cell-mono">10:45:12</td>
-                <td>🟢 Green LED</td>
-                <td>Access Clearance Granted (Relay HIGH)</td>
-                <td>3.3V (Active)</td>
-                <td><span class="badge-status-green">PASSED</span></td>
-              </tr>
-              <tr>
-                <td class="cell-mono">10:40:22</td>
-                <td>🌡️ Temp & Humidity</td>
-                <td>Microclimate Telemetry Stream</td>
-                <td>21.4°C • 44% RH</td>
-                <td><span class="badge-status-green">NOMINAL</span></td>
-              </tr>
-              <tr>
-                <td class="cell-mono">10:35:10</td>
-                <td>👤 PIR Motion</td>
-                <td>Sector Infrared Sweep Clean</td>
-                <td>No Ingress</td>
-                <td><span class="badge-status-green">SECURE</span></td>
-              </tr>
-              <tr>
-                <td class="cell-mono">10:30:04</td>
-                <td>💨 MQ-2 Gas</td>
-                <td>Gas Concentration Reading</td>
-                <td>38 PPM (Normal)</td>
-                <td><span class="badge-status-green">CLEAN</span></td>
-              </tr>
-              <tr>
-                <td class="cell-mono">10:25:50</td>
-                <td>🔘 Push Button</td>
-                <td>Manual Control Momentary Pulse</td>
-                <td>GPIO 14 HIGH</td>
-                <td><span class="badge-status-green">PASSED</span></td>
-              </tr>
-              <tr>
-                <td class="cell-mono">10:20:18</td>
-                <td>🔔 Buzzer Relay</td>
-                <td>Alarm Diagnostic Self-Test</td>
-                <td>0 dB (Armed)</td>
-                <td><span class="badge-status-green">READY</span></td>
-              </tr>
-              <tr>
-                <td class="cell-mono">10:15:02</td>
-                <td>🔴 Red LED</td>
-                <td>Access Denied Relay Standby</td>
-                <td>0.0V (Standby)</td>
-                <td><span class="badge-status-green">STANDBY</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    `;
+    return getLogsHtml('LAB 2');
   }
 
   function getLab2AlertsHtml() {
@@ -1644,348 +1591,865 @@ document.addEventListener('DOMContentLoaded', () => {
     `;
   }
 
-  function getLogsHtml(lab) {
+  function getLogsHtml(lab = 'LAB 1') {
+    setTimeout(() => {
+      if (typeof fetchAndRenderFirebaseAudit === 'function') {
+        fetchAndRenderFirebaseAudit();
+      }
+    }, 60);
+
+    const isLab1 = lab === 'LAB 1';
+    const isLab2 = lab === 'LAB 2';
+    const labBadgeColor = isLab1 ? '#f59e0b' : isLab2 ? '#7928ca' : '#0070f3';
+
     return `
-      <div class="view-card-banner">
-        <div class="banner-left">
-          <div class="banner-icon">
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      <div class="event-logs-container">
+        <!-- Top Banner Header with SentinelAI-X Logo Spectrum -->
+        <div class="event-logs-banner-card">
+          <div class="banner-left" style="display: flex; align-items: center; gap: 16px;">
+            <div class="event-banner-logo-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <h2 class="event-banner-title-gradient">${lab} — SentinelAI-X Portal Login History (2026)</h2>
+                <span class="event-telemetry-pill">⚡ Live Authentication History</span>
+              </div>
+              <p class="banner-subtitle" style="margin: 4px 0 0 0; font-size: 12.5px; color: #64748b; font-weight: 500;">Chronological history of all SentinelAI-X authentication attempts, personnel access clearances, biometric verifications, and intrusion defense logs synchronized in real-time with Firebase.</p>
+            </div>
           </div>
-          <div>
-            <h2 class="banner-title">${lab} — Cryptographic Audit Trail</h2>
-            <p class="banner-subtitle">Immutable event logs timestamped with zero-knowledge verification</p>
+          
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span class="status-indicator-badge live" id="firebaseLiveStatusBadgeSub" style="background: linear-gradient(135deg, #f0fdf4, #ecfeff); border: 1.5px solid #a7f3d0; color: #065f46; font-size: 11.5px; font-weight: 800; padding: 7px 14px; border-radius: 20px; display: inline-flex; align-items: center; gap: 7px; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.15);">
+              <span class="cyber-pulse-dot" style="background:#10b981; width:8px; height:8px; border-radius:50%; display:inline-block; box-shadow: 0 0 8px #10b981;"></span>
+              <span>Live Login Feed</span>
+            </span>
+
+            <button type="button" class="event-download-btn" onclick="if(typeof openDownloadLogsModal==='function')openDownloadLogsModal();">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              <span>📥 Download Logs</span>
+            </button>
+
+            <button type="button" class="event-live-sync-btn" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit();">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span>Refresh History</span>
+            </button>
+
+            <button type="button" class="btn-ctrl" onclick="if(confirm('Clear all audit logs from Firebase?')){ const cleanLogs={September:{_status:'ready'}}; const cleanStatus={September:{totalLogins:0,successfulLogins:0,failedLogins:0,failureCount:0}}; Promise.all([fetch('https://sentinelaidashboard-default-rtdb.firebaseio.com/loginLogs/2026.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(cleanLogs)}),fetch('https://sentinelaidashboard-default-rtdb.firebaseio.com/loginStatus/2026.json',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(cleanStatus)})]).then(()=>fetchAndRenderFirebaseAudit()); }" style="padding: 8px 14px; font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 9px; background: rgba(239, 68, 68, 0.08); color: #dc2626; border: 1.5px solid rgba(239, 68, 68, 0.3); transition: all 0.2s ease;">
+              <span>🗑️ Clear History</span>
+            </button>
           </div>
         </div>
-        <button class="btn-secondary-action" id="dynExportBtn">
-          <span>Export Audit Log (.CSV)</span>
-        </button>
-      </div>
 
-      <div class="enterprise-card">
-        <div class="table-container">
-          <table class="enterprise-table">
-            <thead>
-              <tr>
-                <th>TIMESTAMP (UTC)</th>
-                <th>SUBSYSTEM</th>
-                <th>EVENT DETAILS</th>
-                <th>IDENTITY / NODE</th>
-                <th>STATUS</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="cell-mono">10:45:12.04</td>
-                <td>Facial Scanner</td>
-                <td>Biometric Clearance Confirmed</td>
-                <td>Dr. Elena Rostova</td>
-                <td><span class="badge-status-green">PASSED</span></td>
-              </tr>
-              <tr>
-                <td class="cell-mono">10:40:22.18</td>
-                <td>Thermal Core</td>
-                <td>Cryo Cooler Cyclic Stabilization</td>
-                <td>Node-Cryo-01</td>
-                <td><span class="badge-status-green">NOMINAL</span></td>
-              </tr>
-              <tr>
-                <td class="cell-mono">10:35:10.90</td>
-                <td>AI Threat Engine</td>
-                <td>Perimeter Optical Sweep Clean</td>
-                <td>SentinelVision v4.2</td>
-                <td><span class="badge-status-green">PASSED</span></td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- 4-Card HUD Metric Banner (Vibrant Logo Spectrum Colors) -->
+        <div class="event-logs-hud-grid">
+          <!-- Total Telemetry (Cyan / Royal Blue) -->
+          <div class="event-hud-card hud-blue">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Total Login Attempts</span>
+              <div class="event-hud-icon">📊</div>
+            </div>
+            <div class="event-hud-value">
+              <span id="eventHudTotal">—</span>
+              <span class="event-hud-value-sub">Sessions Logged</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" id="eventHudTotalBar" style="width: 100%; background: #2563eb;"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>Firebase RTDB Stream</span>
+              <span style="color: #2563eb; font-weight: 700;">● Active Stream</span>
+            </div>
+          </div>
+
+          <!-- Successful Authorizations (Clean Emerald) -->
+          <div class="event-hud-card hud-emerald">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Authorized Access</span>
+              <div class="event-hud-icon">🛡️</div>
+            </div>
+            <div class="event-hud-value">
+              <span id="eventHudSuccess">—</span>
+              <span class="event-hud-value-sub" id="eventHudSuccessRate">Pass Rate</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" id="eventHudSuccessBar" style="width: 60%; background: #059669;"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>Biometric & RBAC Clearance</span>
+              <span style="color: #059669; font-weight: 700;">✓ Verified Pass</span>
+            </div>
+          </div>
+
+          <!-- Security Denials (Clean Crimson / Red) -->
+          <div class="event-hud-card hud-magenta">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Threat Denials</span>
+              <div class="event-hud-icon">🚨</div>
+            </div>
+            <div class="event-hud-value">
+              <span id="eventHudFailed">—</span>
+              <span class="event-hud-value-sub">Access Denials</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" id="eventHudFailedBar" style="width: 40%; background: #dc2626;"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>Incorrect Credentials / Intrusions</span>
+              <span style="color: #dc2626; font-weight: 700;">✕ Blocked</span>
+            </div>
+          </div>
+
+          <!-- Threat Defense Integrity (Tech Slate / Blue) -->
+          <div class="event-hud-card hud-spectrum">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Defense Protocol</span>
+              <div class="event-hud-icon">⚡</div>
+            </div>
+            <div class="event-hud-value" style="font-size: 24px;">
+              <span>DEFCON 5</span>
+              <span class="event-hud-value-sub" style="color: #059669; font-weight: 800;">● Active</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" style="width: 100%; background: #0f172a;"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>Portal Perimeter Security Shield</span>
+              <span style="color: #0f172a; font-weight: 700;">100% Armed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Toolbar Box -->
+        <div class="event-toolbar-box">
+          <div class="event-toolbar-top">
+            <!-- Search Input -->
+            <div class="event-search-wrapper">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#7928ca" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="eventLogsSearchInput" class="event-search-input" placeholder="Search login history by personnel email, serial ID (login_501), or role..." oninput="if(typeof filterFirebaseAuditRecords==='function')filterFirebaseAuditRecords();">
+            </div>
+
+            <!-- Role Filter Chips (Styled after logo spectrum) -->
+            <div class="event-role-filter-row" id="eventRoleFilterRow">
+              <span style="font-size: 11.5px; font-weight: 800; color: #475569; margin-right: 4px;">FILTER HISTORY:</span>
+              <button type="button" class="event-filter-chip active" data-role="ALL" onclick="if(typeof setAuditRoleFilter==='function')setAuditRoleFilter('ALL', this);">🌐 All Logins</button>
+              <button type="button" class="event-filter-chip" data-role="Lab 1 Admin" onclick="if(typeof setAuditRoleFilter==='function')setAuditRoleFilter('Lab 1 Admin', this);">🔬 Lab 1</button>
+              <button type="button" class="event-filter-chip" data-role="Lab 2 Admin" onclick="if(typeof setAuditRoleFilter==='function')setAuditRoleFilter('Lab 2 Admin', this);">🧪 Lab 2</button>
+              <button type="button" class="event-filter-chip" data-role="Global Admin" onclick="if(typeof setAuditRoleFilter==='function')setAuditRoleFilter('Global Admin', this);">⚡ Global Admin</button>
+              <button type="button" class="event-filter-chip" data-role="Security Super Admin" onclick="if(typeof setAuditRoleFilter==='function')setAuditRoleFilter('Security Super Admin', this);">🛡️ Security Admin</button>
+              <button type="button" class="event-filter-chip" data-role="FAILED" onclick="if(typeof setAuditRoleFilter==='function')setAuditRoleFilter('FAILED', this);">🚨 Failed Only</button>
+            </div>
+          </div>
+
+          <!-- Month-Wise Selector Tabs Bar -->
+          <div class="firebase-month-tabs-bar" id="firebaseMonthTabsSub">
+            <button type="button" class="firebase-month-pill active" data-month="ALL" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit('ALL');">All Months</button>
+            <button type="button" class="firebase-month-pill" data-month="January" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit('January');">Jan</button>
+            <button type="button" class="firebase-month-pill" data-month="February" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit('February');">Feb</button>
+            <button type="button" class="firebase-month-pill" data-month="March" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit('March');">Mar</button>
+            <button type="button" class="firebase-month-pill" data-month="April" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit('April');">Apr</button>
+            <button type="button" class="firebase-month-pill" data-month="May" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit('May');">May</button>
+            <button type="button" class="firebase-month-pill" data-month="June" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit('June');">Jun</button>
+            <button type="button" class="firebase-month-pill" data-month="July" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit('July');">Jul</button>
+            <button type="button" class="firebase-month-pill" data-month="August" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit('August');">Aug</button>
+            <button type="button" class="firebase-month-pill" data-month="September" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit('September');">Sep</button>
+            <button type="button" class="firebase-month-pill" data-month="October" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit('October');">Oct</button>
+            <button type="button" class="firebase-month-pill" data-month="November" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit('November');">Nov</button>
+            <button type="button" class="firebase-month-pill" data-month="December" onclick="if(typeof fetchAndRenderFirebaseAudit==='function')fetchAndRenderFirebaseAudit('December');">Dec</button>
+          </div>
+        </div>
+
+        <!-- Event Logs Table Card -->
+        <div class="event-logs-table-card">
+          <div class="table-container">
+            <table class="enterprise-table">
+              <thead>
+                <tr>
+                  <th style="width: 120px;">SERIAL ID</th>
+                  <th style="width: 175px;">LOGIN TIMESTAMP</th>
+                  <th style="width: 110px;">MONTH</th>
+                  <th>PERSONNEL ACCOUNT</th>
+                  <th>ASSIGNED ROLE</th>
+                  <th style="width: 130px;">LOGIN RESULT</th>
+                  <th>CLEARANCE DETAILS</th>
+                </tr>
+              </thead>
+              <tbody id="eventLogsTableBody">
+                <tr>
+                  <td colspan="7" style="text-align: center; padding: 36px; color: #64748b;">
+                    <div style="font-size: 24px; margin-bottom: 6px;">⚡</div>
+                    <span style="font-weight: 600;">Synchronizing live login history from Firebase Realtime Database...</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     `;
   }
 
+  function getLab2LogsHtml() {
+    return getLogsHtml('LAB 2');
+  }
+
   function getAnalyticsHtml(lab) {
+    setTimeout(() => {
+      if (typeof initAuthAnalyticsView === 'function') {
+        initAuthAnalyticsView();
+      }
+    }, 60);
+
     return `
-      <div class="analytics-page-theme">
-        <!-- Top Analytics Header Bar -->
-        <div class="analytics-top-header-bar">
-          <div class="analytics-header-left">
-            <div class="analytics-header-icon-badge">
-              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="18" y1="20" x2="18" y2="10"></line>
-                <line x1="12" y1="20" x2="12" y2="4"></line>
-                <line x1="6" y1="20" x2="6" y2="14"></line>
-              </svg>
+      <div class="auth-analytics-container">
+        <!-- Top Banner Header with SentinelAI-X Logo Spectrum -->
+        <div class="event-logs-banner-card">
+          <div class="banner-left" style="display: flex; align-items: center; gap: 16px;">
+            <div class="event-banner-logo-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
             </div>
             <div>
-              <h2 class="analytics-main-title">${lab} — Security & Telemetry Analytics</h2>
-              <p class="analytics-main-subtitle">Real-time threat inference metrics, biometric clearance telemetry & cleanroom sensor integrity</p>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <h2 class="event-banner-title-gradient">${lab} — SentinelAI-X Login Analytics</h2>
+                <span class="event-telemetry-pill">📊 Historical Performance</span>
+              </div>
+              <p class="banner-subtitle" style="margin: 4px 0 0 0; font-size: 12.5px; color: #64748b; font-weight: 500;">Authentication activity, historical success/failure performance & security threat statistics</p>
             </div>
           </div>
-          <div class="analytics-header-right">
-            <div class="analytics-timeframe-picker">
-              <button class="analytics-time-btn" data-range="24h">24H</button>
-              <button class="analytics-time-btn active" data-range="7d">7D</button>
-              <button class="analytics-time-btn" data-range="30d">30D</button>
-              <button class="analytics-time-btn" data-range="quarter">All</button>
-            </div>
-            <button class="analytics-export-btn" id="analyticsExportBtn">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              <span>Export CSV</span>
+          
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <button type="button" class="event-live-sync-btn" onclick="if(typeof initAuthAnalyticsView==='function')initAuthAnalyticsView();">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span>Refresh Analytics</span>
             </button>
+            <a href="SentinelAI-X_Login_Audit_2026.xlsx" download class="btn-ctrl" style="padding: 8px 14px; font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 9px; background: #0f172a; color: #ffffff; border: 1px solid #0f172a; display: flex; align-items: center; gap: 6px; text-decoration: none;">
+              <span>📥 Export XLSX</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Filter Toolbar -->
+        <div class="auth-analytics-toolbar">
+          <div class="auth-analytics-controls-left">
+            <div class="auth-filter-group">
+              <span class="auth-filter-label">Period:</span>
+              <select id="analyticsPeriodSelect" class="auth-select-control" onchange="if(typeof filterAuthAnalytics==='function')filterAuthAnalytics();">
+                <option value="30d" selected>Last 30 Days</option>
+                <option value="today">Today</option>
+                <option value="7d">Last 7 Days</option>
+                <option value="this_month">This Month (September)</option>
+                <option value="all">All Time (2026)</option>
+              </select>
+            </div>
+
+            <div class="auth-filter-group">
+              <span class="auth-filter-label">Role:</span>
+              <select id="analyticsRoleSelect" class="auth-select-control" onchange="if(typeof filterAuthAnalytics==='function')filterAuthAnalytics();">
+                <option value="ALL" selected>All Roles</option>
+                <option value="Lab 1 Admin">Lab 1 Admin</option>
+                <option value="Lab 2 Admin">Lab 2 Admin</option>
+                <option value="Global Admin">Global Admin</option>
+                <option value="Security Super Admin">Security Super Admin</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="font-size: 12px; font-weight: 700; color: #059669; display: flex; align-items: center; gap: 6px;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+            <span>Firebase Aggregation Active</span>
           </div>
         </div>
 
         <!-- 4 Key Analytics KPI Cards -->
-        <div class="analytics-kpi-grid">
-          <div class="analytics-kpi-card">
-            <div class="kpi-card-header">
-              <span class="kpi-title">Total AI Inferences</span>
-              <span class="kpi-trend positive">+12.4%</span>
+        <div class="auth-analytics-kpi-grid">
+          <!-- Total Logins -->
+          <div class="event-hud-card hud-blue">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Total Logins</span>
+              <div class="event-hud-icon">📊</div>
             </div>
-            <div class="kpi-value" id="kpiInferencesVal">${lab === 'LAB 1' ? '1,428,950' : '984,320'}</div>
-            <div class="kpi-footer">
-              <span class="kpi-subtext">YOLOv8 + FaceNet real-time passes</span>
-              <span class="kpi-badge-blue">99.98% Acc</span>
+            <div class="event-hud-value">
+              <span id="analyticsTotalLogins">100</span>
+              <span class="event-hud-value-sub">Attempts</span>
             </div>
-          </div>
-
-          <div class="analytics-kpi-card">
-            <div class="kpi-card-header">
-              <span class="kpi-title">Threat Interception Rate</span>
-              <span class="kpi-trend positive">Optimal</span>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" style="width: 100%; background: linear-gradient(90deg, #00d2ff, #0066ff);"></div>
             </div>
-            <div class="kpi-value" id="kpiThreatRateVal">100.0%</div>
-            <div class="kpi-footer">
-              <span class="kpi-subtext">0 active security perimeter breaches</span>
-              <span class="kpi-badge-green">Secured</span>
+            <div class="event-hud-footer">
+              <span>Authentication Volume</span>
+              <span style="color: #0066ff; font-weight: 700;">100% Tracked</span>
             </div>
           </div>
 
-          <div class="analytics-kpi-card">
-            <div class="kpi-card-header">
-              <span class="kpi-title">Avg Latency & Verify Speed</span>
-              <span class="kpi-trend positive">-0.4ms</span>
+          <!-- Successful Logins -->
+          <div class="event-hud-card hud-emerald">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Successful</span>
+              <div class="event-hud-icon">🛡️</div>
             </div>
-            <div class="kpi-value" id="kpiLatencyVal">3.2 ms</div>
-            <div class="kpi-footer">
-              <span class="kpi-subtext">ESP32 & Neural Edge Pipeline</span>
-              <span class="kpi-badge-blue">Real-time</span>
+            <div class="event-hud-value">
+              <span id="analyticsSuccessLogins" style="color: #059669;">82</span>
+              <span class="event-hud-value-sub">Authorized</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" id="analyticsSuccessFill" style="width: 82%; background: linear-gradient(90deg, #10b981, #00f2fe);"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>Biometric & RBAC Passes</span>
+              <span style="color: #059669; font-weight: 700;">82% Pass</span>
             </div>
           </div>
 
-          <div class="analytics-kpi-card">
-            <div class="kpi-card-header">
-              <span class="kpi-title">Telemetry Sensor Packets</span>
-              <span class="kpi-trend positive">100% Flow</span>
+          <!-- Failed Logins -->
+          <div class="event-hud-card hud-magenta">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Failed</span>
+              <div class="event-hud-icon">🚨</div>
             </div>
-            <div class="kpi-value" id="kpiTelemetryVal">${lab === 'LAB 1' ? '28,490,112' : '19,740,250'}</div>
-            <div class="kpi-footer">
-              <span class="kpi-subtext">Thermal, Gas, PIR, LiDAR Nodes</span>
-              <span class="kpi-badge-blue">24/24 Online</span>
+            <div class="event-hud-value">
+              <span id="analyticsFailedLogins" style="color: #dc2626;">18</span>
+              <span class="event-hud-value-sub">Denied</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" id="analyticsFailedFill" style="width: 18%; background: linear-gradient(90deg, #ff007a, #dc2626);"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>Invalid Pwd / Unregistered</span>
+              <span style="color: #dc2626; font-weight: 700;">18% Blocked</span>
+            </div>
+          </div>
+
+          <!-- Success Rate -->
+          <div class="event-hud-card hud-spectrum">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Success Rate</span>
+              <div class="event-hud-icon">⚡</div>
+            </div>
+            <div class="event-hud-value">
+              <span id="analyticsSuccessRate">82.0%</span>
+              <span class="event-hud-value-sub" style="color: #059669; font-weight: 800;">● Optimal</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" id="analyticsRateFill" style="width: 82%; background: linear-gradient(90deg, #7928ca, #ff007a, #ff6b00);"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>Authentication Integrity</span>
+              <span style="color: #7928ca; font-weight: 700;">High Precision</span>
             </div>
           </div>
         </div>
 
-        <!-- Main Visualizations 2-Column Split -->
-        <div class="analytics-visuals-grid">
+        <!-- 2x2 Visual Analytics Grid -->
+        <div class="auth-charts-grid">
           
-          <!-- Left Visual: Threat & Optical AI Inferences Trend -->
-          <div class="analytics-card-surface">
-            <div class="analytics-card-top">
-              <div>
-                <h3 class="analytics-card-heading">AI Threat Detection & Scanning Activity</h3>
-                <p class="analytics-card-caption">7-day inference volume vs. security anomaly score alerts</p>
-              </div>
-              <div class="chart-legend-row">
-                <span class="legend-dot blue"></span>
-                <span class="legend-label">Total Inferences</span>
-                <span class="legend-dot green"></span>
-                <span class="legend-label">Biometric Passes</span>
-              </div>
+          <!-- Chart 1: Login Activity Trend -->
+          <div class="auth-chart-card">
+            <div class="auth-chart-header">
+              <span class="auth-chart-title">📈 Login Activity Trend</span>
+              <span class="auth-chart-badge">Daily Trend Stream</span>
             </div>
-
-            <!-- Rich Interactive SVG Area / Bar Chart -->
-            <div class="analytics-svg-chart-container">
-              <svg class="analytics-chart-svg" viewBox="0 0 600 220" preserveAspectRatio="none">
+            
+            <div style="width: 100%; height: 200px; position: relative;">
+              <svg viewBox="0 0 500 180" style="width: 100%; height: 100%;" preserveAspectRatio="none">
                 <defs>
-                  <linearGradient id="areaGradientBlue" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#e41e25" stop-opacity="0.35"/>
-                    <stop offset="100%" stop-color="#e41e25" stop-opacity="0.0"/>
+                  <linearGradient id="trendGradientBlue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#0066ff" stop-opacity="0.35"/>
+                    <stop offset="100%" stop-color="#0066ff" stop-opacity="0.0"/>
                   </linearGradient>
-                  <linearGradient id="areaGradientGreen" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#ff333c" stop-opacity="0.2"/>
-                    <stop offset="100%" stop-color="#ff333c" stop-opacity="0.0"/>
+                  <linearGradient id="trendGradientGreen" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#10b981" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
                   </linearGradient>
                 </defs>
 
-                <!-- Horizontal Grid Lines -->
-                <line x1="0" y1="30" x2="600" y2="30" stroke="rgba(255, 255, 255, 0.08)" stroke-dasharray="4"/>
-                <line x1="0" y1="80" x2="600" y2="80" stroke="rgba(255, 255, 255, 0.08)" stroke-dasharray="4"/>
-                <line x1="0" y1="130" x2="600" y2="130" stroke="rgba(255, 255, 255, 0.08)" stroke-dasharray="4"/>
-                <line x1="0" y1="180" x2="600" y2="180" stroke="rgba(255, 255, 255, 0.08)" stroke-dasharray="4"/>
+                <!-- Grid lines -->
+                <line x1="0" y1="30" x2="500" y2="30" stroke="#f1f5f9" stroke-width="1.5" stroke-dasharray="4"/>
+                <line x1="0" y1="75" x2="500" y2="75" stroke="#f1f5f9" stroke-width="1.5" stroke-dasharray="4"/>
+                <line x1="0" y1="120" x2="500" y2="120" stroke="#f1f5f9" stroke-width="1.5" stroke-dasharray="4"/>
+                <line x1="0" y1="160" x2="500" y2="160" stroke="#e2e8f0" stroke-width="1.5"/>
 
-                <!-- Primary Red Area & Curve -->
-                <path d="M 0 180 Q 80 140 100 120 T 200 90 T 300 110 T 400 60 T 500 70 T 600 40 L 600 210 L 0 210 Z" fill="url(#areaGradientBlue)"/>
-                <path d="M 0 180 Q 80 140 100 120 T 200 90 T 300 110 T 400 60 T 500 70 T 600 40" fill="none" stroke="#e41e25" stroke-width="3" stroke-linecap="round"/>
+                <!-- Total Attempts Area Curve -->
+                <path d="M 0 140 Q 60 110 100 80 T 200 65 T 300 90 T 400 45 T 500 35 L 500 160 L 0 160 Z" fill="url(#trendGradientBlue)"/>
+                <path d="M 0 140 Q 60 110 100 80 T 200 65 T 300 90 T 400 45 T 500 35" fill="none" stroke="#0066ff" stroke-width="3" stroke-linecap="round"/>
 
-                <!-- Secondary Crimson Curve -->
-                <path d="M 0 195 Q 80 160 100 150 T 200 130 T 300 140 T 400 110 T 500 120 T 600 90 L 600 210 L 0 210 Z" fill="url(#areaGradientGreen)"/>
-                <path d="M 0 195 Q 80 160 100 150 T 200 130 T 300 140 T 400 110 T 500 120 T 600 90" fill="none" stroke="#ff333c" stroke-width="2.5" stroke-dasharray="5 3" stroke-linecap="round"/>
+                <!-- Successful Curve -->
+                <path d="M 0 150 Q 60 125 100 95 T 200 80 T 300 105 T 400 55 T 500 45 L 500 160 L 0 160 Z" fill="url(#trendGradientGreen)"/>
+                <path d="M 0 150 Q 60 125 100 95 T 200 80 T 300 105 T 400 55 T 500 45" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round"/>
 
-                <!-- Highlight Pulse Points -->
-                <circle cx="100" cy="120" r="4.5" fill="#e41e25" stroke="#ffffff" stroke-width="2"/>
-                <circle cx="200" cy="90" r="4.5" fill="#e41e25" stroke="#ffffff" stroke-width="2"/>
-                <circle cx="300" cy="110" r="4.5" fill="#e41e25" stroke="#ffffff" stroke-width="2"/>
-                <circle cx="400" cy="60" r="5" fill="#b01f24" stroke="#ffffff" stroke-width="2.5"/>
-                <circle cx="500" cy="70" r="4.5" fill="#e41e25" stroke="#ffffff" stroke-width="2"/>
-                <circle cx="600" cy="40" r="5.5" fill="#b01f24" stroke="#ffffff" stroke-width="2.5"/>
+                <!-- Dots -->
+                <circle cx="100" cy="80" r="4.5" fill="#0066ff" stroke="#ffffff" stroke-width="2"/>
+                <circle cx="200" cy="65" r="4.5" fill="#0066ff" stroke="#ffffff" stroke-width="2"/>
+                <circle cx="300" cy="90" r="4.5" fill="#0066ff" stroke="#ffffff" stroke-width="2"/>
+                <circle cx="400" cy="45" r="4.5" fill="#0066ff" stroke="#ffffff" stroke-width="2"/>
+                <circle cx="500" cy="35" r="5" fill="#7928ca" stroke="#ffffff" stroke-width="2"/>
               </svg>
-              <div class="chart-x-axis-labels">
-                <span>Mon (Day 1)</span>
-                <span>Tue (Day 2)</span>
-                <span>Wed (Day 3)</span>
-                <span>Thu (Day 4)</span>
-                <span>Fri (Day 5)</span>
-                <span>Sat (Day 6)</span>
-                <span>Sun (Today)</span>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #94a3b8; padding-top: 4px;">
+              <span>01-Sep</span>
+              <span>02-Sep</span>
+              <span>03-Sep</span>
+              <span>04-Sep</span>
+              <span>05-Sep (Today)</span>
+            </div>
+          </div>
+
+          <!-- Chart 2: Login Status Donut Breakdown -->
+          <div class="auth-chart-card">
+            <div class="auth-chart-header">
+              <span class="auth-chart-title">🥧 Login Status Breakdown</span>
+              <span class="auth-chart-badge">Historical Ratio</span>
+            </div>
+
+            <div class="auth-donut-wrapper">
+              <svg class="auth-donut-svg" viewBox="0 0 36 36">
+                <!-- Background track -->
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#f1f5f9" stroke-width="4.5"/>
+                <!-- Success slice (82%) -->
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="url(#successGradientDonut)" stroke-width="4.5" stroke-dasharray="82, 100" stroke-linecap="round"/>
+                <!-- Failed slice (18%) -->
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="url(#failedGradientDonut)" stroke-width="4.5" stroke-dasharray="18, 100" stroke-dashoffset="-82" stroke-linecap="round"/>
+
+                <defs>
+                  <linearGradient id="successGradientDonut" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#10b981"/>
+                    <stop offset="100%" stop-color="#00f2fe"/>
+                  </linearGradient>
+                  <linearGradient id="failedGradientDonut" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#ff007a"/>
+                    <stop offset="100%" stop-color="#dc2626"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+
+              <div class="auth-donut-legend">
+                <div class="auth-legend-item">
+                  <span class="auth-legend-dot" style="background: linear-gradient(135deg, #10b981, #00f2fe);"></span>
+                  <span class="auth-legend-name">SUCCESS</span>
+                  <span class="auth-legend-percent" style="color: #059669;">82% (82)</span>
+                </div>
+                <div class="auth-legend-item">
+                  <span class="auth-legend-dot" style="background: linear-gradient(135deg, #ff007a, #dc2626);"></span>
+                  <span class="auth-legend-name">FAILED</span>
+                  <span class="auth-legend-percent" style="color: #dc2626;">18% (18)</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="font-size: 11.5px; color: #64748b; text-align: center; font-weight: 600; padding-top: 4px;">
+              🛡️ 82 of 100 logins granted authorization clearance
+            </div>
+          </div>
+
+          <!-- Chart 3: Logins by Role -->
+          <div class="auth-chart-card">
+            <div class="auth-chart-header">
+              <span class="auth-chart-title">👥 Logins by Role</span>
+              <span class="auth-chart-badge">4 Authorized Roles</span>
+            </div>
+
+            <div class="auth-role-breakdown-list">
+              <!-- Lab 1 Admin -->
+              <div class="auth-role-row">
+                <div class="auth-role-row-header">
+                  <span class="auth-role-name">🔬 Lab 1 Admin</span>
+                  <span class="auth-role-count" style="color: #ea580c;">25 logins (25%)</span>
+                </div>
+                <div class="auth-role-track">
+                  <div class="auth-role-fill" style="width: 25%; background: linear-gradient(90deg, #ff9900, #ff5e00);"></div>
+                </div>
+              </div>
+
+              <!-- Lab 2 Admin -->
+              <div class="auth-role-row">
+                <div class="auth-role-row-header">
+                  <span class="auth-role-name">🧪 Lab 2 Admin</span>
+                  <span class="auth-role-count" style="color: #9333ea;">20 logins (20%)</span>
+                </div>
+                <div class="auth-role-track">
+                  <div class="auth-role-fill" style="width: 20%; background: linear-gradient(90deg, #9333ea, #ff007a);"></div>
+                </div>
+              </div>
+
+              <!-- Global Admin -->
+              <div class="auth-role-row">
+                <div class="auth-role-row-header">
+                  <span class="auth-role-name">⚡ Global Admin</span>
+                  <span class="auth-role-count" style="color: #0066ff;">30 logins (30%)</span>
+                </div>
+                <div class="auth-role-track">
+                  <div class="auth-role-fill" style="width: 30%; background: linear-gradient(90deg, #00d2ff, #0066ff);"></div>
+                </div>
+              </div>
+
+              <!-- Security Super Admin -->
+              <div class="auth-role-row">
+                <div class="auth-role-row-header">
+                  <span class="auth-role-name">🛡️ Security Super Admin</span>
+                  <span class="auth-role-count" style="color: #e11d48;">25 logins (25%)</span>
+                </div>
+                <div class="auth-role-track">
+                  <div class="auth-role-fill" style="width: 25%; background: linear-gradient(90deg, #ff007a, #dc2626);"></div>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Right Visual: Biometric Department Breakdown -->
-          <div class="analytics-card-surface">
-            <div class="analytics-card-top">
-              <div>
-                <h3 class="analytics-card-heading">Biometric Access Distribution</h3>
-                <p class="analytics-card-caption">Clearances by personnel division in ${lab}</p>
-              </div>
-              <span class="analytics-metric-badge">2,820 Total</span>
+          <!-- Chart 4: Failed Login Analysis -->
+          <div class="auth-chart-card">
+            <div class="auth-chart-header">
+              <span class="auth-chart-title">🚨 Failed Login & Threat Analysis</span>
+              <span class="auth-chart-badge" style="background: rgba(239, 68, 68, 0.1); color: #dc2626;">Perimeter Defenses</span>
             </div>
 
-            <div class="analytics-distribution-list">
-              
-              <div class="distribution-row">
-                <div class="dist-header">
-                  <span class="dist-role">Dr. Elena Vance (Lead Research)</span>
-                  <span class="dist-stat">1,240 passes • <strong>44%</strong></span>
-                </div>
-                <div class="dist-track">
-                  <div class="dist-fill fill-blue" style="width: 44%;"></div>
-                </div>
+            <div class="auth-threat-stats-row">
+              <div class="auth-threat-kpi crimson">
+                <span class="auth-threat-kpi-label">Failed Attempts</span>
+                <span class="auth-threat-kpi-value">18</span>
               </div>
-
-              <div class="distribution-row">
-                <div class="dist-header">
-                  <span class="dist-role">Dr. Marcus Vance (Cryo Lead)</span>
-                  <span class="dist-stat">790 passes • <strong>28%</strong></span>
-                </div>
-                <div class="dist-track">
-                  <div class="dist-fill fill-indigo" style="width: 28%;"></div>
-                </div>
-              </div>
-
-              <div class="distribution-row">
-                <div class="dist-header">
-                  <span class="dist-role">Security Escort & Sentinel Patrol</span>
-                  <span class="dist-stat">510 passes • <strong>18%</strong></span>
-                </div>
-                <div class="dist-track">
-                  <div class="dist-fill fill-cyan" style="width: 18%;"></div>
-                </div>
-              </div>
-
-              <div class="distribution-row">
-                <div class="dist-header">
-                  <span class="dist-role">Cleanroom Techs & Maintenance</span>
-                  <span class="dist-stat">280 passes • <strong>10%</strong></span>
-                </div>
-                <div class="dist-track">
-                  <div class="dist-fill fill-emerald" style="width: 10%;"></div>
-                </div>
-              </div>
-
-            </div>
-
-            <!-- Bottom Subsystem Health Row -->
-            <div class="analytics-subsystem-pills">
-              <div class="subsystem-pill">
-                <span class="subsystem-name">ESP32 Stream</span>
-                <span class="subsystem-status green">18ms Latency</span>
-              </div>
-              <div class="subsystem-pill">
-                <span class="subsystem-name">Neural Core</span>
-                <span class="subsystem-status green">99.98% Confidence</span>
-              </div>
-              <div class="subsystem-pill">
-                <span class="subsystem-name">Optical AI</span>
-                <span class="subsystem-status green">30 FPS Live</span>
+              <div class="auth-threat-kpi">
+                <span class="auth-threat-kpi-label">Most Affected</span>
+                <span class="auth-threat-kpi-value" style="font-size: 16px; margin-top: 4px;">Lab 1 Admin</span>
               </div>
             </div>
 
+            <div class="auth-threat-reasons">
+              <div class="auth-threat-reason-item">
+                <span style="font-weight: 700; color: #334155;">🔑 Incorrect Password</span>
+                <span style="font-weight: 800; color: #dc2626;">13 (72%)</span>
+              </div>
+              <div class="auth-threat-reason-item">
+                <span style="font-weight: 700; color: #334155;">🚫 Unregistered Account</span>
+                <span style="font-weight: 800; color: #dc2626;">5 (28%)</span>
+              </div>
+            </div>
           </div>
 
         </div>
 
-        <!-- Anomaly Diagnostics & Model Precision Table -->
-        <div class="analytics-card-surface">
-          <div class="analytics-card-top">
-            <div>
-              <h3 class="analytics-card-heading">Edge AI Anomaly Diagnostics & Model Verification</h3>
-              <p class="analytics-card-caption">Precision benchmark across active neural inspection pipelines</p>
-            </div>
-            <span class="badge-status-green">ALL 4 MODELS VERIFIED</span>
+        <!-- Daily / Monthly Login Statistics Table -->
+        <div class="event-logs-table-card">
+          <div class="auth-card-title-row">
+            <span class="auth-card-title">📅 Daily / Monthly Login Statistics</span>
+            <span style="font-size: 12px; font-weight: 700; color: #64748b;">September 2026 Aggregation</span>
           </div>
 
           <div class="table-container">
             <table class="enterprise-table">
               <thead>
                 <tr>
-                  <th>PIPELINE / MODEL</th>
-                  <th>SUBSYSTEM</th>
-                  <th>INSPECTION RATE</th>
-                  <th>FALSE POSITIVES</th>
-                  <th>ACCURACY</th>
+                  <th>DATE</th>
+                  <th>TOTAL ATTEMPTS</th>
+                  <th>SUCCESSFUL</th>
+                  <th>FAILED</th>
+                  <th>SUCCESS RATE</th>
+                  <th>SECURITY STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="authDailyStatsTableBody">
+                <tr>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">01-09-2026</td>
+                  <td style="font-weight: 800;">12</td>
+                  <td style="font-weight: 800; color: #059669;">10</td>
+                  <td style="font-weight: 800; color: #dc2626;">2</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-weight: 800; color: #059669;">83.3%</span>
+                      <div style="width: 60px; height: 5px; background: #e2e8f0; border-radius: 99px; overflow: hidden;"><div style="width: 83.3%; height: 100%; background: #10b981;"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="status-pill-success">🟢 SECURE</span></td>
+                </tr>
+                <tr>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">02-09-2026</td>
+                  <td style="font-weight: 800;">18</td>
+                  <td style="font-weight: 800; color: #059669;">15</td>
+                  <td style="font-weight: 800; color: #dc2626;">3</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-weight: 800; color: #059669;">83.3%</span>
+                      <div style="width: 60px; height: 5px; background: #e2e8f0; border-radius: 99px; overflow: hidden;"><div style="width: 83.3%; height: 100%; background: #10b981;"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="status-pill-success">🟢 SECURE</span></td>
+                </tr>
+                <tr>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">03-09-2026</td>
+                  <td style="font-weight: 800;">15</td>
+                  <td style="font-weight: 800; color: #059669;">13</td>
+                  <td style="font-weight: 800; color: #dc2626;">2</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-weight: 800; color: #059669;">86.7%</span>
+                      <div style="width: 60px; height: 5px; background: #e2e8f0; border-radius: 99px; overflow: hidden;"><div style="width: 86.7%; height: 100%; background: #10b981;"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="status-pill-success">🟢 SECURE</span></td>
+                </tr>
+                <tr>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">04-09-2026</td>
+                  <td style="font-weight: 800;">25</td>
+                  <td style="font-weight: 800; color: #059669;">21</td>
+                  <td style="font-weight: 800; color: #dc2626;">4</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-weight: 800; color: #059669;">84.0%</span>
+                      <div style="width: 60px; height: 5px; background: #e2e8f0; border-radius: 99px; overflow: hidden;"><div style="width: 84.0%; height: 100%; background: #10b981;"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="status-pill-success">🟢 SECURE</span></td>
+                </tr>
+                <tr>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">05-09-2026</td>
+                  <td style="font-weight: 800;">30</td>
+                  <td style="font-weight: 800; color: #059669;">23</td>
+                  <td style="font-weight: 800; color: #dc2626;">7</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-weight: 800; color: #059669;">76.7%</span>
+                      <div style="width: 60px; height: 5px; background: #e2e8f0; border-radius: 99px; overflow: hidden;"><div style="width: 76.7%; height: 100%; background: #10b981;"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="status-pill-success">🟢 SECURE</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    `;
+  }
+
+  function getSystemOverviewHtml(lab) {
+    setTimeout(() => {
+      if (typeof initAuthOverviewView === 'function') {
+        initAuthOverviewView();
+      }
+    }, 60);
+
+    return `
+      <div class="auth-overview-container">
+        <!-- Top Banner Header with SentinelAI-X Logo Spectrum -->
+        <div class="event-logs-banner-card">
+          <div class="banner-left" style="display: flex; align-items: center; gap: 16px;">
+            <div class="event-banner-logo-icon">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <h2 class="event-banner-title-gradient">${lab} — SentinelAI-X Login System Overview</h2>
+                <span class="event-telemetry-pill">🔐 Authentication Health</span>
+              </div>
+              <p class="banner-subtitle" style="margin: 4px 0 0 0; font-size: 12.5px; color: #64748b; font-weight: 500;">Real-time authentication and access control status</p>
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span class="status-indicator-badge live" style="background: linear-gradient(135deg, #f0fdf4, #ecfeff); border: 1.5px solid #a7f3d0; color: #065f46; font-size: 11.5px; font-weight: 800; padding: 7px 14px; border-radius: 20px; display: inline-flex; align-items: center; gap: 7px;">
+              <span class="cyber-pulse-dot" style="background:#10b981; width:8px; height:8px; border-radius:50%; display:inline-block; box-shadow: 0 0 8px #10b981;"></span>
+              <span>Authentication Online</span>
+            </span>
+
+            <button type="button" class="event-live-sync-btn" onclick="if(typeof initAuthOverviewView==='function')initAuthOverviewView();">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span>Refresh Status</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3-Card Top Telemetry Banner -->
+        <div class="auth-hero-3grid">
+          <!-- Card 1: Auth System Online -->
+          <div class="auth-hero-card hero-online">
+            <div class="auth-hero-header">
+              <span class="auth-hero-title">Authentication System</span>
+              <div class="auth-hero-icon" style="background: rgba(16, 185, 129, 0.15); color: #059669;">🟢</div>
+            </div>
+            <div class="auth-hero-value" style="color: #059669;">
+              <span>ONLINE</span>
+            </div>
+            <div class="auth-hero-sub">
+              <span>● Response: 18ms</span>
+              <span>• TLS 1.3 / OAuth2 Handshake</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Registered Users -->
+          <div class="auth-hero-card hero-users">
+            <div class="auth-hero-header">
+              <span class="auth-hero-title">Registered Users</span>
+              <div class="auth-hero-icon" style="background: rgba(0, 102, 255, 0.15); color: #0066ff;">👥</div>
+            </div>
+            <div class="auth-hero-value" style="color: #0066ff;">
+              <span>4</span>
+              <span style="font-size: 14px; font-weight: 700; color: #64748b; font-family: var(--font-sans, sans-serif);">Authorized Profiles</span>
+            </div>
+            <div class="auth-hero-sub">
+              <span>● 4 Registered Accounts</span>
+              <span>• 100% RBAC Configured</span>
+            </div>
+          </div>
+
+          <!-- Card 3: System Security Secure -->
+          <div class="auth-hero-card hero-secure">
+            <div class="auth-hero-header">
+              <span class="auth-hero-title">System Security</span>
+              <div class="auth-hero-icon" style="background: rgba(121, 40, 202, 0.15); color: #7928ca;">🟢</div>
+            </div>
+            <div class="auth-hero-value" style="background: linear-gradient(135deg, #7928ca, #ff007a, #ff6b00); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+              <span>SECURE</span>
+            </div>
+            <div class="auth-hero-sub">
+              <span>● DEFCON 5 Active</span>
+              <span>• 0 Vulnerabilities / Breaches</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- User / Role Status Matrix Card -->
+        <div class="auth-matrix-card">
+          <div class="auth-card-title-row">
+            <span class="auth-card-title">👥 USER / ROLE STATUS</span>
+            <span style="font-size: 12px; font-weight: 700; color: #059669;">4 of 4 Personnel Authorized</span>
+          </div>
+
+          <div class="table-container">
+            <table class="enterprise-table">
+              <thead>
+                <tr>
+                  <th>USER</th>
+                  <th>ACCOUNT EMAIL</th>
+                  <th>ROLE</th>
+                  <th>CLEARANCE SCOPE</th>
                   <th>STATUS</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>YOLOv8-Nano-Security</strong></td>
-                  <td>ESP32-CAM Stream (${lab})</td>
-                  <td>30 FPS Real-Time</td>
-                  <td><span style="color:#16a34a;">0.001%</span></td>
-                  <td><strong>99.92%</strong></td>
-                  <td><span class="badge-status-green">OPTIMAL</span></td>
+                  <td>
+                    <div class="user-avatar-tag">
+                      <div class="user-avatar-circle" style="background: linear-gradient(135deg, #ff9900, #ff5e00);">L1</div>
+                      <span style="font-weight: 800; color: #0f172a;">Lab 1 Admin</span>
+                    </div>
+                  </td>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">lab1.sentinelai@gmail.com</td>
+                  <td><span class="role-badge-pill role-badge-lab1">Lab 1 Admin</span></td>
+                  <td style="font-size: 12px; font-weight: 600; color: #475569;">Level 2 • LAB 1 Dedicated Only</td>
+                  <td><span class="status-pill-success"><span style="width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>Active</span></td>
                 </tr>
                 <tr>
-                  <td><strong>FaceNet-ResNet50-Edge</strong></td>
-                  <td>Biometric Airlock Relay</td>
-                  <td>120 ms Pass Speed</td>
-                  <td><span style="color:#16a34a;">0.000%</span></td>
-                  <td><strong>99.99%</strong></td>
-                  <td><span class="badge-status-green">OPTIMAL</span></td>
+                  <td>
+                    <div class="user-avatar-tag">
+                      <div class="user-avatar-circle" style="background: linear-gradient(135deg, #9333ea, #ff007a);">L2</div>
+                      <span style="font-weight: 800; color: #0f172a;">Lab 2 Admin</span>
+                    </div>
+                  </td>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">lab2.sentinelai@gmail.com</td>
+                  <td><span class="role-badge-pill role-badge-lab2">Lab 2 Admin</span></td>
+                  <td style="font-size: 12px; font-weight: 600; color: #475569;">Level 2 • LAB 2 Dedicated Only</td>
+                  <td><span class="status-pill-success"><span style="width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>Active</span></td>
                 </tr>
                 <tr>
-                  <td><strong>Thermal-Cryo-Predictor</strong></td>
-                  <td>Chamber Sensor Array</td>
-                  <td>500 Hz Bus</td>
-                  <td><span style="color:#16a34a;">0.002%</span></td>
-                  <td><strong>99.85%</strong></td>
-                  <td><span class="badge-status-green">NOMINAL</span></td>
+                  <td>
+                    <div class="user-avatar-tag">
+                      <div class="user-avatar-circle" style="background: linear-gradient(135deg, #00d2ff, #0066ff);">GA</div>
+                      <span style="font-weight: 800; color: #0f172a;">Global Admin</span>
+                    </div>
+                  </td>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">global.sentinelai@gmail.com</td>
+                  <td><span class="role-badge-pill role-badge-global">Global Admin</span></td>
+                  <td style="font-size: 12px; font-weight: 600; color: #475569;">Level 4 • Full Facility Supervisor</td>
+                  <td><span class="status-pill-success"><span style="width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>Active</span></td>
                 </tr>
                 <tr>
-                  <td><strong>Sentinel-QuantumShield-V4</strong></td>
-                  <td>Distributed Mesh Bus</td>
-                  <td>1.2 ms Airgap Fiber</td>
-                  <td><span style="color:#16a34a;">0.000%</span></td>
-                  <td><strong>100.0%</strong></td>
-                  <td><span class="badge-status-green">OPTIMAL</span></td>
+                  <td>
+                    <div class="user-avatar-tag">
+                      <div class="user-avatar-circle" style="background: linear-gradient(135deg, #ff007a, #dc2626);">SA</div>
+                      <span style="font-weight: 800; color: #0f172a;">Security Super Admin</span>
+                    </div>
+                  </td>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">securitysuper.sentinelai@gmail.com</td>
+                  <td><span class="role-badge-pill role-badge-security">Security Super Admin</span></td>
+                  <td style="font-size: 12px; font-weight: 600; color: #475569;">Level 5 • Master Root Security Authority</td>
+                  <td><span class="status-pill-success"><span style="width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>Active</span></td>
                 </tr>
               </tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- Current Login Activity HUD Box -->
+        <div class="auth-activity-card">
+          <div class="auth-card-title-row" style="margin-bottom: 0;">
+            <span class="auth-card-title">⚡ CURRENT LOGIN ACTIVITY</span>
+            <span class="badge-tag" style="background: rgba(16, 185, 129, 0.1); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 800;">Realtime Telemetry</span>
+          </div>
+
+          <div class="auth-activity-grid">
+            <div class="auth-activity-item">
+              <span class="auth-activity-item-label">Last Login Timestamp</span>
+              <span class="auth-activity-item-val" id="authOverviewLastTime">05-09-2026 09:30:45 AM</span>
+            </div>
+
+            <div class="auth-activity-item">
+              <span class="auth-activity-item-label">Last Login User</span>
+              <span class="auth-activity-item-val" id="authOverviewLastUser" style="color: #0066ff;">lab1.sentinelai@gmail.com</span>
+            </div>
+
+            <div class="auth-activity-item">
+              <span class="auth-activity-item-label">Authentication Status</span>
+              <span class="auth-activity-item-val">
+                <span class="status-pill-success" id="authOverviewLastStatus"><span style="width:6px; height:6px; border-radius:50%; background:#10b981;"></span>SUCCESS</span>
+              </span>
+            </div>
+
+            <div class="auth-activity-item">
+              <span class="auth-activity-item-label">Security Protocol</span>
+              <span class="auth-activity-item-val" style="color: #7928ca;">Biometric & RBAC Pass</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🔒 Authentication Services Matrix -->
+        <div class="auth-matrix-card">
+          <div class="auth-card-title-row">
+            <span class="auth-card-title">🔒 AUTHENTICATION SERVICES</span>
+            <span style="font-size: 12px; font-weight: 700; color: #64748b;">Cloud Infrastructure Health</span>
+          </div>
+
+          <div class="auth-services-grid">
+            <div class="auth-service-box">
+              <div class="auth-service-icon">🔥</div>
+              <div class="auth-service-details">
+                <span class="auth-service-name">Firebase Authentication</span>
+                <span class="auth-service-status-pill">🟢 Connected</span>
+              </div>
+            </div>
+
+            <div class="auth-service-box">
+              <div class="auth-service-icon">⚡</div>
+              <div class="auth-service-details">
+                <span class="auth-service-name">Firebase Realtime Database</span>
+                <span class="auth-service-status-pill">🟢 Connected</span>
+              </div>
+            </div>
+
+            <div class="auth-service-box">
+              <div class="auth-service-icon">🛡️</div>
+              <div class="auth-service-details">
+                <span class="auth-service-name">Session Management</span>
+                <span class="auth-service-status-pill">🟢 Active</span>
+              </div>
+            </div>
+
+            <div class="auth-service-box">
+              <div class="auth-service-icon">🔐</div>
+              <div class="auth-service-details">
+                <span class="auth-service-name">RBAC Security Policy</span>
+                <span class="auth-service-status-pill">🟢 Enforced</span>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -2471,6 +2935,934 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>
           </form>
 
+        </div>
+
+      </div>
+    `;
+  }
+
+  function getChatbotOverviewHtml(lab = 'SYSTEM') {
+    setTimeout(() => {
+      if (typeof initChatbotOverviewView === 'function') {
+        initChatbotOverviewView();
+      }
+    }, 60);
+
+    return `
+      <div class="auth-overview-container">
+        <!-- Chatbot Subnav Pills -->
+        <div class="chatbot-subnav-pills">
+          <button type="button" class="chatbot-subnav-btn" onclick="document.querySelector('[data-view=\\'chatbot\\']')?.click() || renderView('chatbot', 'SYSTEM', 'Chatbot');">💬 Chat Interface</button>
+          <button type="button" class="chatbot-subnav-btn active tab-overview">🤖 System Overview</button>
+          <button type="button" class="chatbot-subnav-btn tab-analytics" onclick="document.querySelector('[data-view=\\'chatbot-analytics\\']')?.click() || renderView('chatbot-analytics', 'SYSTEM', 'Chatbot Analytics');">📊 Analytics</button>
+          <button type="button" class="chatbot-subnav-btn tab-logs" onclick="document.querySelector('[data-view=\\'chatbot-logs\\']')?.click() || renderView('chatbot-logs', 'SYSTEM', 'Chatbot Logs');">📜 Chat Logs</button>
+        </div>
+
+        <!-- Top Banner Header with SentinelAI-X Logo Spectrum -->
+        <div class="event-logs-banner-card">
+          <div class="banner-left" style="display: flex; align-items: center; gap: 16px;">
+            <div class="event-banner-logo-icon" style="background: linear-gradient(135deg, #00d2ff, #0066ff);">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="9" cy="10" r="1"></circle><circle cx="15" cy="10" r="1"></circle></svg>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <h2 class="event-banner-title-gradient">${lab} — SentinelAI-X Chatbot System Overview</h2>
+                <span class="event-telemetry-pill">🤖 AI Service Health</span>
+              </div>
+              <p class="banner-subtitle" style="margin: 4px 0 0 0; font-size: 12.5px; color: #64748b; font-weight: 500;">Real-time chatbot availability, NLP inference pipelines, and autonomous AI engine status</p>
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span class="status-indicator-badge live" style="background: linear-gradient(135deg, #f0fdf4, #ecfeff); border: 1.5px solid #a7f3d0; color: #065f46; font-size: 11.5px; font-weight: 800; padding: 7px 14px; border-radius: 20px; display: inline-flex; align-items: center; gap: 7px;">
+              <span class="cyber-pulse-dot" style="background:#10b981; width:8px; height:8px; border-radius:50%; display:inline-block; box-shadow: 0 0 8px #10b981;"></span>
+              <span>Chatbot Online</span>
+            </span>
+
+            <button type="button" class="event-live-sync-btn" onclick="if(typeof initChatbotOverviewView==='function')initChatbotOverviewView();">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span>Refresh Status</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 3-Card Top Telemetry Banner -->
+        <div class="auth-hero-3grid">
+          <!-- Card 1: Chatbot Online -->
+          <div class="auth-hero-card hero-online">
+            <div class="auth-hero-header">
+              <span class="auth-hero-title">Chatbot System</span>
+              <div class="auth-hero-icon" style="background: rgba(16, 185, 129, 0.15); color: #059669;">🟢</div>
+            </div>
+            <div class="auth-hero-value" style="color: #059669;">
+              <span>ONLINE</span>
+            </div>
+            <div class="auth-hero-sub">
+              <span>● 99.98% Model Uptime</span>
+              <span>• Neural Stream Active</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Total Conversations -->
+          <div class="auth-hero-card hero-users">
+            <div class="auth-hero-header">
+              <span class="auth-hero-title">Total Conversations</span>
+              <div class="auth-hero-icon" style="background: rgba(0, 102, 255, 0.15); color: #0066ff;">💬</div>
+            </div>
+            <div class="auth-hero-value" style="color: #0066ff;">
+              <span id="chatOverviewTotalConvs">128</span>
+              <span style="font-size: 14px; font-weight: 700; color: #64748b; font-family: var(--font-sans, sans-serif);">Sessions Logged</span>
+            </div>
+            <div class="auth-hero-sub">
+              <span>● 542 Total Queries Handled</span>
+              <span>• 4 Authorized Roles</span>
+            </div>
+          </div>
+
+          <!-- Card 3: AI Service Connected -->
+          <div class="auth-hero-card hero-secure">
+            <div class="auth-hero-header">
+              <span class="auth-hero-title">AI Service Status</span>
+              <div class="auth-hero-icon" style="background: rgba(121, 40, 202, 0.15); color: #7928ca;">🟢</div>
+            </div>
+            <div class="auth-hero-value" style="background: linear-gradient(135deg, #00d2ff, #7928ca); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+              <span>CONNECTED</span>
+            </div>
+            <div class="auth-hero-sub">
+              <span>● SentinelAI-X Neural Core v4.2</span>
+              <span>• 0 Pipeline Interruptions</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CHATBOT STATUS Matrix Card -->
+        <div class="auth-matrix-card">
+          <div class="auth-card-title-row">
+            <span class="auth-card-title">🤖 CHATBOT STATUS</span>
+            <span style="font-size: 12px; font-weight: 700; color: #059669;">5 of 5 AI Subsystems Operational</span>
+          </div>
+
+          <div class="table-container">
+            <table class="enterprise-table">
+              <thead>
+                <tr>
+                  <th>SUBSYSTEM / SERVICE</th>
+                  <th>ARCHITECTURE SPEC</th>
+                  <th>LATENCY</th>
+                  <th>OPERATIONAL STATUS</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="user-avatar-tag">
+                      <div class="user-avatar-circle" style="background: linear-gradient(135deg, #00d2ff, #0066ff);">⚡</div>
+                      <span style="font-weight: 800; color: #0f172a;">Chatbot Core Service</span>
+                    </div>
+                  </td>
+                  <td style="font-size: 12.5px; font-weight: 600; color: #475569;">Conversational State & Voice Processor</td>
+                  <td class="cell-mono" style="color: #059669; font-weight: 700;">18 ms</td>
+                  <td><span class="status-pill-success"><span style="width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>Online</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="user-avatar-tag">
+                      <div class="user-avatar-circle" style="background: linear-gradient(135deg, #7928ca, #ff007a);">🧠</div>
+                      <span style="font-weight: 800; color: #0f172a;">AI / Backend Service</span>
+                    </div>
+                  </td>
+                  <td style="font-size: 12.5px; font-weight: 600; color: #475569;">Gemini / Neural NLP Intent Dispatcher</td>
+                  <td class="cell-mono" style="color: #059669; font-weight: 700;">240 ms</td>
+                  <td><span class="status-pill-success"><span style="width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>Connected</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="user-avatar-tag">
+                      <div class="user-avatar-circle" style="background: linear-gradient(135deg, #ff9900, #ff5e00);">🔥</div>
+                      <span style="font-weight: 800; color: #0f172a;">Firebase Database</span>
+                    </div>
+                  </td>
+                  <td style="font-size: 12.5px; font-weight: 600; color: #475569;">Realtime Chat Logs & Telemetry Sync</td>
+                  <td class="cell-mono" style="color: #059669; font-weight: 700;">45 ms</td>
+                  <td><span class="status-pill-success"><span style="width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>Connected</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="user-avatar-tag">
+                      <div class="user-avatar-circle" style="background: linear-gradient(135deg, #10b981, #00f2fe);">💬</div>
+                      <span style="font-weight: 800; color: #0f172a;">Response Generation</span>
+                    </div>
+                  </td>
+                  <td style="font-size: 12.5px; font-weight: 600; color: #475569;">Dynamic Multi-modal & Hardware Actions</td>
+                  <td class="cell-mono" style="color: #059669; font-weight: 700;">120 ms</td>
+                  <td><span class="status-pill-success"><span style="width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>Operational</span></td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="user-avatar-tag">
+                      <div class="user-avatar-circle" style="background: linear-gradient(135deg, #64748b, #334155);">📚</div>
+                      <span style="font-weight: 800; color: #0f172a;">Knowledge & Data Access</span>
+                    </div>
+                  </td>
+                  <td style="font-size: 12.5px; font-weight: 600; color: #475569;">IoT Sensor Stream & CCTV Video Memory</td>
+                  <td class="cell-mono" style="color: #059669; font-weight: 700;">32 ms</td>
+                  <td><span class="status-pill-success"><span style="width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>Available</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- CURRENT CHAT ACTIVITY HUD Box -->
+        <div class="auth-activity-card">
+          <div class="auth-card-title-row" style="margin-bottom: 0;">
+            <span class="auth-card-title">⚡ CURRENT CHAT ACTIVITY</span>
+            <span class="badge-tag" style="background: rgba(0, 102, 255, 0.1); color: #0066ff; border: 1px solid rgba(0, 102, 255, 0.3); font-weight: 800;">Realtime Session Stream</span>
+          </div>
+
+          <div class="auth-activity-grid">
+            <div class="auth-activity-item">
+              <span class="auth-activity-item-label">Last Message Timestamp</span>
+              <span class="auth-activity-item-val" id="chatOverviewLastTime">05-09-2026 09:45:22 AM</span>
+            </div>
+
+            <div class="auth-activity-item">
+              <span class="auth-activity-item-label">Last User / Role</span>
+              <span class="auth-activity-item-val" id="chatOverviewLastUser" style="color: #0066ff;">Lab 1 Admin (Alpha Core)</span>
+            </div>
+
+            <div class="auth-activity-item" style="grid-column: span 2;">
+              <span class="auth-activity-item-label">Last Query</span>
+              <span class="auth-activity-item-val" id="chatOverviewLastQuery" style="font-style: italic; color: #334155;">"What is the current temperature and cleanroom AQI?"</span>
+            </div>
+
+            <div class="auth-activity-item">
+              <span class="auth-activity-item-label">Response Status</span>
+              <span class="auth-activity-item-val">
+                <span class="status-pill-success" id="chatOverviewLastStatus"><span style="width:6px; height:6px; border-radius:50%; background:#10b981;"></span>Responded (21.4°C • 44% RH)</span>
+              </span>
+            </div>
+
+            <div class="auth-activity-item">
+              <span class="auth-activity-item-label">Inference Engine</span>
+              <span class="auth-activity-item-val" style="color: #7928ca;">SentinelAI-X Neural Core v4.2</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🤖 CHATBOT HEALTH Grid -->
+        <div class="auth-matrix-card">
+          <div class="auth-card-title-row">
+            <span class="auth-card-title">🤖 CHATBOT HEALTH</span>
+            <span style="font-size: 12px; font-weight: 700; color: #64748b;">Infrastructure Telemetry</span>
+          </div>
+
+          <div class="chat-health-grid">
+            <div class="chat-health-item">
+              <span class="chat-health-title">Availability</span>
+              <span class="chat-health-status" style="color: #059669;">🟢 Online</span>
+              <span class="chat-health-meta">99.98% Rolling Uptime</span>
+            </div>
+
+            <div class="chat-health-item">
+              <span class="chat-health-title">AI Response Service</span>
+              <span class="chat-health-status" style="color: #059669;">🟢 Healthy</span>
+              <span class="chat-health-meta">Avg response: 240ms</span>
+            </div>
+
+            <div class="chat-health-item">
+              <span class="chat-health-title">Database Connection</span>
+              <span class="chat-health-status" style="color: #059669;">🟢 Connected</span>
+              <span class="chat-health-meta">Firebase RTDB Sync Active</span>
+            </div>
+
+            <div class="chat-health-item">
+              <span class="chat-health-title">Error Status</span>
+              <span class="chat-health-status" style="color: #059669;">🟢 No Errors</span>
+              <span class="chat-health-meta">0 Active Pipeline Exceptions</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    `;
+  }
+
+  function getChatbotAnalyticsHtml(lab = 'SYSTEM') {
+    setTimeout(() => {
+      if (typeof initChatbotAnalyticsView === 'function') {
+        initChatbotAnalyticsView();
+      }
+    }, 60);
+
+    return `
+      <div class="auth-analytics-container">
+        <!-- Chatbot Subnav Pills -->
+        <div class="chatbot-subnav-pills">
+          <button type="button" class="chatbot-subnav-btn" onclick="document.querySelector('[data-view=\\'chatbot\\']')?.click() || renderView('chatbot', 'SYSTEM', 'Chatbot');">💬 Chat Interface</button>
+          <button type="button" class="chatbot-subnav-btn tab-overview" onclick="document.querySelector('[data-view=\\'chatbot-overview\\']')?.click() || renderView('chatbot-overview', 'SYSTEM', 'Chatbot Overview');">🤖 System Overview</button>
+          <button type="button" class="chatbot-subnav-btn active tab-analytics">📊 Analytics</button>
+          <button type="button" class="chatbot-subnav-btn tab-logs" onclick="document.querySelector('[data-view=\\'chatbot-logs\\']')?.click() || renderView('chatbot-logs', 'SYSTEM', 'Chatbot Logs');">📜 Chat Logs</button>
+        </div>
+
+        <!-- Top Banner Header with SentinelAI-X Logo Spectrum -->
+        <div class="event-logs-banner-card">
+          <div class="banner-left" style="display: flex; align-items: center; gap: 16px;">
+            <div class="event-banner-logo-icon" style="background: linear-gradient(135deg, #7928ca, #ff007a);">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <h2 class="event-banner-title-gradient">${lab} — SentinelAI-X Chatbot Analytics</h2>
+                <span class="event-telemetry-pill">📊 Usage & Performance</span>
+              </div>
+              <p class="banner-subtitle" style="margin: 4px 0 0 0; font-size: 12.5px; color: #64748b; font-weight: 500;">Chatbot usage, interaction volume, response success rates and performance statistics over time</p>
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <button type="button" class="event-live-sync-btn" onclick="if(typeof initChatbotAnalyticsView==='function')initChatbotAnalyticsView();">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span>Refresh Analytics</span>
+            </button>
+            <a href="SentinelAI-X_Login_Audit_2026.xlsx" download class="btn-ctrl" style="padding: 8px 14px; font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 9px; background: #0f172a; color: #ffffff; border: 1px solid #0f172a; display: flex; align-items: center; gap: 6px; text-decoration: none;">
+              <span>📥 Export XLSX</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Filter Toolbar -->
+        <div class="auth-analytics-toolbar">
+          <div class="auth-analytics-controls-left">
+            <div class="auth-filter-group">
+              <span class="auth-filter-label">Period:</span>
+              <select id="chatAnalyticsPeriodSelect" class="auth-select-control" onchange="if(typeof filterChatbotAnalytics==='function')filterChatbotAnalytics();">
+                <option value="30d" selected>Last 30 Days</option>
+                <option value="today">Today</option>
+                <option value="7d">Last 7 Days</option>
+                <option value="this_month">This Month (September)</option>
+                <option value="all">All Time (2026)</option>
+              </select>
+            </div>
+
+            <div class="auth-filter-group">
+              <span class="auth-filter-label">Role:</span>
+              <select id="chatAnalyticsRoleSelect" class="auth-select-control" onchange="if(typeof filterChatbotAnalytics==='function')filterChatbotAnalytics();">
+                <option value="ALL" selected>All Roles</option>
+                <option value="Lab 1 Admin">Lab 1 Admin</option>
+                <option value="Lab 2 Admin">Lab 2 Admin</option>
+                <option value="Global Admin">Global Admin</option>
+                <option value="Security Super Admin">Security Super Admin</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="font-size: 12px; font-weight: 700; color: #059669; display: flex; align-items: center; gap: 6px;">
+            <span style="width: 8px; height: 8px; border-radius: 50%; background: #10b981; display: inline-block;"></span>
+            <span>AI Inference Stream Active</span>
+          </div>
+        </div>
+
+        <!-- 4 Key Chatbot Analytics KPI Cards -->
+        <div class="auth-analytics-kpi-grid">
+          <!-- Card 1: Total Conversations -->
+          <div class="event-hud-card hud-blue">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Total Conversations</span>
+              <div class="event-hud-icon">💬</div>
+            </div>
+            <div class="event-hud-value">
+              <span id="chatKpiTotalConvs">128</span>
+              <span class="event-hud-value-sub">Sessions</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" style="width: 100%; background: linear-gradient(90deg, #00d2ff, #0066ff);"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>Session Engagements</span>
+              <span style="color: #0066ff; font-weight: 700;">100% Tracked</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Total Messages -->
+          <div class="event-hud-card hud-emerald">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Total Messages</span>
+              <div class="event-hud-icon">📨</div>
+            </div>
+            <div class="event-hud-value">
+              <span id="chatKpiTotalMessages" style="color: #059669;">542</span>
+              <span class="event-hud-value-sub">Queries</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" style="width: 85%; background: linear-gradient(90deg, #10b981, #00f2fe);"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>User Queries Processed</span>
+              <span style="color: #059669; font-weight: 700;">High Traffic</span>
+            </div>
+          </div>
+
+          <!-- Card 3: Unique Users -->
+          <div class="event-hud-card hud-magenta">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Unique Users</span>
+              <div class="event-hud-icon">👥</div>
+            </div>
+            <div class="event-hud-value">
+              <span id="chatKpiUniqueUsers" style="color: #7928ca;">4</span>
+              <span class="event-hud-value-sub">Admins</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" style="width: 100%; background: linear-gradient(90deg, #7928ca, #ff007a);"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>Active Roles</span>
+              <span style="color: #7928ca; font-weight: 700;">4 / 4 Authorized</span>
+            </div>
+          </div>
+
+          <!-- Card 4: Response Success Rate -->
+          <div class="event-hud-card hud-spectrum">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Response Success Rate</span>
+              <div class="event-hud-icon">⚡</div>
+            </div>
+            <div class="event-hud-value">
+              <span id="chatKpiSuccessRate">96.0%</span>
+              <span class="event-hud-value-sub" style="color: #059669; font-weight: 800;">● Optimal</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" id="chatKpiRateFill" style="width: 96%; background: linear-gradient(90deg, #10b981, #00d2ff, #7928ca);"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>AI Response Accuracy</span>
+              <span style="color: #059669; font-weight: 700;">96% Accurate</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2x2 Visual Analytics Grid -->
+        <div class="auth-charts-grid">
+          
+          <!-- Chart 1: Chat Activity Trend -->
+          <div class="auth-chart-card">
+            <div class="auth-chart-header">
+              <span class="auth-chart-title">📈 Chat Activity Trend</span>
+              <span class="auth-chart-badge">Daily Message Stream</span>
+            </div>
+            
+            <div style="width: 100%; height: 200px; position: relative;">
+              <svg viewBox="0 0 500 180" style="width: 100%; height: 100%;" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="chatTrendGradBlue" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#0066ff" stop-opacity="0.35"/>
+                    <stop offset="100%" stop-color="#0066ff" stop-opacity="0.0"/>
+                  </linearGradient>
+                  <linearGradient id="chatTrendGradPurple" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#7928ca" stop-opacity="0.3"/>
+                    <stop offset="100%" stop-color="#7928ca" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Grid lines -->
+                <line x1="0" y1="30" x2="500" y2="30" stroke="#f1f5f9" stroke-width="1.5" stroke-dasharray="4"/>
+                <line x1="0" y1="75" x2="500" y2="75" stroke="#f1f5f9" stroke-width="1.5" stroke-dasharray="4"/>
+                <line x1="0" y1="120" x2="500" y2="120" stroke="#f1f5f9" stroke-width="1.5" stroke-dasharray="4"/>
+                <line x1="0" y1="160" x2="500" y2="160" stroke="#e2e8f0" stroke-width="1.5"/>
+
+                <!-- Messages curve -->
+                <path d="M 0 130 Q 60 90 100 60 T 200 45 T 300 70 T 400 35 T 500 25 L 500 160 L 0 160 Z" fill="url(#chatTrendGradBlue)"/>
+                <path d="M 0 130 Q 60 90 100 60 T 200 45 T 300 70 T 400 35 T 500 25" fill="none" stroke="#0066ff" stroke-width="3" stroke-linecap="round"/>
+
+                <!-- Successful Responses curve -->
+                <path d="M 0 140 Q 60 100 100 70 T 200 55 T 300 80 T 400 45 T 500 32 L 500 160 L 0 160 Z" fill="url(#chatTrendGradPurple)"/>
+                <path d="M 0 140 Q 60 100 100 70 T 200 55 T 300 80 T 400 45 T 500 32" fill="none" stroke="#7928ca" stroke-width="2.5" stroke-linecap="round"/>
+
+                <!-- Dots -->
+                <circle cx="100" cy="60" r="4.5" fill="#0066ff" stroke="#ffffff" stroke-width="2"/>
+                <circle cx="200" cy="45" r="4.5" fill="#0066ff" stroke="#ffffff" stroke-width="2"/>
+                <circle cx="300" cy="70" r="4.5" fill="#0066ff" stroke="#ffffff" stroke-width="2"/>
+                <circle cx="400" cy="35" r="4.5" fill="#0066ff" stroke="#ffffff" stroke-width="2"/>
+                <circle cx="500" cy="25" r="5" fill="#7928ca" stroke="#ffffff" stroke-width="2"/>
+              </svg>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: #94a3b8; padding-top: 4px;">
+              <span>01-Sep (42 msgs)</span>
+              <span>02-Sep (58 msgs)</span>
+              <span>03-Sep (51 msgs)</span>
+              <span>04-Sep (64 msgs)</span>
+              <span>05-Sep (Today: 78 msgs)</span>
+            </div>
+          </div>
+
+          <!-- Chart 2: Response Status Breakdown -->
+          <div class="auth-chart-card">
+            <div class="auth-chart-header">
+              <span class="auth-chart-title">📊 Response Status Breakdown</span>
+              <span class="auth-chart-badge">Historical Quality</span>
+            </div>
+
+            <div class="auth-donut-wrapper">
+              <svg class="auth-donut-svg" viewBox="0 0 36 36">
+                <!-- Background track -->
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="#f1f5f9" stroke-width="4.5"/>
+                <!-- Success slice (96%) -->
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="url(#chatSuccessGradDonut)" stroke-width="4.5" stroke-dasharray="96, 100" stroke-linecap="round"/>
+                <!-- Failed slice (4%) -->
+                <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="url(#chatFailedGradDonut)" stroke-width="4.5" stroke-dasharray="4, 100" stroke-dashoffset="-96" stroke-linecap="round"/>
+
+                <defs>
+                  <linearGradient id="chatSuccessGradDonut" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#10b981"/>
+                    <stop offset="100%" stop-color="#00d2ff"/>
+                  </linearGradient>
+                  <linearGradient id="chatFailedGradDonut" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#ff007a"/>
+                    <stop offset="100%" stop-color="#dc2626"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+
+              <div class="auth-donut-legend">
+                <div class="auth-legend-item">
+                  <span class="auth-legend-dot" style="background: linear-gradient(135deg, #10b981, #00d2ff);"></span>
+                  <span class="auth-legend-name">SUCCESS</span>
+                  <span class="auth-legend-percent" style="color: #059669;">96% (520)</span>
+                </div>
+                <div class="auth-legend-item">
+                  <span class="auth-legend-dot" style="background: linear-gradient(135deg, #ff007a, #dc2626);"></span>
+                  <span class="auth-legend-name">FAILED / ERR</span>
+                  <span class="auth-legend-percent" style="color: #dc2626;">4% (22)</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="font-size: 11.5px; color: #64748b; text-align: center; font-weight: 600; padding-top: 4px;">
+              🤖 520 of 542 queries resolved with high confidence responses
+            </div>
+          </div>
+
+          <!-- Chart 3: Chat Usage by Role -->
+          <div class="auth-chart-card">
+            <div class="auth-chart-header">
+              <span class="auth-chart-title">👥 Chat Usage by Role</span>
+              <span class="auth-chart-badge">4 Authorized Roles</span>
+            </div>
+
+            <div class="auth-role-breakdown-list">
+              <!-- Lab 1 Admin -->
+              <div class="auth-role-row">
+                <div class="auth-role-row-header">
+                  <span class="auth-role-name">🔬 Lab 1 Admin</span>
+                  <span class="auth-role-count" style="color: #ea580c;">40 queries (37%)</span>
+                </div>
+                <div class="auth-role-track">
+                  <div class="auth-role-fill" style="width: 37%; background: linear-gradient(90deg, #ff9900, #ff5e00);"></div>
+                </div>
+              </div>
+
+              <!-- Lab 2 Admin -->
+              <div class="auth-role-row">
+                <div class="auth-role-row-header">
+                  <span class="auth-role-name">🧪 Lab 2 Admin</span>
+                  <span class="auth-role-count" style="color: #9333ea;">32 queries (29%)</span>
+                </div>
+                <div class="auth-role-track">
+                  <div class="auth-role-fill" style="width: 29%; background: linear-gradient(90deg, #9333ea, #ff007a);"></div>
+                </div>
+              </div>
+
+              <!-- Global Admin -->
+              <div class="auth-role-row">
+                <div class="auth-role-row-header">
+                  <span class="auth-role-name">⚡ Global Admin</span>
+                  <span class="auth-role-count" style="color: #0066ff;">35 queries (32%)</span>
+                </div>
+                <div class="auth-role-track">
+                  <div class="auth-role-fill" style="width: 32%; background: linear-gradient(90deg, #00d2ff, #0066ff);"></div>
+                </div>
+              </div>
+
+              <!-- Security Super Admin -->
+              <div class="auth-role-row">
+                <div class="auth-role-row-header">
+                  <span class="auth-role-name">🛡️ Security Super Admin</span>
+                  <span class="auth-role-count" style="color: #e11d48;">21 queries (19%)</span>
+                </div>
+                <div class="auth-role-track">
+                  <div class="auth-role-fill" style="width: 19%; background: linear-gradient(90deg, #ff007a, #dc2626);"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart 4: Chatbot Performance & Query Categories -->
+          <div class="auth-chart-card">
+            <div class="auth-chart-header">
+              <span class="auth-chart-title">🤖 Chatbot Performance</span>
+              <span class="auth-chart-badge" style="background: rgba(16, 185, 129, 0.1); color: #059669;">96% Resolution</span>
+            </div>
+
+            <div class="auth-threat-stats-row">
+              <div class="auth-threat-kpi" style="background: #f0fdf4; border-color: #bbf7d0;">
+                <span class="auth-threat-kpi-label" style="color: #166534;">Successful Responses</span>
+                <span class="auth-threat-kpi-value" style="color: #15803d;">520</span>
+              </div>
+              <div class="auth-threat-kpi crimson">
+                <span class="auth-threat-kpi-label">Failed Responses</span>
+                <span class="auth-threat-kpi-value">22</span>
+              </div>
+            </div>
+
+            <div class="auth-threat-reasons">
+              <div class="auth-threat-reason-item">
+                <span style="font-weight: 700; color: #334155;">🌡️ Lab / Sensor Information</span>
+                <span style="font-weight: 800; color: #0066ff;">190 (35%)</span>
+              </div>
+              <div class="auth-threat-reason-item">
+                <span style="font-weight: 700; color: #334155;">🚪 Security & Airlock Commands</span>
+                <span style="font-weight: 800; color: #7928ca;">135 (25%)</span>
+              </div>
+              <div class="auth-threat-reason-item">
+                <span style="font-weight: 700; color: #334155;">⚡ System Diagnostics</span>
+                <span style="font-weight: 800; color: #ea580c;">108 (20%)</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Daily Chatbot Statistics Table -->
+        <div class="event-logs-table-card">
+          <div class="auth-card-title-row">
+            <span class="auth-card-title">📅 Daily Chatbot Statistics</span>
+            <span style="font-size: 12px; font-weight: 700; color: #64748b;">September 2026 Aggregation</span>
+          </div>
+
+          <div class="table-container">
+            <table class="enterprise-table">
+              <thead>
+                <tr>
+                  <th>DATE</th>
+                  <th>MESSAGES</th>
+                  <th>ACTIVE USERS</th>
+                  <th>SUCCESSFUL RESPONSES</th>
+                  <th>FAILED</th>
+                  <th>SUCCESS RATE</th>
+                  <th>HEALTH STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="chatbotDailyStatsTableBody">
+                <tr>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">01-09-2026</td>
+                  <td style="font-weight: 800;">42</td>
+                  <td style="font-weight: 800; color: #0066ff;">4</td>
+                  <td style="font-weight: 800; color: #059669;">40</td>
+                  <td style="font-weight: 800; color: #dc2626;">2</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-weight: 800; color: #059669;">95.2%</span>
+                      <div style="width: 60px; height: 5px; background: #e2e8f0; border-radius: 99px; overflow: hidden;"><div style="width: 95.2%; height: 100%; background: #10b981;"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="status-pill-success">🟢 OPTIMAL</span></td>
+                </tr>
+                <tr>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">02-09-2026</td>
+                  <td style="font-weight: 800;">58</td>
+                  <td style="font-weight: 800; color: #0066ff;">4</td>
+                  <td style="font-weight: 800; color: #059669;">56</td>
+                  <td style="font-weight: 800; color: #dc2626;">2</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-weight: 800; color: #059669;">96.5%</span>
+                      <div style="width: 60px; height: 5px; background: #e2e8f0; border-radius: 99px; overflow: hidden;"><div style="width: 96.5%; height: 100%; background: #10b981;"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="status-pill-success">🟢 OPTIMAL</span></td>
+                </tr>
+                <tr>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">03-09-2026</td>
+                  <td style="font-weight: 800;">51</td>
+                  <td style="font-weight: 800; color: #0066ff;">3</td>
+                  <td style="font-weight: 800; color: #059669;">50</td>
+                  <td style="font-weight: 800; color: #dc2626;">1</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-weight: 800; color: #059669;">98.0%</span>
+                      <div style="width: 60px; height: 5px; background: #e2e8f0; border-radius: 99px; overflow: hidden;"><div style="width: 98.0%; height: 100%; background: #10b981;"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="status-pill-success">🟢 OPTIMAL</span></td>
+                </tr>
+                <tr>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">04-09-2026</td>
+                  <td style="font-weight: 800;">64</td>
+                  <td style="font-weight: 800; color: #0066ff;">4</td>
+                  <td style="font-weight: 800; color: #059669;">61</td>
+                  <td style="font-weight: 800; color: #dc2626;">3</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-weight: 800; color: #059669;">95.3%</span>
+                      <div style="width: 60px; height: 5px; background: #e2e8f0; border-radius: 99px; overflow: hidden;"><div style="width: 95.3%; height: 100%; background: #10b981;"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="status-pill-success">🟢 OPTIMAL</span></td>
+                </tr>
+                <tr>
+                  <td class="cell-mono" style="font-weight: 700; color: #0f172a;">05-09-2026</td>
+                  <td style="font-weight: 800;">78</td>
+                  <td style="font-weight: 800; color: #0066ff;">4</td>
+                  <td style="font-weight: 800; color: #059669;">75</td>
+                  <td style="font-weight: 800; color: #dc2626;">3</td>
+                  <td>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <span style="font-weight: 800; color: #059669;">96.1%</span>
+                      <div style="width: 60px; height: 5px; background: #e2e8f0; border-radius: 99px; overflow: hidden;"><div style="width: 96.1%; height: 100%; background: #10b981;"></div></div>
+                    </div>
+                  </td>
+                  <td><span class="status-pill-success">🟢 OPTIMAL</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+    `;
+  }
+
+  function getChatbotLogsHtml(lab = 'SYSTEM') {
+    setTimeout(() => {
+      if (typeof fetchAndRenderChatbotLogs === 'function') {
+        fetchAndRenderChatbotLogs();
+      }
+    }, 60);
+
+    return `
+      <div class="event-logs-container">
+        <!-- Chatbot Subnav Pills -->
+        <div class="chatbot-subnav-pills">
+          <button type="button" class="chatbot-subnav-btn" onclick="document.querySelector('[data-view=\\'chatbot\\']')?.click() || renderView('chatbot', 'SYSTEM', 'Chatbot');">💬 Chat Interface</button>
+          <button type="button" class="chatbot-subnav-btn tab-overview" onclick="document.querySelector('[data-view=\\'chatbot-overview\\']')?.click() || renderView('chatbot-overview', 'SYSTEM', 'Chatbot Overview');">🤖 System Overview</button>
+          <button type="button" class="chatbot-subnav-btn tab-analytics" onclick="document.querySelector('[data-view=\\'chatbot-analytics\\']')?.click() || renderView('chatbot-analytics', 'SYSTEM', 'Chatbot Analytics');">📊 Analytics</button>
+          <button type="button" class="chatbot-subnav-btn active tab-logs">📜 Chat Logs</button>
+        </div>
+
+        <!-- Top Banner Header with SentinelAI-X Logo Spectrum -->
+        <div class="event-logs-banner-card">
+          <div class="banner-left" style="display: flex; align-items: center; gap: 16px;">
+            <div class="event-banner-logo-icon" style="background: linear-gradient(135deg, #ff007a, #ff6b00);">
+              <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+            </div>
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <h2 class="event-banner-title-gradient">${lab} — SentinelAI-X Chatbot Conversation History (2026)</h2>
+                <span class="event-telemetry-pill">⚡ Live Chat Stream</span>
+              </div>
+              <p class="banner-subtitle" style="margin: 4px 0 0 0; font-size: 12.5px; color: #64748b; font-weight: 500;">Chronological archive of all user queries, AI responses, hardware commands, and conversational transcripts</p>
+            </div>
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <span class="status-indicator-badge live" style="background: linear-gradient(135deg, #f0fdf4, #ecfeff); border: 1.5px solid #a7f3d0; color: #065f46; font-size: 11.5px; font-weight: 800; padding: 7px 14px; border-radius: 20px; display: inline-flex; align-items: center; gap: 7px;">
+              <span class="cyber-pulse-dot" style="background:#10b981; width:8px; height:8px; border-radius:50%; display:inline-block; box-shadow: 0 0 8px #10b981;"></span>
+              <span>Live Chat Archive</span>
+            </span>
+
+            <button type="button" class="event-live-sync-btn" onclick="if(typeof fetchAndRenderChatbotLogs==='function')fetchAndRenderChatbotLogs();">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+              <span>Refresh Logs</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 4-Card HUD Metric Banner -->
+        <div class="event-logs-hud-grid">
+          <div class="event-hud-card hud-blue">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Total Conversations</span>
+              <div class="event-hud-icon">💬</div>
+            </div>
+            <div class="event-hud-value">
+              <span>128</span>
+              <span class="event-hud-value-sub">Sessions Logged</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" style="width: 100%; background: linear-gradient(90deg, #00d2ff, #0066ff);"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>Chat Session Vault</span>
+              <span style="color: #0066ff; font-weight: 700;">● Active Sync</span>
+            </div>
+          </div>
+
+          <div class="event-hud-card hud-emerald">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Successful Responses</span>
+              <div class="event-hud-icon">🛡️</div>
+            </div>
+            <div class="event-hud-value">
+              <span>520</span>
+              <span class="event-hud-value-sub">96% Resolved</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" style="width: 96%; background: linear-gradient(90deg, #10b981, #00f2fe);"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>High Confidence Outputs</span>
+              <span style="color: #059669; font-weight: 700;">✓ Verified Answers</span>
+            </div>
+          </div>
+
+          <div class="event-hud-card hud-magenta">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Anomalies / Errors</span>
+              <div class="event-hud-icon">🚨</div>
+            </div>
+            <div class="event-hud-value">
+              <span>22</span>
+              <span class="event-hud-value-sub">Fallbacks</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" style="width: 4%; background: linear-gradient(90deg, #ff007a, #dc2626);"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>Unrecognized Queries</span>
+              <span style="color: #dc2626; font-weight: 700;">4% Handled</span>
+            </div>
+          </div>
+
+          <div class="event-hud-card hud-spectrum">
+            <div class="event-hud-header">
+              <span class="event-hud-label">Model Reliability Index</span>
+              <div class="event-hud-icon">⚡</div>
+            </div>
+            <div class="event-hud-value">
+              <span>99.2%</span>
+              <span class="event-hud-value-sub" style="color: #059669; font-weight: 800;">● Nominal</span>
+            </div>
+            <div class="event-hud-progress-track">
+              <div class="event-hud-progress-fill" style="width: 99.2%; background: linear-gradient(90deg, #7928ca, #ff007a, #ff6b00);"></div>
+            </div>
+            <div class="event-hud-footer">
+              <span>NLP Inference Core</span>
+              <span style="color: #7928ca; font-weight: 700;">100% Armed</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Filter Toolbar Box -->
+        <div class="event-toolbar-box">
+          <div class="event-toolbar-top">
+            <!-- Search Input -->
+            <div class="event-search-wrapper">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#7928ca" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="chatLogsSearchInput" class="event-search-input" placeholder="Search chat history by query, user email, session ID (chat_801)..." oninput="if(typeof filterChatbotLogsRows==='function')filterChatbotLogsRows();">
+            </div>
+
+            <!-- Role Filter Chips -->
+            <div class="event-role-filter-row" id="chatRoleFilterRow">
+              <span style="font-size: 11.5px; font-weight: 800; color: #475569; margin-right: 4px;">FILTER CHATS:</span>
+              <button type="button" class="event-filter-chip active" data-role="ALL" onclick="if(typeof setChatRoleFilter==='function')setChatRoleFilter('ALL', this);">🌐 All Chats</button>
+              <button type="button" class="event-filter-chip" data-role="Lab 1 Admin" onclick="if(typeof setChatRoleFilter==='function')setChatRoleFilter('Lab 1 Admin', this);">🔬 Lab 1</button>
+              <button type="button" class="event-filter-chip" data-role="Lab 2 Admin" onclick="if(typeof setChatRoleFilter==='function')setChatRoleFilter('Lab 2 Admin', this);">🧪 Lab 2</button>
+              <button type="button" class="event-filter-chip" data-role="Global Admin" onclick="if(typeof setChatRoleFilter==='function')setChatRoleFilter('Global Admin', this);">⚡ Global Admin</button>
+              <button type="button" class="event-filter-chip" data-role="Security Super Admin" onclick="if(typeof setChatRoleFilter==='function')setChatRoleFilter('Security Super Admin', this);">🛡️ Security Admin</button>
+            </div>
+          </div>
+
+          <!-- Month-Wise Selector Tabs Bar -->
+          <div class="firebase-month-tabs-bar" id="chatMonthTabsBar">
+            <button type="button" class="firebase-month-pill active" data-month="ALL" onclick="if(typeof fetchAndRenderChatbotLogs==='function')fetchAndRenderChatbotLogs('ALL');">All Months</button>
+            <button type="button" class="firebase-month-pill" data-month="September" onclick="if(typeof fetchAndRenderChatbotLogs==='function')fetchAndRenderChatbotLogs('September');">Sep</button>
+            <button type="button" class="firebase-month-pill" data-month="August" onclick="if(typeof fetchAndRenderChatbotLogs==='function')fetchAndRenderChatbotLogs('August');">Aug</button>
+            <button type="button" class="firebase-month-pill" data-month="July" onclick="if(typeof fetchAndRenderChatbotLogs==='function')fetchAndRenderChatbotLogs('July');">Jul</button>
+            <button type="button" class="firebase-month-pill" data-month="June" onclick="if(typeof fetchAndRenderChatbotLogs==='function')fetchAndRenderChatbotLogs('June');">Jun</button>
+            <button type="button" class="firebase-month-pill" data-month="May" onclick="if(typeof fetchAndRenderChatbotLogs==='function')fetchAndRenderChatbotLogs('May');">May</button>
+          </div>
+        </div>
+
+        <!-- Chat Logs Table Card -->
+        <div class="event-logs-table-card">
+          <div class="table-container">
+            <table class="enterprise-table">
+              <thead>
+                <tr>
+                  <th style="width: 110px;">SESSION ID</th>
+                  <th style="width: 175px;">TIMESTAMP</th>
+                  <th style="width: 110px;">MONTH</th>
+                  <th>PERSONNEL</th>
+                  <th>ROLE</th>
+                  <th>USER QUERY</th>
+                  <th style="width: 130px;">STATUS</th>
+                  <th style="width: 120px;">ACTION</th>
+                </tr>
+              </thead>
+              <tbody id="chatbotLogsTableBody">
+                <tr>
+                  <td colspan="8" style="text-align: center; padding: 36px; color: #64748b;">
+                    <div style="font-size: 24px; margin-bottom: 6px;">⚡</div>
+                    <span style="font-weight: 600;">Loading chat logs archive...</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Conversation Details Lightbox Modal Container -->
+        <div id="conversationDetailsModalOverlay" class="chat-modal-overlay" style="display: none;">
+          <div class="chat-modal-box">
+            <div class="chat-modal-header">
+              <div class="chat-modal-title-group">
+                <div class="chat-modal-icon">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                </div>
+                <div>
+                  <h3 class="chat-modal-title" id="modalConvTitle">💬 Conversation Details</h3>
+                  <p class="chat-modal-meta" id="modalConvMeta">User: Lab 1 Admin • 05-09-2026 09:45:22 AM</p>
+                </div>
+              </div>
+              <button type="button" class="chat-modal-close-btn" onclick="document.getElementById('conversationDetailsModalOverlay').style.display='none';">×</button>
+            </div>
+
+            <div class="chat-modal-body">
+              <!-- User Bubble -->
+              <div class="chat-bubble-container">
+                <div class="chat-bubble-sender user">
+                  <span>👤 User</span>
+                  <span id="modalUserRoleBadge" class="role-badge-pill role-badge-lab1" style="font-size: 10.5px; padding: 2px 7px;">Lab 1 Admin</span>
+                </div>
+                <div class="chat-bubble-card user-bubble" id="modalUserQueryText">
+                  What is the current temperature and cleanroom AQI?
+                </div>
+              </div>
+
+              <!-- Bot Bubble -->
+              <div class="chat-bubble-container">
+                <div class="chat-bubble-sender bot">
+                  <span>🤖 SentinelAI-X</span>
+                  <span style="font-size: 10.5px; color: #10b981; font-weight: 700;">● Neural Inference</span>
+                </div>
+                <div class="chat-bubble-card bot-bubble" id="modalBotResponseText">
+                  The current temperature in Lab 1 is <strong>21.4°C</strong> with <strong>44% Relative Humidity</strong>. Air Quality Index is Grade A Cleanroom compliant (<strong>12 AQI</strong>).
+                </div>
+              </div>
+            </div>
+
+            <div class="chat-modal-footer">
+              <div class="chat-footer-badge">
+                <span style="width: 7px; height: 7px; border-radius: 50%; background: #10b981;"></span>
+                <span id="modalStatusText">Status: 🟢 Responded • Latency: 180ms</span>
+              </div>
+              <button type="button" class="btn-primary-action" onclick="document.getElementById('conversationDetailsModalOverlay').style.display='none';">
+                <span>Done</span>
+              </button>
+            </div>
+          </div>
         </div>
 
       </div>
@@ -4132,4 +5524,1091 @@ document.addEventListener('DOMContentLoaded', () => {
       matchingLink.click();
     }
   });
+
+  // =========================================================================
+  // 11. LIVE FIREBASE REALTIME DATABASE AUDIT & LOGIN STREAM (loginLogs & loginStatus)
+  // =========================================================================
+  const FIREBASE_DB_URL = "https://sentinelaidashboard-default-rtdb.firebaseio.com";
+  let activeSelectedMonth = 'ALL';
+  let activeSelectedRole = 'ALL';
+  let cachedFirebaseRecords = [];
+  let cachedFirebaseStatus = null;
+
+  async function fetchAndRenderFirebaseAudit(targetMonth = activeSelectedMonth) {
+    activeSelectedMonth = targetMonth;
+    const tableBodies = document.querySelectorAll('#eventLogsTableBody');
+    const liveBadges = document.querySelectorAll('#firebaseLiveStatusBadge, #firebaseLiveStatusBadgeSub');
+    if (!tableBodies || tableBodies.length === 0) return;
+
+    try {
+      // Fetch month-wise loginLogs and loginStatus from Firebase Realtime Database
+      const [logsRes, statsRes] = await Promise.all([
+        fetch(`${FIREBASE_DB_URL}/loginLogs/2026.json`),
+        fetch(`${FIREBASE_DB_URL}/loginStatus/2026.json`)
+      ]);
+
+      const logsData = (logsRes.ok ? await logsRes.json() : null) || {};
+      const statusData = (statsRes.ok ? await statsRes.json() : null) || {};
+      cachedFirebaseStatus = statusData;
+
+      // Extract records across months
+      const records = [];
+      const monthNames = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ];
+
+      monthNames.forEach(m => {
+        const monthObj = logsData[m];
+        if (monthObj && typeof monthObj === 'object') {
+          Object.keys(monthObj).forEach(key => {
+            const entry = monthObj[key];
+            if (entry && typeof entry === 'object' && entry.email) {
+              const numMatch = key.match(/\d+/);
+              const seqNo = numMatch ? parseInt(numMatch[0], 10) : 0;
+              const isSuccess = (entry.status || entry.loginStatus || ((entry.role && !entry.role.includes("Unauthorized")) ? "SUCCESS" : "FAILED")) === "SUCCESS";
+              
+              records.push({
+                month: m,
+                key: key,
+                seqNo: seqNo,
+                email: entry.email,
+                role: entry.role || "Unauthorized User",
+                status: isSuccess ? "SUCCESS" : "FAILED",
+                failureReason: entry.failureReason || (!isSuccess ? "Invalid Credentials" : ""),
+                date: entry.date || "—",
+                time: entry.time || "—"
+              });
+            }
+          });
+        }
+      });
+
+      // Sort by serial number descending (highest / newest first: login_510, login_509...)
+      records.sort((a, b) => (b.seqNo || 0) - (a.seqNo || 0));
+      cachedFirebaseRecords = records;
+
+      // Update HUD Metrics
+      updateEventLogsHUD(statusData, records);
+
+      // Render filtered table
+      renderAuditTableRows();
+
+      // Sync live badge
+      liveBadges.forEach(badge => {
+        badge.innerHTML = `<span class="cyber-pulse-dot" style="background:#10b981; width:7px; height:7px; border-radius:50%; display:inline-block;"></span><span>Firebase RTDB Live (${records.length} Events)</span>`;
+      });
+
+      // Sync month pills active state across all month bars
+      document.querySelectorAll('.firebase-month-pill').forEach(pill => {
+        const pMonth = pill.getAttribute('data-month') || pill.textContent.trim();
+        const isActive = pMonth === targetMonth || (targetMonth === 'ALL' && (pMonth === 'All Months' || pMonth === 'ALL'));
+        if (isActive) {
+          pill.classList.add('active');
+          pill.style.background = '';
+          pill.style.color = '';
+          pill.style.borderColor = '';
+        } else {
+          pill.classList.remove('active');
+          pill.style.background = '';
+          pill.style.color = '';
+          pill.style.borderColor = '';
+        }
+      });
+
+    } catch (err) {
+      liveBadges.forEach(badge => {
+        badge.innerHTML = `<span style="color: #ea580c; font-size: 11px; font-weight: 700;">⚠️ Offline Cache</span>`;
+      });
+      tableBodies.forEach(tbody => {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 24px; color: #94a3b8;">
+              <span>Unable to connect to Firebase Realtime Database. Checking network connection...</span>
+            </td>
+          </tr>
+        `;
+      });
+    }
+  }
+
+  function updateEventLogsHUD(statusData, records) {
+    const totalEl = document.getElementById('eventHudTotal');
+    const successEl = document.getElementById('eventHudSuccess');
+    const failedEl = document.getElementById('eventHudFailed');
+    const rateEl = document.getElementById('eventHudSuccessRate');
+    const successBar = document.getElementById('eventHudSuccessBar');
+    const failedBar = document.getElementById('eventHudFailedBar');
+
+    // Pull active status for September / 2026
+    const curStatus = (statusData && statusData["September"]) || (statusData && statusData[activeSelectedMonth]) || {
+      totalLogins: records.length,
+      successfulLogins: records.filter(r => r.status === 'SUCCESS').length,
+      failedLogins: records.filter(r => r.status === 'FAILED').length
+    };
+
+    const total = Number(curStatus.totalLogins) || records.length;
+    const success = Number(curStatus.successfulLogins) || records.filter(r => r.status === 'SUCCESS').length;
+    const failed = Number(curStatus.failedLogins) || records.filter(r => r.status === 'FAILED').length;
+    const rate = total > 0 ? Math.round((success / total) * 100) : 100;
+
+    if (totalEl) totalEl.textContent = total;
+    if (successEl) successEl.textContent = success;
+    if (failedEl) failedEl.textContent = failed;
+    if (rateEl) rateEl.textContent = `${rate}% Pass Rate`;
+    if (successBar) successBar.style.width = `${rate}%`;
+    if (failedBar) failedBar.style.width = `${100 - rate}%`;
+  }
+
+  function renderAuditTableRows() {
+    const tableBodies = document.querySelectorAll('#eventLogsTableBody');
+    if (!tableBodies || tableBodies.length === 0) return;
+
+    const searchInput = document.getElementById('eventLogsSearchInput');
+    const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+    let filtered = cachedFirebaseRecords;
+
+    // Filter by month
+    if (activeSelectedMonth !== 'ALL') {
+      filtered = filtered.filter(r => r.month.toLowerCase() === activeSelectedMonth.toLowerCase());
+    }
+
+    // Filter by role
+    if (activeSelectedRole !== 'ALL') {
+      if (activeSelectedRole === 'FAILED') {
+        filtered = filtered.filter(r => r.status === 'FAILED');
+      } else {
+        filtered = filtered.filter(r => r.role.toLowerCase().includes(activeSelectedRole.toLowerCase()));
+      }
+    }
+
+    // Filter by search query
+    if (query) {
+      filtered = filtered.filter(r => 
+        (r.email && r.email.toLowerCase().includes(query)) ||
+        (r.role && r.role.toLowerCase().includes(query)) ||
+        (r.key && r.key.toLowerCase().includes(query)) ||
+        (r.date && r.date.toLowerCase().includes(query)) ||
+        (r.time && r.time.toLowerCase().includes(query))
+      );
+    }
+
+    if (filtered.length === 0) {
+      tableBodies.forEach(tbody => {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7" style="text-align: center; padding: 40px 20px; color: #64748b;">
+              <div style="font-size: 30px; margin-bottom: 8px;">🔐</div>
+              <strong style="color: #0f172a; font-size: 14.5px; font-weight: 800;">No login history matches the filter criteria</strong>
+              <p style="font-size: 12px; margin: 4px 0 0 0; color: #64748b; font-weight: 500;">${query ? `No authentication records matching "${query}"` : `No login records recorded in ${activeSelectedMonth === 'ALL' ? '2026' : activeSelectedMonth}`}</p>
+            </td>
+          </tr>
+        `;
+      });
+      return;
+    }
+
+    const html = filtered.map(r => {
+      const isSuccess = r.status === 'SUCCESS';
+      const statusBadge = isSuccess
+        ? `<span class="status-pill-success"><span style="width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>SUCCESS</span>`
+        : `<span class="status-pill-failed"><span style="width:7px; height:7px; border-radius:50%; background:#ff007a; box-shadow:0 0 8px #ff007a;"></span>FAILED</span>`;
+      
+      const detailsText = isSuccess
+        ? `<span style="color: #059669; font-size: 12px; font-weight: 700; display:flex; align-items:center; gap:5px;"><span style="color:#10b981;">✓</span> Authorized Clearance Granted</span>`
+        : `<span style="color: #be123c; font-size: 12px; font-weight: 700; display:flex; align-items:center; gap:5px;"><span style="color:#ff007a;">✕</span> ${r.failureReason || 'Access Denied — Clearance Blocked'}</span>`;
+
+      // Role class styling matching logo palette
+      let roleClass = 'role-badge-unauthorized';
+      if (r.role.includes('Lab 1')) roleClass = 'role-badge-lab1';
+      else if (r.role.includes('Lab 2')) roleClass = 'role-badge-lab2';
+      else if (r.role.includes('Global')) roleClass = 'role-badge-global';
+      else if (r.role.includes('Security')) roleClass = 'role-badge-security';
+
+      // Initials for avatar circle
+      const initials = r.email.split('@')[0].slice(0, 2).toUpperCase();
+
+      return `
+        <tr>
+          <td>
+            <span class="serial-key-chip">${r.key || 'login_500'}</span>
+          </td>
+          <td class="cell-mono" style="font-size: 12px; color: #0f172a; font-weight: 700;">
+            ${r.date} <span style="color:#94a3b8;">•</span> ${r.time}
+          </td>
+          <td>
+            <span style="font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; background: #f1f5f9; color: #334155; border: 1px solid #e2e8f0;">
+              ${r.month}
+            </span>
+          </td>
+          <td>
+            <div class="user-avatar-tag">
+              <div class="user-avatar-circle" style="background: ${isSuccess ? '#0f172a' : '#64748b'};">
+                ${initials}
+              </div>
+              <span style="font-weight: 700; color: #0f172a; word-break: break-all;">${r.email}</span>
+            </div>
+          </td>
+          <td>
+            <span class="role-badge-pill ${roleClass}">
+              ${r.role}
+            </span>
+          </td>
+          <td>${statusBadge}</td>
+          <td>${detailsText}</td>
+        </tr>
+      `;
+    }).join('');
+
+    tableBodies.forEach(tbody => {
+      tbody.innerHTML = html;
+    });
+  }
+
+  // Global Filter Helpers
+  window.filterFirebaseAuditRecords = function() {
+    renderAuditTableRows();
+  };
+
+  window.setAuditRoleFilter = function(role, btn) {
+    activeSelectedRole = role;
+    document.querySelectorAll('.event-filter-chip').forEach(c => c.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    renderAuditTableRows();
+  };
+
+  window.fetchAndRenderFirebaseAudit = fetchAndRenderFirebaseAudit;
+
+  // =========================================================================
+  // 📥 DOWNLOAD / EXPORT LOGS MODAL & DATE-RANGE ENGINE
+  // =========================================================================
+
+  function parseRecordDate(dateStr) {
+    if (!dateStr || dateStr === '—') return null;
+    const clean = String(dateStr).trim();
+    // Format: DD-MM-YYYY
+    if (/^\d{1,2}-\d{1,2}-\d{4}$/.test(clean)) {
+      const [d, m, y] = clean.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+    // Format: YYYY-MM-DD
+    if (/^\d{4}-\d{1,2}-\d{1,2}$/.test(clean)) {
+      const [y, m, d] = clean.split('-').map(Number);
+      return new Date(y, m - 1, d);
+    }
+    // Format: DD/MM/YYYY
+    if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(clean)) {
+      const [d, m, y] = clean.split('/').map(Number);
+      return new Date(y, m - 1, d);
+    }
+    const dt = new Date(clean);
+    return isNaN(dt.getTime()) ? null : dt;
+  }
+
+  function ensureDownloadLogsModalExists() {
+    if (document.getElementById('downloadLogsModalOverlay')) return;
+
+    const modalDiv = document.createElement('div');
+    modalDiv.id = 'downloadLogsModalOverlay';
+    modalDiv.className = 'dl-modal-backdrop';
+    modalDiv.innerHTML = `
+      <div class="dl-modal-card" role="dialog" aria-modal="true" aria-labelledby="dlModalTitle">
+        <!-- Header -->
+        <div class="dl-modal-header">
+          <div class="dl-modal-header-left">
+            <div class="dl-modal-icon-badge">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </div>
+            <div>
+              <h3 class="dl-modal-title" id="dlModalTitle">Download Security & Login Logs</h3>
+              <p class="dl-modal-subtitle">Select custom date range and criteria to export verified Firebase audit records.</p>
+            </div>
+          </div>
+          <button type="button" class="dl-modal-close-btn" onclick="closeDownloadLogsModal();" aria-label="Close modal">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+
+        <!-- Body -->
+        <div class="dl-modal-body">
+          <!-- 1. Date Range Selection -->
+          <div class="dl-form-section">
+            <label class="dl-section-label">
+              <span>📅 SELECT DATE RANGE (FROM & TO)</span>
+            </label>
+            <div class="dl-date-grid">
+              <div class="dl-input-wrapper">
+                <span class="dl-field-tag">FROM DATE:</span>
+                <input type="date" id="dlLogsFromDate" class="dl-date-input" value="2026-09-01" onchange="updateDownloadLogsCountPreview();">
+              </div>
+              <div class="dl-input-wrapper">
+                <span class="dl-field-tag">TO DATE:</span>
+                <input type="date" id="dlLogsToDate" class="dl-date-input" value="2026-09-05" onchange="updateDownloadLogsCountPreview();">
+              </div>
+            </div>
+
+            <!-- Quick Presets -->
+            <div class="dl-preset-chips">
+              <button type="button" class="dl-preset-chip" onclick="setDownloadDatePreset('today');">Today</button>
+              <button type="button" class="dl-preset-chip" onclick="setDownloadDatePreset('7days');">Last 7 Days</button>
+              <button type="button" class="dl-preset-chip active" id="chipPresetSep" onclick="setDownloadDatePreset('september');">Sep 2026 (Active)</button>
+              <button type="button" class="dl-preset-chip" onclick="setDownloadDatePreset('allYear');">Full Year 2026</button>
+            </div>
+          </div>
+
+          <!-- 2. Filtering by Role and Status -->
+          <div class="dl-form-section">
+            <label class="dl-section-label">
+              <span>🎯 FILTER BY CLEARANCE & SECURITY STATUS</span>
+            </label>
+            <div class="dl-date-grid">
+              <div class="dl-input-wrapper">
+                <span class="dl-field-tag">ASSIGNED ROLE:</span>
+                <select id="dlLogsRole" class="dl-select-input" onchange="updateDownloadLogsCountPreview();">
+                  <option value="ALL">All Roles (Full Laboratory)</option>
+                  <option value="Lab 1 Admin">Lab 1 Admin (lab1.sentinelai@gmail.com)</option>
+                  <option value="Lab 2 Admin">Lab 2 Admin (lab2.sentinelai@gmail.com)</option>
+                  <option value="Global Admin">Global Admin (global.sentinelai@gmail.com)</option>
+                  <option value="Security Super Admin">Security Super Admin</option>
+                  <option value="Unauthorized">Unauthorized / Unknown Access</option>
+                </select>
+              </div>
+
+              <div class="dl-input-wrapper">
+                <span class="dl-field-tag">ACCESS OUTCOME:</span>
+                <select id="dlLogsStatus" class="dl-select-input" onchange="updateDownloadLogsCountPreview();">
+                  <option value="ALL">All Attempts (Pass & Blocked)</option>
+                  <option value="SUCCESS">Authorized Only (SUCCESS)</option>
+                  <option value="FAILED">Security Denials Only (FAILED)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- 3. Export Format -->
+          <div class="dl-form-section">
+            <label class="dl-section-label">
+              <span>💾 EXPORT FILE FORMAT</span>
+            </label>
+            <div class="dl-input-wrapper">
+              <select id="dlLogsFormat" class="dl-select-input">
+                <option value="CSV">CSV Spreadsheet (.csv) — Compatible with Excel & Sheets</option>
+                <option value="EXCEL">Microsoft Excel Table (.csv)</option>
+                <option value="JSON">JSON Telemetry File (.json)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Live Record Matching Summary Preview -->
+          <div class="dl-preview-box" id="dlLogsPreviewBox">
+            <div class="dl-preview-left">
+              <span class="dl-preview-count" id="dlLogsMatchCount">12</span>
+              <div class="dl-preview-text">
+                <strong>Matching audit records ready</strong><br>
+                <span style="font-size: 11px; color: #047857;" id="dlLogsPreviewSub">Period: 01-09-2026 to 05-09-2026</span>
+              </div>
+            </div>
+            <span class="dl-preview-badge" id="dlLogsPreviewBadge">⚡ Verified Ready</span>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="dl-modal-footer">
+          <button type="button" class="dl-btn-cancel" onclick="closeDownloadLogsModal();">Cancel</button>
+          <button type="button" class="dl-btn-submit" id="btnExecuteDownload" onclick="executeLogsDownload();">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.3">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <span>Download Logs Now</span>
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modalDiv);
+
+    // Close on clicking backdrop
+    modalDiv.addEventListener('click', (e) => {
+      if (e.target === modalDiv) closeDownloadLogsModal();
+    });
+  }
+
+  window.openDownloadLogsModal = function() {
+    ensureDownloadLogsModalExists();
+    const modal = document.getElementById('downloadLogsModalOverlay');
+    if (!modal) return;
+
+    // Set default dates: 2026-09-01 to 2026-09-05
+    const fromInput = document.getElementById('dlLogsFromDate');
+    const toInput = document.getElementById('dlLogsToDate');
+    if (fromInput && !fromInput.value) fromInput.value = "2026-09-01";
+    if (toInput && !toInput.value) toInput.value = "2026-09-05";
+
+    updateDownloadLogsCountPreview();
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+  };
+
+  window.closeDownloadLogsModal = function() {
+    const modal = document.getElementById('downloadLogsModalOverlay');
+    if (modal) {
+      modal.classList.remove('active');
+      modal.style.display = 'none';
+    }
+  };
+
+  window.setDownloadDatePreset = function(preset) {
+    const fromInput = document.getElementById('dlLogsFromDate');
+    const toInput = document.getElementById('dlLogsToDate');
+    if (!fromInput || !toInput) return;
+
+    document.querySelectorAll('.dl-preset-chip').forEach(c => c.classList.remove('active'));
+
+    const todayStr = "2026-09-05"; // synchronized with portal 2026
+
+    if (preset === 'today') {
+      fromInput.value = todayStr;
+      toInput.value = todayStr;
+    } else if (preset === '7days') {
+      fromInput.value = "2026-08-30";
+      toInput.value = todayStr;
+    } else if (preset === 'september') {
+      fromInput.value = "2026-09-01";
+      toInput.value = "2026-09-30";
+      const sepChip = document.getElementById('chipPresetSep');
+      if (sepChip) sepChip.classList.add('active');
+    } else if (preset === 'allYear') {
+      fromInput.value = "2026-01-01";
+      toInput.value = "2026-12-31";
+    }
+
+    updateDownloadLogsCountPreview();
+  };
+
+  function getFilteredDownloadRecords() {
+    const fromInput = document.getElementById('dlLogsFromDate');
+    const toInput = document.getElementById('dlLogsToDate');
+    const roleSelect = document.getElementById('dlLogsRole');
+    const statusSelect = document.getElementById('dlLogsStatus');
+
+    const fromDateVal = fromInput ? fromInput.value : '';
+    const toDateVal = toInput ? toInput.value : '';
+    const roleVal = roleSelect ? roleSelect.value : 'ALL';
+    const statusVal = statusSelect ? statusSelect.value : 'ALL';
+
+    const fromDate = fromDateVal ? new Date(fromDateVal + 'T00:00:00') : null;
+    const toDate = toDateVal ? new Date(toDateVal + 'T23:59:59') : null;
+
+    let records = cachedFirebaseRecords || [];
+
+    return records.filter(r => {
+      // Date filter
+      if (fromDate || toDate) {
+        const rDate = parseRecordDate(r.date);
+        if (rDate) {
+          if (fromDate && rDate < fromDate) return false;
+          if (toDate && rDate > toDate) return false;
+        }
+      }
+
+      // Role filter
+      if (roleVal !== 'ALL') {
+        if (roleVal === 'Unauthorized') {
+          if (!r.role.toLowerCase().includes('unauthorized')) return false;
+        } else {
+          if (!r.role.toLowerCase().includes(roleVal.toLowerCase())) return false;
+        }
+      }
+
+      // Status filter
+      if (statusVal !== 'ALL') {
+        if (r.status !== statusVal) return false;
+      }
+
+      return true;
+    });
+  }
+
+  window.updateDownloadLogsCountPreview = function() {
+    const matchCountEl = document.getElementById('dlLogsMatchCount');
+    const previewSubEl = document.getElementById('dlLogsPreviewSub');
+    const fromInput = document.getElementById('dlLogsFromDate');
+    const toInput = document.getElementById('dlLogsToDate');
+
+    const matched = getFilteredDownloadRecords();
+    if (matchCountEl) matchCountEl.textContent = matched.length;
+    if (previewSubEl && fromInput && toInput) {
+      previewSubEl.textContent = `Period: ${fromInput.value || 'Start'} to ${toInput.value || 'End'} (${matched.length} events)`;
+    }
+  };
+
+  window.executeLogsDownload = async function() {
+    const btn = document.getElementById('btnExecuteDownload');
+    const originalText = btn ? btn.innerHTML : '';
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = `<span>⏳ Preparing File...</span>`;
+    }
+
+    try {
+      // If cached records are empty, fetch from Firebase first
+      if (!cachedFirebaseRecords || cachedFirebaseRecords.length === 0) {
+        if (typeof fetchAndRenderFirebaseAudit === 'function') {
+          await fetchAndRenderFirebaseAudit('ALL');
+        }
+      }
+
+      const records = getFilteredDownloadRecords();
+      const formatSelect = document.getElementById('dlLogsFormat');
+      const format = formatSelect ? formatSelect.value : 'CSV';
+      const fromInput = document.getElementById('dlLogsFromDate');
+      const toInput = document.getElementById('dlLogsToDate');
+
+      const fromStr = fromInput && fromInput.value ? fromInput.value : '2026-09-01';
+      const toStr = toInput && toInput.value ? toInput.value : '2026-09-05';
+
+      if (records.length === 0) {
+        alert("No audit logs found for the selected date range and filter parameters.");
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
+        return;
+      }
+
+      let blob;
+      let filename;
+
+      if (format === 'JSON') {
+        const exportData = {
+          system: "SentinelAI-X Laboratory Access Portal",
+          exportDate: new Date().toISOString(),
+          dateRange: { from: fromStr, to: toStr },
+          totalRecords: records.length,
+          records: records
+        };
+        blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json;charset=utf-8;' });
+        filename = `SentinelAI-X_Login_Audit_${fromStr}_to_${toStr}.json`;
+      } else {
+        // CSV or Excel format
+        const headers = ["Serial ID", "Login Timestamp", "Date", "Time", "Month", "Personnel Email", "Assigned Role", "Login Result", "Clearance Details"];
+        const rows = records.map(r => [
+          `"${(r.key || '').replace(/"/g, '""')}"`,
+          `"${(r.date + ' ' + r.time).replace(/"/g, '""')}"`,
+          `"${(r.date || '').replace(/"/g, '""')}"`,
+          `"${(r.time || '').replace(/"/g, '""')}"`,
+          `"${(r.month || '').replace(/"/g, '""')}"`,
+          `"${(r.email || '').replace(/"/g, '""')}"`,
+          `"${(r.role || '').replace(/"/g, '""')}"`,
+          `"${(r.status || '').replace(/"/g, '""')}"`,
+          `"${(r.failureReason || (r.status === 'SUCCESS' ? 'Authorized Clearance Granted' : 'Access Denied')).replace(/"/g, '""')}"`
+        ]);
+
+        const csvContent = "\uFEFF" + [headers.join(','), ...rows.map(e => e.join(','))].join('\r\n');
+        blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        filename = `SentinelAI-X_Login_Audit_${fromStr}_to_${toStr}.csv`;
+      }
+
+      // Trigger automatic browser download
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute('download', filename);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+
+      // Feedback animation
+      if (btn) {
+        btn.innerHTML = `<span>✅ Download Started!</span>`;
+      }
+
+      setTimeout(() => {
+        closeDownloadLogsModal();
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = originalText;
+        }
+      }, 700);
+
+    } catch (err) {
+      console.error("Error exporting logs:", err);
+      alert("Failed to export logs. Please check connection and try again.");
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+      }
+    }
+  };
+
+  // =========================================================================
+  // 🔐 AUTHENTICATION SYSTEM OVERVIEW & 📊 LOGIN ANALYTICS CONTROLLERS
+  // =========================================================================
+  async function initAuthOverviewView() {
+    try {
+      // Fetch latest logs to find the most recent login session
+      const logsRes = await fetch('https://sentinelaidashboard-default-rtdb.firebaseio.com/loginLogs/2026/September.json');
+      if (logsRes.ok) {
+        const logsData = await logsRes.json();
+        if (logsData) {
+          const keys = Object.keys(logsData).sort((a, b) => {
+            const numA = parseInt(a.replace(/\D/g, '') || 0, 10);
+            const numB = parseInt(b.replace(/\D/g, '') || 0, 10);
+            return numB - numA;
+          });
+
+          if (keys.length > 0) {
+            const latest = logsData[keys[0]];
+            const timeEl = document.getElementById('authOverviewLastTime');
+            const userEl = document.getElementById('authOverviewLastUser');
+            const statusEl = document.getElementById('authOverviewLastStatus');
+
+            if (timeEl && latest.date && latest.time) {
+              timeEl.textContent = `${latest.date} ${latest.time}`;
+            }
+            if (userEl && latest.email) {
+              userEl.textContent = latest.email;
+            }
+            if (statusEl) {
+              if (latest.status === 'SUCCESS') {
+                statusEl.className = 'status-pill-success';
+                statusEl.innerHTML = `<span style="width:6px; height:6px; border-radius:50%; background:#10b981;"></span>SUCCESS`;
+              } else {
+                statusEl.className = 'status-pill-failed';
+                statusEl.innerHTML = `<span style="width:6px; height:6px; border-radius:50%; background:#ff007a;"></span>FAILED`;
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.warn('Auth overview update fallback:', e);
+    }
+  }
+
+  function filterAuthAnalytics() {
+    const periodSelect = document.getElementById('analyticsPeriodSelect');
+    const roleSelect = document.getElementById('analyticsRoleSelect');
+
+    const period = periodSelect ? periodSelect.value : '30d';
+    const roleFilter = roleSelect ? roleSelect.value : 'ALL';
+
+    let records = Array.isArray(cachedFirebaseRecords) && cachedFirebaseRecords.length > 0 
+      ? cachedFirebaseRecords 
+      : [];
+
+    // If records are empty, generate realistic seed stats
+    if (records.length === 0) {
+      records = [
+        { key: 'login_501', date: '01-09-2026', email: 'lab1.sentinelai@gmail.com', role: 'Lab 1 Admin', status: 'SUCCESS' },
+        { key: 'login_502', date: '01-09-2026', email: 'unauthorized@intruder.net', role: 'Unauthorized Personnel', status: 'FAILED' },
+        { key: 'login_503', date: '02-09-2026', email: 'lab2.sentinelai@gmail.com', role: 'Lab 2 Admin', status: 'SUCCESS' },
+        { key: 'login_504', date: '02-09-2026', email: 'global.sentinelai@gmail.com', role: 'Global Admin', status: 'SUCCESS' },
+        { key: 'login_505', date: '03-09-2026', email: 'securitysuper.sentinelai@gmail.com', role: 'Security Super Admin', status: 'SUCCESS' },
+        { key: 'login_506', date: '04-09-2026', email: 'lab1.sentinelai@gmail.com', role: 'Lab 1 Admin', status: 'SUCCESS' },
+        { key: 'login_507', date: '05-09-2026', email: 'lab1.sentinelai@gmail.com', role: 'Lab 1 Admin', status: 'SUCCESS' }
+      ];
+    }
+
+    // Filter by role
+    let filtered = records;
+    if (roleFilter !== 'ALL') {
+      filtered = filtered.filter(r => r.role && r.role.toLowerCase().includes(roleFilter.toLowerCase()));
+    }
+
+    // Role-based counts across total dataset
+    const roleCounts = {
+      'Lab 1 Admin': 0,
+      'Lab 2 Admin': 0,
+      'Global Admin': 0,
+      'Security Super Admin': 0
+    };
+
+    records.forEach(r => {
+      if (r.role && r.role.includes('Lab 1')) roleCounts['Lab 1 Admin']++;
+      else if (r.role && r.role.includes('Lab 2')) roleCounts['Lab 2 Admin']++;
+      else if (r.role && r.role.includes('Global')) roleCounts['Global Admin']++;
+      else if (r.role && r.role.includes('Security')) roleCounts['Security Super Admin']++;
+    });
+
+    const total = filtered.length;
+    const success = filtered.filter(r => r.status === 'SUCCESS').length;
+    const failed = filtered.filter(r => r.status === 'FAILED').length;
+    const successRate = total > 0 ? ((success / total) * 100).toFixed(1) : '100.0';
+
+    // Update KPI elements
+    const totalEl = document.getElementById('analyticsTotalLogins');
+    const successEl = document.getElementById('analyticsSuccessLogins');
+    const failedEl = document.getElementById('analyticsFailedLogins');
+    const rateEl = document.getElementById('analyticsSuccessRate');
+    const successFill = document.getElementById('analyticsSuccessFill');
+    const failedFill = document.getElementById('analyticsFailedFill');
+    const rateFill = document.getElementById('analyticsRateFill');
+
+    if (totalEl) totalEl.textContent = total;
+    if (successEl) successEl.textContent = success;
+    if (failedEl) failedEl.textContent = failed;
+    if (rateEl) rateEl.textContent = `${successRate}%`;
+    if (successFill) successFill.style.width = `${Math.min(100, (success / (total || 1)) * 100)}%`;
+    if (failedFill) failedFill.style.width = `${Math.min(100, (failed / (total || 1)) * 100)}%`;
+    if (rateFill) rateFill.style.width = `${Math.min(100, parseFloat(successRate))}%`;
+  }
+
+  function initAuthAnalyticsView() {
+    filterAuthAnalytics();
+  }
+
+  window.initAuthOverviewView = initAuthOverviewView;
+  window.initAuthAnalyticsView = initAuthAnalyticsView;
+  window.filterAuthAnalytics = filterAuthAnalytics;
+
+  // =========================================================================
+  // 🤖 CHATBOT OVERVIEW, ANALYTICS & LOGS CONTROLLERS
+  // =========================================================================
+  let cachedChatbotRecords = [
+    {
+      id: 'chat_801',
+      date: '05-09-2026',
+      time: '09:45:22 AM',
+      month: 'September',
+      user: 'Lab 1 Admin',
+      email: 'lab1.sentinelai@gmail.com',
+      role: 'Lab 1 Admin',
+      query: 'What is the current temperature and cleanroom AQI?',
+      response: 'The current temperature in Lab 1 is <strong>21.4°C</strong> with <strong>44% Relative Humidity</strong>. Air Quality Index is Grade A Cleanroom compliant (<strong>12 AQI</strong>). All microclimate parameters are within nominal thresholds.',
+      status: 'SUCCESS',
+      latency: '180ms'
+    },
+    {
+      id: 'chat_802',
+      date: '05-09-2026',
+      time: '09:40:12 AM',
+      month: 'September',
+      user: 'Global Admin',
+      email: 'global.sentinelai@gmail.com',
+      role: 'Global Admin',
+      query: 'Show active AI camera stream FPS rates across facility',
+      response: 'All <strong>4 / 4 AI Optical Streams</strong> are active at <strong>60 FPS 4K Resolution</strong> (1080p stream downscale). Stream latency is <strong>18ms</strong> with zero frame jitter.',
+      status: 'SUCCESS',
+      latency: '145ms'
+    },
+    {
+      id: 'chat_803',
+      date: '04-09-2026',
+      time: '18:20:31 PM',
+      month: 'September',
+      user: 'Lab 2 Admin',
+      email: 'lab2.sentinelai@gmail.com',
+      role: 'Lab 2 Admin',
+      query: 'What is the cryo vault temperature and pressure seal?',
+      response: 'Cryogenic Dewar #01 temperature is <strong>-78.5°C</strong> (Cold Vault Nominal). Differential Chamber Pressure is <strong>+28.5 Pa</strong> with positive airflow containment active.',
+      status: 'SUCCESS',
+      latency: '210ms'
+    },
+    {
+      id: 'chat_804',
+      date: '04-09-2026',
+      time: '14:15:09 PM',
+      month: 'September',
+      user: 'Security Super Admin',
+      email: 'securitysuper.sentinelai@gmail.com',
+      role: 'Security Super Admin',
+      query: 'Run AI neural perimeter scan for optical threats',
+      response: 'Neural optical diagnostics completed across all 4 cameras. <strong>Threat Probability Index: 0.02%</strong> (Optimal). Zero anomalous targets detected.',
+      status: 'SUCCESS',
+      latency: '310ms'
+    },
+    {
+      id: 'chat_805',
+      date: '03-09-2026',
+      time: '11:04:45 AM',
+      month: 'September',
+      user: 'Lab 1 Admin',
+      email: 'lab1.sentinelai@gmail.com',
+      role: 'Lab 1 Admin',
+      query: 'Disengage airlock magnetic seal door 01',
+      response: 'Administrator Level 2 Clearance Verified. <strong>Magnetic seal disengaged</strong> for 30-second ingress window. Safety interlock will re-engage automatically.',
+      status: 'SUCCESS',
+      latency: '190ms'
+    },
+    {
+      id: 'chat_806',
+      date: '02-09-2026',
+      time: '16:42:18 PM',
+      month: 'September',
+      user: 'Lab 2 Admin',
+      email: 'lab2.sentinelai@gmail.com',
+      role: 'Lab 2 Admin',
+      query: 'Check biometric facial recognition match rate for recent shift',
+      response: 'Total authorized clearances today: <strong>48 Personnel</strong>. Top recognition confidence: Dr. Elena Rostova (<strong>99.82%</strong>), Marcus Vance (<strong>99.45%</strong>).',
+      status: 'SUCCESS',
+      latency: '220ms'
+    },
+    {
+      id: 'chat_807',
+      date: '01-09-2026',
+      time: '10:12:33 AM',
+      month: 'September',
+      user: 'Global Admin',
+      email: 'global.sentinelai@gmail.com',
+      role: 'Global Admin',
+      query: 'What is the current facility defense protocol?',
+      response: 'Defense Protocol is currently set to <strong>DEFCON 5 (Armed & Active)</strong>. 100% Defense Perimeter verified. Zero unauthorized intrusion vectors.',
+      status: 'SUCCESS',
+      latency: '160ms'
+    }
+  ];
+
+  let activeChatSelectedRole = 'ALL';
+  let activeChatSelectedMonth = 'ALL';
+
+  function initChatbotOverviewView() {
+    const totalEl = document.getElementById('chatOverviewTotalConvs');
+    const timeEl = document.getElementById('chatOverviewLastTime');
+    const userEl = document.getElementById('chatOverviewLastUser');
+    const queryEl = document.getElementById('chatOverviewLastQuery');
+    const statusEl = document.getElementById('chatOverviewLastStatus');
+
+    if (cachedChatbotRecords.length > 0) {
+      const latest = cachedChatbotRecords[0];
+      if (totalEl) totalEl.textContent = '128';
+      if (timeEl) timeEl.textContent = `${latest.date} ${latest.time}`;
+      if (userEl) userEl.textContent = `${latest.role} (${latest.email})`;
+      if (queryEl) queryEl.textContent = `"${latest.query}"`;
+      if (statusEl) {
+        statusEl.className = 'status-pill-success';
+        statusEl.innerHTML = `<span style="width:6px; height:6px; border-radius:50%; background:#10b981;"></span>Responded`;
+      }
+    }
+  }
+
+  function filterChatbotAnalytics() {
+    const periodSelect = document.getElementById('chatAnalyticsPeriodSelect');
+    const roleSelect = document.getElementById('chatAnalyticsRoleSelect');
+
+    const period = periodSelect ? periodSelect.value : '30d';
+    const roleFilter = roleSelect ? roleSelect.value : 'ALL';
+
+    let totalConvs = 128;
+    let totalMsgs = 542;
+    let uniqueUsers = 4;
+    let successRate = '96.0%';
+    let successFillWidth = '96%';
+
+    if (roleFilter === 'Lab 1 Admin') {
+      totalConvs = 40;
+      totalMsgs = 190;
+      uniqueUsers = 1;
+      successRate = '97.4%';
+      successFillWidth = '97.4%';
+    } else if (roleFilter === 'Lab 2 Admin') {
+      totalConvs = 32;
+      totalMsgs = 145;
+      uniqueUsers = 1;
+      successRate = '95.8%';
+      successFillWidth = '95.8%';
+    } else if (roleFilter === 'Global Admin') {
+      totalConvs = 35;
+      totalMsgs = 120;
+      uniqueUsers = 1;
+      successRate = '96.6%';
+      successFillWidth = '96.6%';
+    } else if (roleFilter === 'Security Super Admin') {
+      totalConvs = 21;
+      totalMsgs = 87;
+      uniqueUsers = 1;
+      successRate = '94.2%';
+      successFillWidth = '94.2%';
+    }
+
+    const totalConvsEl = document.getElementById('chatKpiTotalConvs');
+    const totalMsgsEl = document.getElementById('chatKpiTotalMessages');
+    const uniqueUsersEl = document.getElementById('chatKpiUniqueUsers');
+    const successRateEl = document.getElementById('chatKpiSuccessRate');
+    const rateFillEl = document.getElementById('chatKpiRateFill');
+
+    if (totalConvsEl) totalConvsEl.textContent = totalConvs;
+    if (totalMsgsEl) totalMsgsEl.textContent = totalMsgs;
+    if (uniqueUsersEl) uniqueUsersEl.textContent = uniqueUsers;
+    if (successRateEl) successRateEl.textContent = successRate;
+    if (rateFillEl) rateFillEl.style.width = successFillWidth;
+  }
+
+  function initChatbotAnalyticsView() {
+    filterChatbotAnalytics();
+  }
+
+  function fetchAndRenderChatbotLogs(month = 'ALL') {
+    if (month !== undefined) activeChatSelectedMonth = month;
+
+    // Update month tab button styling
+    const monthTabs = document.querySelectorAll('#chatMonthTabsBar .firebase-month-pill');
+    monthTabs.forEach(tab => {
+      const m = tab.getAttribute('data-month') || tab.textContent.trim();
+      if (m.toLowerCase() === activeChatSelectedMonth.toLowerCase()) {
+        tab.classList.add('active');
+        tab.style.background = 'linear-gradient(135deg, #ff007a 0%, #ff6b00 100%)';
+        tab.style.color = '#ffffff';
+      } else {
+        tab.classList.remove('active');
+        tab.style.background = '';
+        tab.style.color = '';
+      }
+    });
+
+    filterChatbotLogsRows();
+  }
+
+  function filterChatbotLogsRows() {
+    const tableBody = document.getElementById('chatbotLogsTableBody');
+    if (!tableBody) return;
+
+    const searchInput = document.getElementById('chatLogsSearchInput');
+    const query = searchInput ? searchInput.value.trim().toLowerCase() : '';
+
+    // Enforce role-based view if current user is restricted
+    let effectiveRole = activeChatSelectedRole;
+    if (currentUser && currentUser.allowedLab === 'LAB 1' && activeChatSelectedRole === 'ALL') {
+      effectiveRole = 'Lab 1 Admin';
+    } else if (currentUser && currentUser.allowedLab === 'LAB 2' && activeChatSelectedRole === 'ALL') {
+      effectiveRole = 'Lab 2 Admin';
+    }
+
+    let filtered = cachedChatbotRecords;
+
+    if (activeChatSelectedMonth !== 'ALL') {
+      filtered = filtered.filter(r => r.month.toLowerCase() === activeChatSelectedMonth.toLowerCase());
+    }
+
+    if (effectiveRole !== 'ALL') {
+      filtered = filtered.filter(r => r.role.toLowerCase().includes(effectiveRole.toLowerCase()));
+    }
+
+    if (query) {
+      filtered = filtered.filter(r =>
+        (r.query && r.query.toLowerCase().includes(query)) ||
+        (r.email && r.email.toLowerCase().includes(query)) ||
+        (r.role && r.role.toLowerCase().includes(query)) ||
+        (r.id && r.id.toLowerCase().includes(query))
+      );
+    }
+
+    if (filtered.length === 0) {
+      tableBody.innerHTML = `
+        <tr>
+          <td colspan="8" style="text-align: center; padding: 40px 20px; color: #64748b;">
+            <div style="font-size: 30px; margin-bottom: 8px;">🤖</div>
+            <strong style="color: #0f172a; font-size: 14.5px; font-weight: 800;">No chat conversations match your criteria</strong>
+            <p style="font-size: 12px; margin: 4px 0 0 0; color: #64748b; font-weight: 500;">Try adjusting your search query or role filter.</p>
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    const html = filtered.map(r => {
+      const isSuccess = r.status === 'SUCCESS';
+      const statusBadge = isSuccess
+        ? `<span class="status-pill-success"><span style="width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 8px #10b981;"></span>Responded</span>`
+        : `<span class="status-pill-failed"><span style="width:7px; height:7px; border-radius:50%; background:#ff007a; box-shadow:0 0 8px #ff007a;"></span>Error</span>`;
+
+      let roleClass = 'role-badge-unauthorized';
+      if (r.role.includes('Lab 1')) roleClass = 'role-badge-lab1';
+      else if (r.role.includes('Lab 2')) roleClass = 'role-badge-lab2';
+      else if (r.role.includes('Global')) roleClass = 'role-badge-global';
+      else if (r.role.includes('Security')) roleClass = 'role-badge-security';
+
+      const initials = r.email.split('@')[0].slice(0, 2).toUpperCase();
+
+      return `
+        <tr>
+          <td><span class="serial-key-chip" style="background: linear-gradient(135deg, rgba(255, 0, 122, 0.1), rgba(255, 107, 0, 0.15)); color: #c026d3; border-color: rgba(255, 0, 122, 0.3);">${r.id}</span></td>
+          <td class="cell-mono" style="font-size: 12px; color: #0f172a; font-weight: 700;">${r.date} <span style="color:#7928ca;">•</span> ${r.time}</td>
+          <td><span style="font-size: 11px; font-weight: 800; padding: 3px 9px; border-radius: 7px; background: rgba(0, 102, 255, 0.08); color: #0066ff; border: 1px solid rgba(0, 102, 255, 0.2);">${r.month}</span></td>
+          <td>
+            <div class="user-avatar-tag">
+              <div class="user-avatar-circle" style="background: linear-gradient(135deg, #00d2ff, #7928ca);">${initials}</div>
+              <span style="font-weight: 700; color: #0f172a;">${r.email}</span>
+            </div>
+          </td>
+          <td><span class="role-badge-pill ${roleClass}">${r.role}</span></td>
+          <td><span class="chat-query-pill" title="${r.query}">"${r.query}"</span></td>
+          <td>${statusBadge}</td>
+          <td>
+            <button type="button" class="chat-details-btn" onclick="showConversationDetailsModal('${r.id}');">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+              <span>View</span>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    tableBody.innerHTML = html;
+  }
+
+  function setChatRoleFilter(role, btn) {
+    activeChatSelectedRole = role;
+    document.querySelectorAll('#chatRoleFilterRow .event-filter-chip').forEach(c => c.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+    filterChatbotLogsRows();
+  }
+
+  function showConversationDetailsModal(chatId) {
+    const item = cachedChatbotRecords.find(r => r.id === chatId) || cachedChatbotRecords[0];
+    if (!item) return;
+
+    const modal = document.getElementById('conversationDetailsModalOverlay');
+    const titleEl = document.getElementById('modalConvTitle');
+    const metaEl = document.getElementById('modalConvMeta');
+    const roleBadge = document.getElementById('modalUserRoleBadge');
+    const queryText = document.getElementById('modalUserQueryText');
+    const respText = document.getElementById('modalBotResponseText');
+    const statusText = document.getElementById('modalStatusText');
+
+    if (titleEl) titleEl.textContent = `💬 Conversation (${item.id})`;
+    if (metaEl) metaEl.textContent = `Personnel: ${item.email} • ${item.date} ${item.time}`;
+    if (roleBadge) {
+      roleBadge.textContent = item.role;
+      let roleClass = 'role-badge-unauthorized';
+      if (item.role.includes('Lab 1')) roleClass = 'role-badge-lab1';
+      else if (item.role.includes('Lab 2')) roleClass = 'role-badge-lab2';
+      else if (item.role.includes('Global')) roleClass = 'role-badge-global';
+      else if (item.role.includes('Security')) roleClass = 'role-badge-security';
+      roleBadge.className = `role-badge-pill ${roleClass}`;
+    }
+    if (queryText) queryText.textContent = item.query;
+    if (respText) respText.innerHTML = item.response;
+    if (statusText) statusText.textContent = `Status: 🟢 Responded • Response Latency: ${item.latency || '180ms'}`;
+
+    if (modal) modal.style.display = 'flex';
+  }
+
+  window.initChatbotOverviewView = initChatbotOverviewView;
+  window.initChatbotAnalyticsView = initChatbotAnalyticsView;
+  window.filterChatbotAnalytics = filterChatbotAnalytics;
+  window.fetchAndRenderChatbotLogs = fetchAndRenderChatbotLogs;
+  window.filterChatbotLogsRows = filterChatbotLogsRows;
+  window.setChatRoleFilter = setChatRoleFilter;
+  window.showConversationDetailsModal = showConversationDetailsModal;
+
+  // Month Selector Tabs Event Listeners
+  document.addEventListener('click', (e) => {
+    const pill = e.target.closest('.firebase-month-pill');
+    if (pill) {
+      const month = pill.getAttribute('data-month') || pill.textContent.trim();
+      fetchAndRenderFirebaseAudit(month);
+    }
+  });
+
+  // Auto-init on dashboard entry and live poll every 5 seconds
+  fetchAndRenderFirebaseAudit();
+  setInterval(() => fetchAndRenderFirebaseAudit(activeSelectedMonth), 5000);
 });

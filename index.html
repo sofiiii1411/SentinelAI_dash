@@ -335,7 +335,31 @@
                   <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="9" cy="10" r="1"></circle><circle cx="15" cy="10" r="1"></circle></svg>
                 </span>
                 <span class="item-text">AI Security Chatbot</span>
-                <span class="badge-system-tag">AI Assistant</span>
+                <span class="badge-system-tag">AI Core</span>
+              </a>
+            </li>
+            <li>
+              <a href="#chatbot-overview" class="nav-link" data-view="chatbot-overview" data-lab="SYSTEM" data-section="Chatbot Overview">
+                <span class="item-icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
+                </span>
+                <span class="item-text">Chatbot Overview</span>
+              </a>
+            </li>
+            <li>
+              <a href="#chatbot-analytics" class="nav-link" data-view="chatbot-analytics" data-lab="SYSTEM" data-section="Chatbot Analytics">
+                <span class="item-icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                </span>
+                <span class="item-text">Chatbot Analytics</span>
+              </a>
+            </li>
+            <li>
+              <a href="#chatbot-logs" class="nav-link" data-view="chatbot-logs" data-lab="SYSTEM" data-section="Chatbot Logs">
+                <span class="item-icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                </span>
+                <span class="item-text">Chatbot Logs</span>
               </a>
             </li>
             <li>
@@ -741,64 +765,74 @@
           </div>
 
           <!-- BOTTOM SECTION: AUDIT LOGS -->
-          <div class="enterprise-card full-width">
-            <div class="card-header-row">
+          <!-- BOTTOM SECTION: FIREBASE LIVE REALTIME AUDIT STREAM -->
+          <div class="enterprise-card full-width" id="firebaseAuditCard">
+            <div class="card-header-row" style="flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;">
               <div class="card-title-group">
-                <span class="card-title-icon">
-                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                <span class="card-title-icon" style="color: #f59e0b;">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c1.5 3 4 5 4 9a6 6 0 0 1-12 0c0-4 2.5-6 4-9 1 2 2 3 4 0z"></path></svg>
                 </span>
                 <div>
-                  <h3 class="card-heading">Real-Time Security Event Telemetry Log</h3>
-                  <p class="card-subheading">Immutable audit log of all access events, biometric verifications, and sensor telemetry</p>
+                  <h3 class="card-heading">Live Firebase Security Audit & Login Stream (2026)</h3>
+                  <p class="card-subheading">Real-time telemetry stream synchronized directly with Firebase Realtime Database</p>
                 </div>
               </div>
-              <span class="badge-tag">Auto-streaming</span>
+              
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span class="badge-tag" id="firebaseLiveStatusBadge" style="background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+                  <span class="cyber-pulse-dot" style="background: #10b981;"></span>
+                  <span>Firebase RTDB Live</span>
+                </span>
+
+                <button type="button" class="btn-ctrl" onclick="if(typeof openDownloadLogsModal==='function')openDownloadLogsModal();" style="padding: 6px 14px; font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 8px; background: linear-gradient(135deg, #0066ff, #7928ca); color: #ffffff; border: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0, 102, 255, 0.25);">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  <span>📥 Download Logs</span>
+                </button>
+
+                <button type="button" class="btn-ctrl" id="btnRefreshFirebaseLogs" style="padding: 6px 12px; font-size: 12px; cursor: pointer; border-radius: 8px; background: rgba(37, 99, 235, 0.1); color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.3);">
+                  <span>🔄 Refresh</span>
+                </button>
+
+                <button type="button" class="btn-ctrl" id="btnResetFirebaseHistory" style="padding: 6px 12px; font-size: 12px; cursor: pointer; border-radius: 8px; background: rgba(239, 68, 68, 0.1); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.3);">
+                  <span>🗑️ Reset History</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Month-Wise Selector Tabs Bar -->
+            <div class="firebase-month-tabs-bar" id="firebaseMonthTabs" style="display: flex; gap: 6px; overflow-x: auto; padding: 12px 0 8px 0; border-bottom: 1px solid rgba(226, 232, 240, 0.8); margin-bottom: 12px;">
+              <button type="button" class="firebase-month-pill active" data-month="ALL" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 700; border: 1px solid #cbd5e1; background: #0f172a; color: #ffffff; cursor: pointer; white-space: nowrap;">All Months</button>
+              <button type="button" class="firebase-month-pill" data-month="January" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Jan</button>
+              <button type="button" class="firebase-month-pill" data-month="February" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Feb</button>
+              <button type="button" class="firebase-month-pill" data-month="March" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Mar</button>
+              <button type="button" class="firebase-month-pill" data-month="April" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Apr</button>
+              <button type="button" class="firebase-month-pill" data-month="May" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">May</button>
+              <button type="button" class="firebase-month-pill" data-month="June" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Jun</button>
+              <button type="button" class="firebase-month-pill" data-month="July" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Jul</button>
+              <button type="button" class="firebase-month-pill" data-month="August" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Aug</button>
+              <button type="button" class="firebase-month-pill" data-month="September" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Sep</button>
+              <button type="button" class="firebase-month-pill" data-month="October" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Oct</button>
+              <button type="button" class="firebase-month-pill" data-month="November" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Nov</button>
+              <button type="button" class="firebase-month-pill" data-month="December" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Dec</button>
             </div>
 
             <div class="table-container">
               <table class="enterprise-table">
                 <thead>
                   <tr>
-                    <th>TIMESTAMP (UTC)</th>
-                    <th>LAB NODE</th>
-                    <th>SUBSYSTEM</th>
-                    <th>EVENT DESCRIPTION</th>
-                    <th>AUTHORIZED IDENTITY</th>
-                    <th>STATUS</th>
+                    <th>DATE & TIME</th>
+                    <th>MONTH</th>
+                    <th>ACCOUNT EMAIL</th>
+                    <th>SECURITY ROLE</th>
+                    <th>LOGIN STATUS</th>
+                    <th>DETAILS / FAILURE REASON</th>
                   </tr>
                 </thead>
                 <tbody id="eventLogsTableBody">
                   <tr>
-                    <td class="cell-mono">10:45:12.04</td>
-                    <td><span class="tag-node">LAB 01</span></td>
-                    <td>Biometric Access</td>
-                    <td>Facial Recognition + NFC Badge Verified</td>
-                    <td>Dr. Elena Rostova (Lead Biochemist)</td>
-                    <td><span class="badge-status-green">GRANTED</span></td>
-                  </tr>
-                  <tr>
-                    <td class="cell-mono">10:42:08.19</td>
-                    <td><span class="tag-node">LAB 01</span></td>
-                    <td>Sensor Array</td>
-                    <td>Cryo Pressure Stabilization Pulse Completed</td>
-                    <td>Automated Subsystem</td>
-                    <td><span class="badge-status-green">NOMINAL</span></td>
-                  </tr>
-                  <tr>
-                    <td class="cell-mono">10:38:55.77</td>
-                    <td><span class="tag-node">LAB 02</span></td>
-                    <td>AI Vision Engine</td>
-                    <td>Perimeter Optical Sweep - Zero Anomalies</td>
-                    <td>SentinelVision v4.2</td>
-                    <td><span class="badge-status-green">CLEAR</span></td>
-                  </tr>
-                  <tr>
-                    <td class="cell-mono">10:30:00.00</td>
-                    <td><span class="tag-node">SYSTEM</span></td>
-                    <td>Telemetry Sync</td>
-                    <td>Isolated Hub Node Heartbeat Synchronized</td>
-                    <td>Distributed Orchestrator</td>
-                    <td><span class="badge-status-green">SYNCED</span></td>
+                    <td colspan="6" style="text-align: center; padding: 28px; color: #64748b;">
+                      <span>🔄 Loading live security audit records from Firebase Realtime Database...</span>
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -913,7 +947,7 @@
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         z-index: 10000;
-        display: flex;
+        display: none !important;
         align-items: center;
         justify-content: center;
         padding: 1.2rem;
@@ -922,6 +956,7 @@
         transition: opacity 0.25s ease;
       }
       .access-denied-overlay.active {
+        display: flex !important;
         opacity: 1;
         pointer-events: auto;
       }
