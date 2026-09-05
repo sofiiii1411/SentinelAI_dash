@@ -597,43 +597,45 @@
       display: none !important;
     }
 
+    .modal-glow-frame {
+      width: 100%;
+      max-width: 450px;
+      position: relative;
+      border-radius: 30px;
+      padding: 3.5px;
+      background: linear-gradient(135deg, #00d2ff 0%, #3b82f6 24%, #8b5cf6 54%, #ec4899 82%, #f43f5e 100%);
+      background-size: 300% 300%;
+      box-shadow: 
+        0 25px 65px -12px rgba(15, 23, 42, 0.35),
+        0 12px 35px -8px rgba(37, 99, 235, 0.30),
+        0 0 35px rgba(139, 92, 246, 0.25),
+        0 0 35px rgba(236, 72, 153, 0.20);
+      animation: modalGlowBorderFlow 7s ease infinite;
+      transform: scale(1);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalGlowBorderFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .auth-modal-backdrop.hidden .modal-glow-frame {
+      transform: scale(0.94);
+    }
+
     .auth-modal-card {
       width: 100%;
-      max-width: 440px;
       background: #ffffff;
-      border-radius: 28px;
+      border-radius: 27px;
       position: relative;
       padding: clamp(1.8rem, 3.5vh, 2.5rem) clamp(1.5rem, 2.2vw, 2.2rem);
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      box-shadow: 
-        0 25px 60px -12px rgba(15, 23, 42, 0.22),
-        0 12px 35px -8px rgba(37, 99, 235, 0.18),
-        0 0 25px rgba(139, 92, 246, 0.14),
-        0 0 25px rgba(236, 72, 153, 0.12);
-      /* Multi-vibrant Blue, Violet & Pink Border Line */
-      border: 2px solid transparent;
-      background-clip: padding-box, border-box;
-      background-origin: padding-box, border-box;
-      background-image: 
-        linear-gradient(to bottom, #ffffff, #ffffff), 
-        linear-gradient(135deg, #00d2ff 0%, #3b82f6 28%, #8b5cf6 58%, #ec4899 85%, #f43f5e 100%);
-      background-size: 100% 100%, 300% 300%;
-      animation: modalBorderFlow 8s ease infinite;
-      transform: scale(1);
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes modalBorderFlow {
-      0% { background-position: 0% 0%, 0% 50%; }
-      50% { background-position: 0% 0%, 100% 50%; }
-      100% { background-position: 0% 0%, 0% 50%; }
-    }
-
-    .auth-modal-backdrop.hidden .auth-modal-card {
-      transform: scale(0.94);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.95);
     }
 
     .modal-close-btn {
@@ -982,10 +984,11 @@
        FORGOT PASSWORD & 4-DIGIT OTP RECOVERY MODAL (VIOLET, BLUE & PINK THEME)
        ========================================================================== -->
   <div id="forgot-password-modal" class="auth-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title-dyn">
-    <div class="auth-modal-card">
-      
-      <!-- Close Modal Button -->
-      <button type="button" id="modal-close-btn" class="modal-close-btn" aria-label="Close recovery dialog">
+    <div class="modal-glow-frame">
+      <div class="auth-modal-card">
+        
+        <!-- Close Modal Button -->
+        <button type="button" id="modal-close-btn" class="modal-close-btn" aria-label="Close recovery dialog">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -1001,6 +1004,7 @@
           </svg>
         </div>
         <span class="modal-eyebrow">Recovery Verification</span>
+        <div class="secure-access-multicolor-line" style="margin: 0.25rem auto 0.6rem auto; width: 54px;" aria-hidden="true"></div>
         <h3 id="modal-title-dyn" class="modal-title">Forgot Password?</h3>
         <p class="modal-subtitle">Enter your authorized laboratory Gmail address to receive a secure 4-digit OTP code.</p>
 
@@ -1044,6 +1048,7 @@
           </svg>
         </div>
         <span class="modal-eyebrow">Security Code Verification</span>
+        <div class="secure-access-multicolor-line" style="margin: 0.25rem auto 0.6rem auto; width: 54px;" aria-hidden="true"></div>
         <h3 class="modal-title">Enter 4-Digit OTP</h3>
         <p class="modal-subtitle">We sent a 4-digit code to <strong id="modal-target-email-label" style="color: #7c3aed; word-break: break-all;"></strong></p>
 
@@ -1083,6 +1088,7 @@
           </svg>
         </div>
         <span class="modal-eyebrow">Credential Reset</span>
+        <div class="secure-access-multicolor-line" style="margin: 0.25rem auto 0.6rem auto; width: 54px;" aria-hidden="true"></div>
         <h3 class="modal-title">Reset Password</h3>
         <p class="modal-subtitle">Enter and confirm your new secure password for SentinelAI-X.</p>
 
@@ -1179,6 +1185,7 @@
         </button>
       </div>
 
+      </div>
     </div>
   </div>
 
