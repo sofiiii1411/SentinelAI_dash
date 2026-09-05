@@ -608,10 +608,28 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      box-shadow: 0 25px 60px -12px rgba(15, 23, 42, 0.25);
-      border: 1.5px solid #e2e8f0;
+      box-shadow: 
+        0 25px 60px -12px rgba(15, 23, 42, 0.22),
+        0 12px 35px -8px rgba(37, 99, 235, 0.18),
+        0 0 25px rgba(139, 92, 246, 0.14),
+        0 0 25px rgba(236, 72, 153, 0.12);
+      /* Multi-vibrant Blue, Violet & Pink Border Line */
+      border: 2px solid transparent;
+      background-clip: padding-box, border-box;
+      background-origin: padding-box, border-box;
+      background-image: 
+        linear-gradient(to bottom, #ffffff, #ffffff), 
+        linear-gradient(135deg, #00d2ff 0%, #3b82f6 28%, #8b5cf6 58%, #ec4899 85%, #f43f5e 100%);
+      background-size: 100% 100%, 300% 300%;
+      animation: modalBorderFlow 8s ease infinite;
       transform: scale(1);
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalBorderFlow {
+      0% { background-position: 0% 0%, 0% 50%; }
+      50% { background-position: 0% 0%, 100% 50%; }
+      100% { background-position: 0% 0%, 0% 50%; }
     }
 
     .auth-modal-backdrop.hidden .auth-modal-card {
@@ -626,7 +644,7 @@
       height: 34px;
       border-radius: 50%;
       background: #f1f5f9;
-      border: none;
+      border: 1px solid #e2e8f0;
       color: #64748b;
       cursor: pointer;
       display: flex;
@@ -642,17 +660,19 @@
     }
 
     .modal-shield-badge {
-      width: 58px;
-      height: 58px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, rgba(0, 210, 255, 0.12) 0%, rgba(139, 92, 246, 0.15) 50%, rgba(236, 72, 153, 0.15) 100%);
-      border: 1.5px solid rgba(139, 92, 246, 0.3);
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.14) 0%, rgba(139, 92, 246, 0.18) 50%, rgba(236, 72, 153, 0.16) 100%);
+      border: 1.5px solid rgba(139, 92, 246, 0.35);
       color: #7c3aed;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 0.9rem;
-      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2);
+      box-shadow: 
+        0 10px 25px rgba(139, 92, 246, 0.22),
+        0 4px 12px rgba(0, 210, 255, 0.18);
     }
 
     .modal-step-section {
@@ -769,27 +789,34 @@
     .vibrant-modal-submit-btn {
       width: 100%;
       height: 48px;
-      background: #2563eb;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #ec4899 100%);
+      background-size: 200% 100%;
       border: none;
-      border-radius: 12px;
+      border-radius: 14px;
       color: #ffffff;
       font-family: var(--font-heading);
       font-size: 0.98rem;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.32);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
       margin-top: 0.3rem;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
     }
 
     .vibrant-modal-submit-btn:hover {
-      background: #1d4ed8;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+      background-position: 100% 0;
+      transform: translateY(-1.5px);
+      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
+    }
+
+    .auth-modal-card .text-input-field:focus {
+      background-color: #ffffff;
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.18), 0 4px 12px rgba(37, 99, 235, 0.12);
     }
 
     .modal-secondary-actions {
