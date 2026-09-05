@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>SentinelAI-X | Professional Theme Selector — Laboratory Security Portal</title>
-  <meta name="description" content="Explore and choose from 8 professional, ultra-neat background themes for the SentinelAI-X login portal." />
+  <title>SentinelAI-X | Background Themes & Cyber HUD Frame Showcase</title>
+  <meta name="description" content="Interactive theme customizer for SentinelAI-X: Select background themes and cyber HUD border frames." />
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
   
   <!-- Google Fonts -->
@@ -41,41 +41,49 @@
     }
 
     /* =========================================================================
-       TOP THEME SELECTOR DOCK (CLEAN & PROFESSIONAL)
+       FLOATING CONTROLS DOCK (TOP BAR)
        ========================================================================= */
-    .theme-header-bar {
+    .controls-dock-container {
       position: fixed;
-      top: 14px;
+      top: 12px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 100;
       display: flex;
+      flex-direction: column;
       align-items: center;
       gap: 6px;
-      background: rgba(255, 255, 255, 0.94);
+      max-width: 98vw;
+    }
+
+    .theme-header-bar {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      padding: 6px 10px;
+      padding: 5px 10px;
       border-radius: 999px;
       box-shadow: 
-        0 12px 30px -6px rgba(0, 0, 0, 0.10),
+        0 10px 25px -5px rgba(0, 0, 0, 0.08),
         0 0 0 1px rgba(226, 232, 240, 0.95);
-      max-width: 96vw;
       overflow-x: auto;
       scrollbar-width: none;
+      max-width: 100%;
     }
     .theme-header-bar::-webkit-scrollbar { display: none; }
 
     .theme-dock-brand {
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: 800;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       color: #0f172a;
-      padding: 0 10px 0 6px;
+      padding: 0 8px 0 4px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       border-right: 1.5px solid #e2e8f0;
       white-space: nowrap;
     }
@@ -84,14 +92,14 @@
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 999px;
-      padding: 6px 13px;
-      font-size: 0.78rem;
+      padding: 5px 11px;
+      font-size: 0.75rem;
       font-weight: 600;
       color: #475569;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       white-space: nowrap;
     }
@@ -107,7 +115,14 @@
       background: #2563eb;
       color: #ffffff;
       border-color: #2563eb;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+    }
+
+    .frame-chip-btn.active {
+      background: #7c3aed;
+      color: #ffffff;
+      border-color: #7c3aed;
+      box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
     }
 
     .theme-dot {
@@ -122,11 +137,11 @@
       color: #ffffff;
       border: none;
       border-radius: 999px;
-      padding: 6px 15px;
-      font-size: 0.78rem;
+      padding: 5px 14px;
+      font-size: 0.76rem;
       font-weight: 700;
       cursor: pointer;
-      margin-left: 6px;
+      margin-left: 4px;
       box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
       display: flex;
       align-items: center;
@@ -148,34 +163,22 @@
       filter: blur(95px);
     }
     .ambient-halo-1 {
-      top: -10vw;
-      left: -10vw;
-      width: 50vw;
-      height: 50vw;
+      top: -10vw; left: -10vw; width: 50vw; height: 50vw;
       background: radial-gradient(circle, rgba(59, 130, 246, 0.20) 0%, transparent 70%);
       animation: floatAura1 14s ease-in-out infinite alternate;
     }
     .ambient-halo-2 {
-      top: -6vw;
-      right: 4vw;
-      width: 46vw;
-      height: 46vw;
+      top: -6vw; right: 4vw; width: 46vw; height: 46vw;
       background: radial-gradient(circle, rgba(244, 114, 182, 0.18) 0%, transparent 70%);
       animation: floatAura2 16s ease-in-out infinite alternate;
     }
     .ambient-halo-3 {
-      bottom: -10vw;
-      right: -10vw;
-      width: 48vw;
-      height: 48vw;
+      bottom: -10vw; right: -10vw; width: 48vw; height: 48vw;
       background: radial-gradient(circle, rgba(251, 191, 36, 0.16) 0%, transparent 70%);
       animation: floatAura3 18s ease-in-out infinite alternate;
     }
     .ambient-halo-4 {
-      bottom: -8vw;
-      left: 8vw;
-      width: 48vw;
-      height: 48vw;
+      bottom: -8vw; left: 8vw; width: 48vw; height: 48vw;
       background: radial-gradient(circle, rgba(139, 92, 246, 0.18) 0%, transparent 70%);
       animation: floatAura4 15s ease-in-out infinite alternate;
     }
@@ -253,7 +256,7 @@
       justify-content: center;
       height: 100vh;
       height: 100dvh;
-      margin-top: 30px;
+      margin-top: 50px;
     }
 
     /* Master Card Glow Frame with Running Multi-Vibrant Gradient Border */
@@ -288,8 +291,8 @@
       align-items: center;
       overflow: hidden;
       position: relative;
-      max-height: calc(100vh - clamp(1.5rem, 4vh, 3.6rem) - 50px);
-      max-height: calc(100dvh - clamp(1.5rem, 4vh, 3.6rem) - 50px);
+      max-height: calc(100vh - clamp(1.5rem, 4vh, 3.6rem) - 70px);
+      max-height: calc(100dvh - clamp(1.5rem, 4vh, 3.6rem) - 70px);
       box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.95);
     }
 
@@ -308,6 +311,22 @@
       height: 100%;
     }
 
+    /* =========================================================================
+       CYBER HUD BORDER FRAME FOR LEFT IMAGE
+       ========================================================================= */
+    .brand-image-frame-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      max-height: 100%;
+      max-width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 22px;
+      overflow: hidden;
+    }
+
     .left-brand-image-artwork {
       width: 100%;
       height: 100%;
@@ -316,10 +335,73 @@
       object-fit: contain;
       object-position: center;
       display: block;
-      border-radius: 22px;
+      border-radius: 20px;
       image-rendering: -webkit-optimize-contrast;
       image-rendering: high-quality;
       box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.06);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Cyber HUD Frame Overlay Image & SVG Layer */
+    .cyber-hud-frame-overlay {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
+      border-radius: 20px;
+      background-size: 100% 100%;
+      background-repeat: no-repeat;
+      background-position: center;
+      transition: all 0.3s ease;
+    }
+
+    /* FRAME THEME 1: Exact Neon Rainbow Spectrum HUD (Matches user image) */
+    .frame-neon-spectrum {
+      background-image: url('assets/cyber-frame-border.png');
+      filter: drop-shadow(0 0 10px rgba(0, 210, 255, 0.5)) drop-shadow(0 0 15px rgba(236, 72, 153, 0.4));
+    }
+
+    /* FRAME THEME 2: Dynamic Shifting Spectrum Frame */
+    .frame-dynamic-shift {
+      background-image: url('assets/cyber-frame-border.png');
+      animation: frameHueShift 6s linear infinite;
+    }
+    @keyframes frameHueShift {
+      0% { filter: hue-rotate(0deg) drop-shadow(0 0 10px rgba(0, 210, 255, 0.6)); }
+      50% { filter: hue-rotate(180deg) drop-shadow(0 0 12px rgba(236, 72, 153, 0.6)); }
+      100% { filter: hue-rotate(360deg) drop-shadow(0 0 10px rgba(0, 210, 255, 0.6)); }
+    }
+
+    /* FRAME THEME 3: Cyber Laser Cyan & Blue */
+    .frame-cyber-cyan {
+      background-image: url('assets/cyber-frame-border.png');
+      filter: hue-rotate(190deg) saturate(1.8) drop-shadow(0 0 12px rgba(6, 182, 212, 0.7));
+    }
+
+    /* FRAME THEME 4: Neon Violet & Sunset Magenta */
+    .frame-neon-pink {
+      background-image: url('assets/cyber-frame-border.png');
+      filter: hue-rotate(285deg) saturate(1.7) drop-shadow(0 0 12px rgba(236, 72, 153, 0.7));
+    }
+
+    /* FRAME THEME 5: Emerald & Amber Gold Sentinel */
+    .frame-emerald-gold {
+      background-image: url('assets/cyber-frame-border.png');
+      filter: hue-rotate(90deg) saturate(1.6) drop-shadow(0 0 12px rgba(16, 185, 129, 0.65));
+    }
+
+    /* FRAME THEME 6: Ultra-Fine Sleek Thin Line HUD */
+    .frame-thin-minimal {
+      border: 2px solid transparent;
+      background: 
+        linear-gradient(to bottom, transparent, transparent) padding-box,
+        linear-gradient(135deg, #00d2ff 0%, #3b82f6 25%, #8b5cf6 50%, #ec4899 75%, #f59e0b 100%) border-box;
+      box-shadow: 
+        0 0 14px rgba(0, 210, 255, 0.35),
+        inset 0 0 14px rgba(139, 92, 246, 0.2);
     }
 
     /* Right Auth Column */
@@ -464,67 +546,108 @@
     @media (max-width: 980px) {
       .master-card-container { grid-template-columns: 1fr; max-height: 90vh; }
       .left-brand-column { display: none; }
-      .theme-header-bar { top: 8px; padding: 4px 6px; }
+      .controls-dock-container { top: 6px; }
+      .theme-header-bar { padding: 4px 6px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- THEME SELECTOR TOP DOCK -->
-  <header class="theme-header-bar" role="navigation" aria-label="Theme Selection">
-    <div class="theme-dock-brand">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <circle cx="12" cy="12" r="5"></circle>
-        <line x1="12" y1="1" x2="12" y2="3"></line>
-        <line x1="12" y1="21" x2="12" y2="23"></line>
-        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-        <line x1="1" y1="12" x2="3" y2="12"></line>
-        <line x1="21" y1="12" x2="23" y2="12"></line>
-      </svg>
-      Select Theme
-    </div>
+  <!-- FLOATING CONTROLS DOCK (TOP BAR) -->
+  <div class="controls-dock-container" role="region" aria-label="Theme & Frame Controls">
     
-    <button class="theme-chip-btn active" data-theme="laser-spectrum-waves">
-      <span class="theme-dot" style="color:#2563eb;"></span>
-      1. Moving Spectrum Waves
-    </button>
-    <button class="theme-chip-btn" data-theme="enterprise-mesh">
-      <span class="theme-dot" style="color:#0ea5e9;"></span>
-      2. Enterprise Sensor Mesh
-    </button>
-    <button class="theme-chip-btn" data-theme="quantum-lattice">
-      <span class="theme-dot" style="color:#8b5cf6;"></span>
-      3. Quantum Lab Lattice
-    </button>
-    <button class="theme-chip-btn" data-theme="orbital-telemetry">
-      <span class="theme-dot" style="color:#ec4899;"></span>
-      4. Orbital Security Rings
-    </button>
-    <button class="theme-chip-btn" data-theme="command-grid-hud">
-      <span class="theme-dot" style="color:#10b981;"></span>
-      5. SOC Command Grid HUD
-    </button>
-    <button class="theme-chip-btn" data-theme="hex-cyber-shield">
-      <span class="theme-dot" style="color:#f59e0b;"></span>
-      6. Hex Barrier Matrix
-    </button>
-    <button class="theme-chip-btn" data-theme="aurora-prism">
-      <span class="theme-dot" style="color:#6366f1;"></span>
-      7. Luminous Prism Aurora
-    </button>
-    <button class="theme-chip-btn" data-theme="particle-stream">
-      <span class="theme-dot" style="color:#06b6d4;"></span>
-      8. Quantum Particle Stream
-    </button>
+    <!-- BAR 1: BACKGROUND THEME -->
+    <header class="theme-header-bar">
+      <div class="theme-dock-brand">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+        </svg>
+        Bg Theme:
+      </div>
+      
+      <button class="theme-chip-btn active" data-theme="laser-spectrum-waves">
+        <span class="theme-dot" style="color:#2563eb;"></span>
+        1. Moving Waves
+      </button>
+      <button class="theme-chip-btn" data-theme="enterprise-mesh">
+        <span class="theme-dot" style="color:#0ea5e9;"></span>
+        2. Sensor Mesh
+      </button>
+      <button class="theme-chip-btn" data-theme="quantum-lattice">
+        <span class="theme-dot" style="color:#8b5cf6;"></span>
+        3. Quantum Lattice
+      </button>
+      <button class="theme-chip-btn" data-theme="orbital-telemetry">
+        <span class="theme-dot" style="color:#ec4899;"></span>
+        4. Orbital Rings
+      </button>
+      <button class="theme-chip-btn" data-theme="command-grid-hud">
+        <span class="theme-dot" style="color:#10b981;"></span>
+        5. Command Grid
+      </button>
+      <button class="theme-chip-btn" data-theme="hex-cyber-shield">
+        <span class="theme-dot" style="color:#f59e0b;"></span>
+        6. Hex Matrix
+      </button>
+      <button class="theme-chip-btn" data-theme="aurora-prism">
+        <span class="theme-dot" style="color:#6366f1;"></span>
+        7. Prism Aurora
+      </button>
+      <button class="theme-chip-btn" data-theme="particle-stream">
+        <span class="theme-dot" style="color:#06b6d4;"></span>
+        8. Particle Stream
+      </button>
 
-    <a href="login.html" class="apply-selected-btn" id="applyBtn">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <polyline points="20 6 9 17 4 12"></polyline>
-      </svg>
-      Set on Login
-    </a>
-  </header>
+      <a href="login.html" class="apply-selected-btn" id="applyBtn">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        Apply on Login
+      </a>
+    </header>
+
+    <!-- BAR 2: LEFT IMAGE CYBER HUD FRAME -->
+    <nav class="theme-header-bar" style="background: rgba(255, 255, 255, 0.90);">
+      <div class="theme-dock-brand" style="color:#7c3aed;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="9" y1="3" x2="9" y2="9"></line>
+        </svg>
+        Image Frame:
+      </div>
+
+      <button class="theme-chip-btn frame-chip-btn active" data-frame="frame-neon-spectrum">
+        <span class="theme-dot" style="color:#ec4899;"></span>
+        A. Exact Neon Spectrum (Uploaded)
+      </button>
+      <button class="theme-chip-btn frame-chip-btn" data-frame="frame-dynamic-shift">
+        <span class="theme-dot" style="color:#3b82f6;"></span>
+        B. Live Shifting Glow
+      </button>
+      <button class="theme-chip-btn frame-chip-btn" data-frame="frame-cyber-cyan">
+        <span class="theme-dot" style="color:#06b6d4;"></span>
+        C. Cyber Laser Cyan
+      </button>
+      <button class="theme-chip-btn frame-chip-btn" data-frame="frame-neon-pink">
+        <span class="theme-dot" style="color:#d946ef;"></span>
+        D. Neon Pink & Violet
+      </button>
+      <button class="theme-chip-btn frame-chip-btn" data-frame="frame-emerald-gold">
+        <span class="theme-dot" style="color:#10b981;"></span>
+        E. Emerald & Gold
+      </button>
+      <button class="theme-chip-btn frame-chip-btn" data-frame="frame-thin-minimal">
+        <span class="theme-dot" style="color:#f59e0b;"></span>
+        F. Sleek Thin HUD Line
+      </button>
+    </nav>
+  </div>
 
   <!-- Ambient Outer Glowing Halos -->
   <div class="ambient-halo ambient-halo-1" aria-hidden="true"></div>
@@ -551,14 +674,18 @@
     <div class="master-card-glow-frame">
       <main class="master-card-container">
         
-        <!-- Left Brand Artwork -->
+        <!-- Left Brand Artwork with Cyber HUD Frame -->
         <section class="left-brand-column">
-          <img 
-            src="assets/sentinel-left-brand.png" 
-            alt="SentinelAI-X Distributed Laboratory Security System" 
-            class="left-brand-image-artwork"
-            onerror="this.onerror=null; this.src='assets/lab-network.png';"
-          />
+          <div class="brand-image-frame-wrapper" id="brandFrameWrapper">
+            <img 
+              src="assets/sentinel-left-brand.png" 
+              alt="SentinelAI-X Distributed Laboratory Security System" 
+              class="left-brand-image-artwork"
+              onerror="this.onerror=null; this.src='assets/lab-network.png';"
+            />
+            <!-- Cyber HUD Frame Overlay -->
+            <div class="cyber-hud-frame-overlay frame-neon-spectrum" id="cyberHudOverlay"></div>
+          </div>
         </section>
 
         <!-- Right Sign In Preview Card -->
@@ -609,6 +736,7 @@
       let width, height, dpr;
       let animationFrameId;
       let activeTheme = 'laser-spectrum-waves';
+      let activeFrame = 'frame-neon-spectrum';
       let tick = 0;
 
       const THEME_DATA = {
@@ -669,46 +797,30 @@
       // -----------------------------------------------------------------------
       // ENTITY INITIALIZATION
       // -----------------------------------------------------------------------
-      let nodes = [];
-      let molecules = [];
-      let orbitalRings = [];
-      let particles = [];
-      let hexCells = [];
-      let radarAngle = 0;
+      let nodes = [], molecules = [], orbitalRings = [], particles = [], hexCells = [], radarAngle = 0;
 
       function initEntities() {
-        // 1. Mesh Nodes
         nodes = [];
         const nodeCount = Math.min(55, Math.floor((width * height) / 22000));
         for (let i = 0; i < nodeCount; i++) {
           nodes.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: (Math.random() - 0.5) * 0.5,
-            radius: Math.random() * 2.8 + 1.5,
-            baseHue: Math.random() * 360,
+            x: Math.random() * width, y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.5, vy: (Math.random() - 0.5) * 0.5,
+            radius: Math.random() * 2.8 + 1.5, baseHue: Math.random() * 360,
             pulse: Math.random() * Math.PI * 2
           });
         }
 
-        // 2. Molecular Lattice
         molecules = [];
-        const molCount = 20;
-        for (let i = 0; i < molCount; i++) {
+        for (let i = 0; i < 20; i++) {
           molecules.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            orbitRadius: Math.random() * 24 + 18,
-            angle: Math.random() * Math.PI * 2,
-            speed: (Math.random() - 0.5) * 0.03,
-            vx: (Math.random() - 0.5) * 0.35,
-            vy: (Math.random() - 0.5) * 0.35,
+            x: Math.random() * width, y: Math.random() * height,
+            orbitRadius: Math.random() * 24 + 18, angle: Math.random() * Math.PI * 2,
+            speed: (Math.random() - 0.5) * 0.03, vx: (Math.random() - 0.5) * 0.35, vy: (Math.random() - 0.5) * 0.35,
             hue: Math.random() * 360
           });
         }
 
-        // 3. Orbital Rings
         orbitalRings = [
           { cx: width * 0.12, cy: height * 0.3, r: 110, speed: 0.012, blips: [0, 2.1, 4.2], hue: 215 },
           { cx: width * 0.88, cy: height * 0.25, r: 130, speed: -0.009, blips: [1.2, 3.8], hue: 330 },
@@ -716,7 +828,6 @@
           { cx: width * 0.15, cy: height * 0.82, r: 120, speed: -0.011, blips: [1.8, 4.5], hue: 45 }
         ];
 
-        // 4. Hex Cells
         hexCells = [];
         const hexR = 38;
         const hexW = Math.sqrt(3) * hexR;
@@ -725,74 +836,42 @@
           const row = Math.floor(y / hexH);
           for (let x = -hexR; x < width + hexR * 2; x += hexW) {
             const offsetX = (row % 2 === 0) ? 0 : hexW / 2;
-            hexCells.push({
-              cx: x + offsetX,
-              cy: y,
-              radius: hexR - 2.5,
-              phase: Math.random() * Math.PI * 2,
-              hue: Math.random() * 360
-            });
+            hexCells.push({ cx: x + offsetX, cy: y, radius: hexR - 2.5, phase: Math.random() * Math.PI * 2, hue: Math.random() * 360 });
           }
         }
 
-        // 5. Particles
         particles = [];
         const partCount = Math.min(65, Math.floor((width * height) / 18000));
         for (let i = 0; i < partCount; i++) {
           particles.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            radius: Math.random() * 2.6 + 1.2,
-            vx: (Math.random() - 0.5) * 0.5,
-            vy: -Math.random() * 0.55 - 0.2,
-            baseHue: Math.random() * 360,
-            alpha: Math.random() * 0.45 + 0.35,
-            pulseSpeed: Math.random() * 0.02 + 0.01,
-            pulseOffset: Math.random() * Math.PI * 2
+            x: Math.random() * width, y: Math.random() * height,
+            radius: Math.random() * 2.8 + 1.4, vx: (Math.random() - 0.5) * 0.5, vy: -Math.random() * 0.55 - 0.2,
+            baseHue: Math.random() * 360, alpha: Math.random() * 0.45 + 0.35,
+            pulseSpeed: Math.random() * 0.02 + 0.01, pulseOffset: Math.random() * Math.PI * 2
           });
         }
       }
 
-      // -----------------------------------------------------------------------
-      // MASTER RENDER LOOP
-      // -----------------------------------------------------------------------
       function renderTheme() {
         tick++;
         ctx.clearRect(0, 0, width, height);
 
         switch (activeTheme) {
+          case 'enterprise-mesh': renderEnterpriseMesh(); break;
+          case 'quantum-lattice': renderQuantumLattice(); break;
+          case 'orbital-telemetry': renderOrbitalTelemetry(); break;
+          case 'command-grid-hud': renderCommandGridHud(); break;
+          case 'hex-cyber-shield': renderHexCyberShield(); break;
+          case 'aurora-prism': renderAuroraPrism(); break;
+          case 'particle-stream': renderParticleStream(); break;
           case 'laser-spectrum-waves':
-            renderLaserSpectrumWaves();
-            break;
-          case 'enterprise-mesh':
-            renderEnterpriseMesh();
-            break;
-          case 'quantum-lattice':
-            renderQuantumLattice();
-            break;
-          case 'orbital-telemetry':
-            renderOrbitalTelemetry();
-            break;
-          case 'command-grid-hud':
-            renderCommandGridHud();
-            break;
-          case 'hex-cyber-shield':
-            renderHexCyberShield();
-            break;
-          case 'aurora-prism':
-            renderAuroraPrism();
-            break;
-          case 'particle-stream':
-            renderParticleStream();
-            break;
+          default: renderLaserSpectrumWaves(); break;
         }
 
         animationFrameId = requestAnimationFrame(renderTheme);
       }
 
-      // =======================================================================
-      // THEME 1: Moving Spectrum Waves (Dynamic Color-Cycling Sine Waves)
-      // =======================================================================
+      // THEME 1: Moving Spectrum Waves
       function renderLaserSpectrumWaves() {
         const waveConfigs = [
           { yRatio: 0.18, amp: 30, freq: 0.0032, speed: 0.014, hueOffset: 0, lineWidth: 2.8, glowBlur: 14 },
@@ -838,19 +917,15 @@
           ctx.shadowBlur = 0;
         });
 
-        // Floating ambient particles with color shift
         renderParticles();
       }
 
-      // =======================================================================
-      // THEME 2: Enterprise Sensor Mesh (High-Tech Connected Nodes)
-      // =======================================================================
+      // THEME 2: Enterprise Mesh
       function renderEnterpriseMesh() {
         const maxDist = 135;
         for (let i = 0; i < nodes.length; i++) {
           const n1 = nodes[i];
-          n1.x += n1.vx;
-          n1.y += n1.vy;
+          n1.x += n1.vx; n1.y += n1.vy;
           if (n1.x < 0 || n1.x > width) n1.vx *= -1;
           if (n1.y < 0 || n1.y > height) n1.vy *= -1;
 
@@ -858,8 +933,7 @@
 
           for (let j = i + 1; j < nodes.length; j++) {
             const n2 = nodes[j];
-            const dx = n1.x - n2.x;
-            const dy = n1.y - n2.y;
+            const dx = n1.x - n2.x; const dy = n1.y - n2.y;
             const dist = Math.sqrt(dx * dx + dy * dy);
 
             if (dist < maxDist) {
@@ -873,7 +947,6 @@
             }
           }
 
-          // Node Beacon
           ctx.beginPath();
           ctx.fillStyle = `hsla(${hue1}, 85%, 52%, 0.9)`;
           ctx.shadowColor = `hsla(${hue1}, 90%, 55%, 0.5)`;
@@ -884,20 +957,16 @@
         }
       }
 
-      // =======================================================================
-      // THEME 3: Quantum Lab Lattice (Molecular Electron Rings)
-      // =======================================================================
+      // THEME 3: Quantum Lattice
       function renderQuantumLattice() {
-        molecules.forEach((m, idx) => {
-          m.x += m.vx;
-          m.y += m.vy;
+        molecules.forEach((m) => {
+          m.x += m.vx; m.y += m.vy;
           if (m.x < 50 || m.x > width - 50) m.vx *= -1;
           if (m.y < 50 || m.y > height - 50) m.vy *= -1;
 
           m.angle += m.speed;
           const currentHue = (m.hue + tick * 0.5) % 360;
 
-          // Central Nucleus
           ctx.beginPath();
           ctx.fillStyle = `hsla(${currentHue}, 85%, 52%, 0.8)`;
           ctx.shadowColor = `hsla(${currentHue}, 90%, 55%, 0.5)`;
@@ -906,14 +975,12 @@
           ctx.fill();
           ctx.shadowBlur = 0;
 
-          // Orbit Track
           ctx.beginPath();
           ctx.arc(m.x, m.y, m.orbitRadius, 0, Math.PI * 2);
           ctx.strokeStyle = `hsla(${currentHue}, 80%, 50%, 0.2)`;
           ctx.lineWidth = 1;
           ctx.stroke();
 
-          // Orbiting Electron
           const ex = m.x + Math.cos(m.angle) * m.orbitRadius;
           const ey = m.y + Math.sin(m.angle) * m.orbitRadius;
           ctx.beginPath();
@@ -923,21 +990,17 @@
         });
       }
 
-      // =======================================================================
-      // THEME 4: Orbital Security Rings (Precision Telemetry Tracks)
-      // =======================================================================
+      // THEME 4: Orbital Telemetry
       function renderOrbitalTelemetry() {
         orbitalRings.forEach((ring) => {
           const baseHue = (ring.hue + tick * 0.3) % 360;
 
-          // Ring 1 (Solid Track)
           ctx.beginPath();
           ctx.arc(ring.cx, ring.cy, ring.r, 0, Math.PI * 2);
           ctx.strokeStyle = `hsla(${baseHue}, 80%, 50%, 0.25)`;
           ctx.lineWidth = 1.2;
           ctx.stroke();
 
-          // Ring 2 (Dashed Outer Track)
           ctx.beginPath();
           ctx.setLineDash([4, 6]);
           ctx.arc(ring.cx, ring.cy, ring.r + 20, 0, Math.PI * 2);
@@ -945,7 +1008,6 @@
           ctx.stroke();
           ctx.setLineDash([]);
 
-          // Satellite Radar Markers
           ring.blips.forEach((blipAngle, bIdx) => {
             const curAngle = blipAngle + tick * ring.speed;
             const px = ring.cx + Math.cos(curAngle) * ring.r;
@@ -962,37 +1024,25 @@
         });
       }
 
-      // =======================================================================
-      // THEME 5: SOC Command Grid HUD (Technical Blueprint & Radar Sweep)
-      // =======================================================================
+      // THEME 5: SOC Command Grid HUD
       function renderCommandGridHud() {
         const gridSize = 45;
         ctx.strokeStyle = 'rgba(59, 130, 246, 0.08)';
         ctx.lineWidth = 1;
 
         for (let x = 0; x <= width; x += gridSize) {
-          ctx.beginPath();
-          ctx.moveTo(x, 0);
-          ctx.lineTo(x, height);
-          ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
         }
         for (let y = 0; y <= height; y += gridSize) {
-          ctx.beginPath();
-          ctx.moveTo(0, y);
-          ctx.lineTo(width, y);
-          ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
         }
 
-        // Radar Sweep from Center
-        const cx = width * 0.5;
-        const cy = height * 0.5;
+        const cx = width * 0.5; const cy = height * 0.5;
         radarAngle += 0.015;
 
         for (let r = 100; r <= 500; r += 100) {
-          ctx.beginPath();
-          ctx.arc(cx, cy, r, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(37, 99, 235, 0.12)';
-          ctx.stroke();
+          ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(37, 99, 235, 0.12)'; ctx.stroke();
         }
 
         ctx.save();
@@ -1003,24 +1053,16 @@
         sweepGrad.addColorStop(0.8, 'rgba(6, 182, 212, 0.04)');
         sweepGrad.addColorStop(1, 'transparent');
 
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.arc(0, 0, 500, 0, Math.PI / 4);
-        ctx.closePath();
-        ctx.fillStyle = sweepGrad;
-        ctx.fill();
-        ctx.restore();
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.arc(0, 0, 500, 0, Math.PI / 4); ctx.closePath();
+        ctx.fillStyle = sweepGrad; ctx.fill(); ctx.restore();
 
-        // Technical Coordinates
         ctx.font = '500 11px JetBrains Mono, monospace';
         ctx.fillStyle = '#64748b';
         ctx.fillText(`SYS.ZONE: LAB-NORTH // [${Math.floor(tick * 0.1) % 999}]`, 30, height - 30);
         ctx.fillText('STATUS: AI-SHIELD ONLINE', width - 210, height - 30);
       }
 
-      // =======================================================================
-      // THEME 6: Hex Barrier Matrix (Honeycomb Defense Lattice)
-      // =======================================================================
+      // THEME 6: Hex Cyber Shield
       function renderHexCyberShield() {
         hexCells.forEach((hex) => {
           const pulseVal = Math.sin(tick * 0.025 + hex.phase);
@@ -1047,12 +1089,9 @@
         });
       }
 
-      // =======================================================================
-      // THEME 7: Luminous Prism Aurora (Apple / Stripe Refractive Glow)
-      // =======================================================================
+      // THEME 7: Luminous Prism Aurora
       function renderAuroraPrism() {
-        const blobCount = 4;
-        for (let b = 0; b < blobCount; b++) {
+        for (let b = 0; b < 4; b++) {
           const hue = (tick * 0.3 + b * 90) % 360;
           const cx = width * (0.2 + b * 0.2) + Math.sin(tick * 0.01 + b) * 60;
           const cy = height * (0.3 + (b % 2) * 0.35) + Math.cos(tick * 0.01 + b) * 50;
@@ -1063,46 +1102,33 @@
           grad.addColorStop(0.5, `hsla(${(hue + 45) % 360}, 80%, 55%, 0.06)`);
           grad.addColorStop(1, 'transparent');
 
-          ctx.beginPath();
-          ctx.arc(cx, cy, r, 0, Math.PI * 2);
-          ctx.fillStyle = grad;
-          ctx.fill();
+          ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fillStyle = grad; ctx.fill();
         }
       }
 
-      // =======================================================================
-      // THEME 8: Quantum Particle Stream (Optical Wave Data Streams)
-      // =======================================================================
+      // THEME 8: Quantum Particle Stream
       function renderParticleStream() {
-        const streamCount = 5;
-        for (let s = 0; s < streamCount; s++) {
+        for (let s = 0; s < 5; s++) {
           const hue = (tick * 0.5 + s * 70) % 360;
           const startY = height * (0.2 + s * 0.15);
 
-          ctx.beginPath();
-          ctx.moveTo(0, startY);
-          const cp1x = width * 0.35;
-          const cp1y = startY + Math.sin(tick * 0.018 + s) * 70;
-          const cp2x = width * 0.65;
-          const cp2y = startY - Math.cos(tick * 0.018 + s) * 70;
+          ctx.beginPath(); ctx.moveTo(0, startY);
+          const cp1x = width * 0.35; const cp1y = startY + Math.sin(tick * 0.018 + s) * 70;
+          const cp2x = width * 0.65; const cp2y = startY - Math.cos(tick * 0.018 + s) * 70;
           ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, width, startY + (s % 2 === 0 ? 40 : -40));
 
           ctx.strokeStyle = `hsla(${hue}, 85%, 52%, 0.65)`;
           ctx.lineWidth = 2.2;
           ctx.shadowColor = `hsla(${hue}, 90%, 55%, 0.4)`;
           ctx.shadowBlur = 10;
-          ctx.stroke();
-          ctx.shadowBlur = 0;
+          ctx.stroke(); ctx.shadowBlur = 0;
         }
-
         renderParticles();
       }
 
       function renderParticles() {
         particles.forEach((p) => {
-          p.x += p.vx;
-          p.y += p.vy;
-
+          p.x += p.vx; p.y += p.vy;
           if (p.x < -10) p.x = width + 10;
           if (p.x > width + 10) p.x = -10;
           if (p.y < -10) p.y = height + 10;
@@ -1117,20 +1143,22 @@
           ctx.shadowColor = `hsla(${currentHue}, 90%, 55%, 0.55)`;
           ctx.shadowBlur = 8;
           ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
+          ctx.fill(); ctx.shadowBlur = 0;
         });
       }
 
       // -----------------------------------------------------------------------
-      // THEME BUTTONS INTERACTION
+      // CONTROLS INTERACTION
       // -----------------------------------------------------------------------
-      const themeButtons = document.querySelectorAll('.theme-chip-btn');
+      const themeButtons = document.querySelectorAll('.theme-chip-btn:not(.frame-chip-btn)');
+      const frameButtons = document.querySelectorAll('.frame-chip-btn');
       const themeTitleEl = document.getElementById('themeTitleText');
       const themeBadgeEl = document.getElementById('themeBadgeText');
       const themeDescEl = document.getElementById('themeDescText');
       const applyBtn = document.getElementById('applyBtn');
+      const cyberHudOverlay = document.getElementById('cyberHudOverlay');
 
+      // Theme Switcher
       themeButtons.forEach((btn) => {
         btn.addEventListener('click', () => {
           themeButtons.forEach((b) => b.classList.remove('active'));
@@ -1144,14 +1172,33 @@
             themeDescEl.textContent = info.desc;
           }
 
-          if (applyBtn) {
-            applyBtn.href = `login.html?theme=${activeTheme}`;
-          }
-
+          updateApplyLink();
           localStorage.setItem('sentinel_active_theme', activeTheme);
           initEntities();
         });
       });
+
+      // Frame Switcher
+      frameButtons.forEach((btn) => {
+        btn.addEventListener('click', () => {
+          frameButtons.forEach((b) => b.classList.remove('active'));
+          btn.classList.add('active');
+          activeFrame = btn.getAttribute('data-frame');
+
+          if (cyberHudOverlay) {
+            cyberHudOverlay.className = `cyber-hud-frame-overlay ${activeFrame}`;
+          }
+
+          updateApplyLink();
+          localStorage.setItem('sentinel_active_frame', activeFrame);
+        });
+      });
+
+      function updateApplyLink() {
+        if (applyBtn) {
+          applyBtn.href = `login.html?theme=${activeTheme}&frame=${activeFrame}`;
+        }
+      }
 
       window.addEventListener('resize', resize);
       resize();
