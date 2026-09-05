@@ -1654,6 +1654,9 @@
           // Display in Step 2
           if (targetEmailLabel) targetEmailLabel.textContent = emailVal;
           if (liveOtpText) liveOtpText.textContent = activeGeneratedOtp;
+          for (let i = 0; i < 4; i++) {
+            if (otpInputs[i]) otpInputs[i].value = activeGeneratedOtp[i] || '';
+          }
 
           showModalStep(2);
         });
