@@ -10,7 +10,15 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+  <!-- EmailJS Browser SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      if (typeof emailjs !== 'undefined') {
+        emailjs.init({ publicKey: "hnzDsgOGflqpJ2Zsd" });
+      }
+    })();
+  </script>
 
   <style>
     *, *::before, *::after {
@@ -1620,25 +1628,26 @@
           }
 
           activeRecoveryEmail = emailVal;
+          const generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
+          activeGeneratedOtp = generatedOtp;
 
+          // Dispatch Real Email via EmailJS directly to Gmail Inbox
           try {
-            // Attempt API call with fallback for client-side demo
-            const res = await fetch("/api/auth/forgot-password", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email: emailVal })
-            });
-            const data = await res.json();
-
-            if (res.ok && data.success) {
-              activeGeneratedOtp = data.debugOtp || String(Math.floor(1000 + Math.random() * 9000));
-            } else {
-              // Fallback generate 4-digit OTP if offline
-              activeGeneratedOtp = String(Math.floor(1000 + Math.random() * 9000));
+            if (typeof emailjs !== 'undefined') {
+              await emailjs.send("service_70mhtv8", "template_tyod0uo", {
+                email: emailVal,
+                to_email: emailVal,
+                user_email: emailVal,
+                recipient: emailVal,
+                otp_code: generatedOtp,
+                passcode: generatedOtp,
+                code: generatedOtp,
+                time: "5 minutes"
+              });
+              console.log("📧 [EmailJS Dispatch SUCCESS] OTP code sent to:", emailVal);
             }
-          } catch (err) {
-            // Fallback generate 4-digit OTP
-            activeGeneratedOtp = String(Math.floor(1000 + Math.random() * 9000));
+          } catch (emailErr) {
+            console.warn("⚠️ [EmailJS Dispatch Warning]:", emailErr);
           }
 
           if (btnSendOtp) {
@@ -1715,15 +1724,16 @@
       }
 
       async function handleOtpVerification() {
-        let enteredCode = otpInputs.map(i => i.value.trim()).join('');
+        const enteredCode = otpInputs.map(i => i.value.trim()).join('');
 
         if (enteredCode.length < 4) {
-          // If user hasn't typed code, auto-fill generated OTP and proceed
-          const codeToUse = activeGeneratedOtp || "5821";
-          for (let i = 0; i < 4; i++) {
-            if (otpInputs[i]) otpInputs[i].value = codeToUse[i] || "0";
-          }
-          enteredCode = codeToUse;
+          showModalError(errorStep2, "Please enter the 4-digit security OTP sent to your Gmail.");
+          return;
+        }
+
+        if (enteredCode !== activeGeneratedOtp) {
+          showModalError(errorStep2, "Incorrect security OTP. Please check your Gmail inbox and try again.");
+          return;
         }
 
         if (btnVerifyOtp) {
@@ -1731,20 +1741,7 @@
           btnVerifyOtp.querySelector("span").textContent = "Verifying Code...";
         }
 
-        let isVerified = true;
-        activeResetToken = "LOCAL-VALIDATED";
-
-        try {
-          const res = await fetch("/api/auth/verify-reset-otp", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: activeRecoveryEmail, otp: enteredCode })
-          });
-          const data = await res.json();
-          if (res.ok && data.success && data.resetToken) {
-            activeResetToken = data.resetToken;
-          }
-        } catch (_) {}
+        activeResetToken = "EMAILJS-VERIFIED-" + Date.now();
 
         if (btnVerifyOtp) {
           btnVerifyOtp.disabled = false;
@@ -1760,25 +1757,29 @@
           otpInputs.forEach(i => i.value = "");
           otpInputs[0].focus();
           
+          const newCode = String(Math.floor(1000 + Math.random() * 9000));
+          activeGeneratedOtp = newCode;
+
           try {
-            const res = await fetch("/api/auth/forgot-password", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email: activeRecoveryEmail })
-            });
-            const data = await res.json();
-            if (res.ok && data.success) {
-              activeGeneratedOtp = data.debugOtp || String(Math.floor(1000 + Math.random() * 9000));
-            } else {
-              activeGeneratedOtp = String(Math.floor(1000 + Math.random() * 9000));
+            if (typeof emailjs !== 'undefined') {
+              await emailjs.send("service_70mhtv8", "template_tyod0uo", {
+                email: activeRecoveryEmail,
+                to_email: activeRecoveryEmail,
+                user_email: activeRecoveryEmail,
+                recipient: activeRecoveryEmail,
+                otp_code: newCode,
+                passcode: newCode,
+                code: newCode,
+                time: "5 minutes"
+              });
+              console.log("📧 [EmailJS Resend SUCCESS] New OTP code sent to:", activeRecoveryEmail);
             }
           } catch (e) {
-            activeGeneratedOtp = String(Math.floor(1000 + Math.random() * 9000));
+            console.warn("⚠️ [EmailJS Resend Warning]:", e);
           }
 
-          if (liveOtpText) liveOtpText.textContent = activeGeneratedOtp;
           if (errorStep2) {
-            errorStep2.textContent = "A new 4-digit OTP has been generated.";
+            errorStep2.textContent = "A new 4-digit OTP has been sent to your Gmail.";
             errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
             errorStep2.style.color = "#059669";
             errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
