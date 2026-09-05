@@ -1634,7 +1634,7 @@
           // Dispatch Real Email via EmailJS directly to Gmail Inbox
           try {
             if (typeof emailjs !== 'undefined') {
-              await emailjs.send("service_70mhtv8", "template_tyod0uo", {
+              const res = await emailjs.send("service_70mhtv8", "template_tyod0uo", {
                 email: emailVal,
                 to_email: emailVal,
                 user_email: emailVal,
@@ -1643,11 +1643,20 @@
                 passcode: generatedOtp,
                 code: generatedOtp,
                 time: "5 minutes"
-              });
-              console.log("📧 [EmailJS Dispatch SUCCESS] OTP code sent to:", emailVal);
+              }, "hnzDsgOGflqpJ2Zsd");
+              console.log("📧 [EmailJS Dispatch SUCCESS]:", res);
+            } else {
+              throw new Error("EmailJS SDK not loaded.");
             }
           } catch (emailErr) {
-            console.warn("⚠️ [EmailJS Dispatch Warning]:", emailErr);
+            console.error("⚠️ [EmailJS Dispatch Failed]:", emailErr);
+            const errDetail = emailErr.text || emailErr.message || (typeof emailErr === 'string' ? emailErr : 'Check EmailJS configuration');
+            showModalError(errorStep1, `Email Delivery Notice: ${errDetail}`);
+            if (btnSendOtp) {
+              btnSendOtp.disabled = false;
+              btnSendOtp.querySelector("span").textContent = "Send 4-Digit OTP";
+            }
+            return;
           }
 
           if (btnSendOtp) {
