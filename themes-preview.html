@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>SentinelAI-X | Interactive Background Theme Showcase</title>
-  <meta name="description" content="Explore and test live background themes for the SentinelAI-X login portal." />
+  <title>SentinelAI-X | Professional Theme Selector</title>
+  <meta name="description" content="Select and apply clean, professional executive themes for SentinelAI-X login portal." />
   <link rel="icon" type="image/svg+xml" href="logo.svg" />
   
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <style>
     *, *::before, *::after {
@@ -32,19 +32,21 @@
       margin: 0;
       padding: 0;
       font-family: var(--font-body);
-      background-color: #f1f5fc;
+      background-color: #f8fafc;
+      color: #0f172a;
       display: flex;
       align-items: center;
       justify-content: center;
       overflow: hidden;
       position: relative;
-      transition: background 0.6s ease;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.4s ease;
     }
 
     /* =========================================================================
-       THEME SELECTOR FLOATING DOCK (TOP BAR)
+       TOP FLOATING DOCK: PROFESSIONAL THEME SELECTOR
        ========================================================================= */
-    .theme-nav-dock {
+    .top-theme-dock {
       position: fixed;
       top: 18px;
       left: 50%;
@@ -52,142 +54,105 @@
       z-index: 100;
       display: flex;
       align-items: center;
-      gap: 8px;
-      background: rgba(255, 255, 255, 0.92);
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.96);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       padding: 6px 10px;
       border-radius: 999px;
-      box-shadow: 
-        0 14px 35px -8px rgba(0, 0, 0, 0.12),
-        0 0 0 1px rgba(226, 232, 240, 0.9);
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 12px 35px -6px rgba(15, 23, 42, 0.12);
       max-width: 95vw;
       overflow-x: auto;
       scrollbar-width: none;
     }
-    .theme-nav-dock::-webkit-scrollbar { display: none; }
+    .top-theme-dock::-webkit-scrollbar { display: none; }
 
-    .theme-dock-label {
-      font-size: 0.76rem;
+    .dock-title {
+      font-size: 0.78rem;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: 0.08em;
       color: #0f172a;
       padding: 0 12px 0 6px;
+      border-right: 1.5px solid #e2e8f0;
       display: flex;
       align-items: center;
       gap: 6px;
-      border-right: 1.5px solid #e2e8f0;
       white-space: nowrap;
     }
 
-    .theme-chip-btn {
+    .theme-select-btn {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       border-radius: 999px;
-      padding: 6px 14px;
-      font-size: 0.8rem;
+      padding: 7px 16px;
+      font-size: 0.82rem;
       font-weight: 600;
       color: #475569;
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       white-space: nowrap;
     }
 
-    .theme-chip-btn:hover {
+    .theme-select-btn:hover {
       background: #ffffff;
-      color: #2563eb;
-      border-color: #93c5fd;
+      color: #0f172a;
+      border-color: #cbd5e1;
       transform: translateY(-1px);
     }
 
-    .theme-chip-btn.active {
-      background: #2563eb;
+    .theme-select-btn.active {
+      background: #0f172a;
       color: #ffffff;
-      border-color: #2563eb;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+      border-color: #0f172a;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.25);
     }
 
-    .theme-indicator-dot {
-      width: 7px;
-      height: 7px;
+    .theme-color-dot {
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: currentColor;
     }
 
-    .apply-theme-btn {
-      background: linear-gradient(135deg, #10b981, #059669);
+    .apply-to-login-btn {
+      background: #2563eb;
       color: #ffffff;
       border: none;
       border-radius: 999px;
-      padding: 6px 16px;
-      font-size: 0.8rem;
+      padding: 7px 18px;
+      font-size: 0.82rem;
       font-weight: 700;
       cursor: pointer;
-      margin-left: 6px;
-      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
       display: flex;
       align-items: center;
       gap: 6px;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
       transition: all 0.2s ease;
       white-space: nowrap;
+      text-decoration: none;
     }
-    .apply-theme-btn:hover {
+
+    .apply-to-login-btn:hover {
+      background: #1d4ed8;
       transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
     }
 
-    /* Ambient Outer Halo Layers */
-    .ambient-halo {
+    /* Ambient Background Layer */
+    .theme-bg-layer {
       position: fixed;
+      inset: 0;
       pointer-events: none;
-      z-index: 0;
-      filter: blur(90px);
-      transition: opacity 0.6s ease;
-    }
-    .ambient-halo-1 {
-      top: -10vw;
-      left: -10vw;
-      width: 50vw;
-      height: 50vw;
-      background: radial-gradient(circle, rgba(59, 130, 246, 0.22) 0%, transparent 70%);
-      animation: floatAura1 14s ease-in-out infinite alternate;
-    }
-    .ambient-halo-2 {
-      top: -6vw;
-      right: 4vw;
-      width: 46vw;
-      height: 46vw;
-      background: radial-gradient(circle, rgba(244, 114, 182, 0.20) 0%, transparent 70%);
-      animation: floatAura2 16s ease-in-out infinite alternate;
-    }
-    .ambient-halo-3 {
-      bottom: -10vw;
-      right: -10vw;
-      width: 48vw;
-      height: 48vw;
-      background: radial-gradient(circle, rgba(251, 191, 36, 0.18) 0%, transparent 70%);
-      animation: floatAura3 18s ease-in-out infinite alternate;
-    }
-    .ambient-halo-4 {
-      bottom: -8vw;
-      left: 8vw;
-      width: 48vw;
-      height: 48vw;
-      background: radial-gradient(circle, rgba(139, 92, 246, 0.20) 0%, transparent 70%);
-      animation: floatAura4 15s ease-in-out infinite alternate;
+      z-index: 1;
+      transition: opacity 0.4s ease;
     }
 
-    @keyframes floatAura1 { 0% { transform: translate(0, 0); } 100% { transform: translate(4vw, 3vh); } }
-    @keyframes floatAura2 { 0% { transform: translate(0, 0); } 100% { transform: translate(-3vw, 4vh); } }
-    @keyframes floatAura3 { 0% { transform: translate(0, 0); } 100% { transform: translate(-4vw, -3vh); } }
-    @keyframes floatAura4 { 0% { transform: translate(0, 0); } 100% { transform: translate(3vw, -4vh); } }
-
-    /* Canvas Elements */
-    .theme-canvas {
+    .canvas-bg {
       position: fixed;
       top: 0;
       left: 0;
@@ -198,8 +163,8 @@
       z-index: 1;
     }
 
-    /* Active Theme Info Card (Bottom Right Floating) */
-    .theme-info-pill {
+    /* Floating Info Pill (Bottom Right) */
+    .bottom-info-card {
       position: fixed;
       bottom: 20px;
       right: 24px;
@@ -209,27 +174,26 @@
       -webkit-backdrop-filter: blur(16px);
       border: 1px solid #e2e8f0;
       border-radius: 16px;
-      padding: 10px 16px;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      max-width: 320px;
+      padding: 12px 18px;
+      box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08);
+      max-width: 360px;
       pointer-events: none;
-      animation: fadeIn 0.4s ease;
     }
-    .theme-info-title {
-      font-size: 0.82rem;
-      font-weight: 800;
+
+    .bottom-info-title {
+      font-size: 0.85rem;
+      font-weight: 700;
       color: #0f172a;
+      margin-bottom: 2px;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
-    .theme-info-desc {
-      font-size: 0.74rem;
+
+    .bottom-info-desc {
+      font-size: 0.76rem;
       color: #64748b;
-      line-height: 1.35;
+      line-height: 1.4;
     }
 
     /* Main Viewport Stage */
@@ -247,32 +211,24 @@
       margin-top: 25px;
     }
 
-    /* Master Card Glow Frame */
+    /* Professional Executive Card Frame */
     .master-card-glow-frame {
       width: 100%;
       position: relative;
-      border-radius: 28px;
-      padding: 2.5px;
-      background: linear-gradient(135deg, #f59e0b 0%, #ef4444 24%, #ec4899 48%, #7c3aed 74%, #2563eb 100%);
+      border-radius: 24px;
+      padding: 1px;
+      background: #e2e8f0;
       box-shadow: 
-        0 20px 50px -12px rgba(37, 99, 235, 0.16),
-        0 10px 25px -8px rgba(236, 72, 153, 0.10),
-        0 0 30px rgba(59, 130, 246, 0.12),
-        0 0 30px rgba(245, 158, 11, 0.10);
-      animation: logoBorderSpectrumGlow 12s ease-in-out infinite alternate;
-    }
-
-    @keyframes logoBorderSpectrumGlow {
-      0% { filter: hue-rotate(0deg) saturate(1.05); }
-      50% { filter: hue-rotate(15deg) saturate(1.18); }
-      100% { filter: hue-rotate(-12deg) saturate(1.1); }
+        0 25px 50px -12px rgba(15, 23, 42, 0.08),
+        0 0 0 1px rgba(226, 232, 240, 0.8);
+      transition: all 0.3s ease;
     }
 
     /* Master Card Container */
     .master-card-container {
       width: 100%;
       background: #ffffff;
-      border-radius: 26px;
+      border-radius: 23px;
       display: grid;
       grid-template-columns: 1.35fr 1fr;
       align-items: center;
@@ -280,10 +236,9 @@
       position: relative;
       max-height: calc(100vh - clamp(1.5rem, 4vh, 3.6rem) - 50px);
       max-height: calc(100dvh - clamp(1.5rem, 4vh, 3.6rem) - 50px);
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.95);
     }
 
-    /* Left Brand Column */
+    /* Left Brand Artwork */
     .left-brand-column {
       padding: clamp(0.5rem, 1.2vw, 1.2rem);
       margin: 0;
@@ -293,9 +248,11 @@
       position: relative;
       z-index: 2;
       overflow: hidden;
-      border-top-left-radius: 29px;
-      border-bottom-left-radius: 29px;
+      border-top-left-radius: 23px;
+      border-bottom-left-radius: 23px;
       height: 100%;
+      background: #f8fafc;
+      border-right: 1px solid #f1f5f9;
     }
 
     .left-brand-image-artwork {
@@ -306,54 +263,42 @@
       object-fit: contain;
       object-position: center;
       display: block;
-      border-radius: 22px;
-      image-rendering: -webkit-optimize-contrast;
-      image-rendering: high-quality;
-      box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.06);
+      border-radius: 18px;
+      box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.04);
     }
 
     /* Right Auth Column */
     .right-auth-column {
-      padding: clamp(1rem, 2.5vh, 2.5rem) clamp(1rem, 2vw, 2.5rem);
+      padding: clamp(1.2rem, 3vh, 2.5rem) clamp(1rem, 2vw, 2.5rem);
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       z-index: 2;
       height: 100%;
+      background: #ffffff;
     }
 
     .elevated-auth-subcard {
       width: 100%;
-      max-width: 440px;
-      min-height: min(560px, 92%);
+      max-width: 420px;
       background: #ffffff;
-      border-radius: 28px;
+      border-radius: 20px;
       position: relative;
-      padding: clamp(1.8rem, 3.8vh, 3rem) clamp(1.6rem, 2.2vw, 2.4rem);
+      padding: clamp(1.5rem, 3vh, 2.5rem) clamp(1.4rem, 2vw, 2.2rem);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      box-shadow: 
-        0 24px 50px -12px rgba(0, 112, 243, 0.16),
-        0 10px 24px -6px rgba(236, 72, 153, 0.12),
-        0 0 25px rgba(139, 92, 246, 0.10);
-      border: 2px solid transparent;
-      background-clip: padding-box, border-box;
-      background-origin: padding-box, border-box;
-      background-image: 
-        linear-gradient(to bottom, #ffffff, #ffffff), 
-        linear-gradient(135deg, #00d2ff 0%, #3b82f6 28%, #8b5cf6 58%, #ec4899 85%, #f43f5e 100%);
     }
 
     .shield-icon-container {
-      width: 46px;
-      height: 46px;
+      width: 48px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 0.4rem;
+      margin-bottom: 0.5rem;
     }
     .shield-icon-container img {
       width: 100%;
@@ -365,23 +310,23 @@
       font-family: var(--font-heading);
       font-size: 0.72rem;
       font-weight: 800;
-      letter-spacing: 0.22em;
+      letter-spacing: 0.2em;
       color: #2563eb;
       text-transform: uppercase;
       margin-bottom: 0.35rem;
     }
 
     .secure-access-multicolor-line {
-      width: 64px;
-      height: 3.5px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, #f59e0b, #ef4444, #ec4899, #7c3aed, #2563eb);
-      margin: 0.2rem auto clamp(0.6rem, 1.2vh, 0.9rem) auto;
+      width: 44px;
+      height: 3px;
+      background: #2563eb;
+      border-radius: 99px;
+      margin: 0.2rem auto clamp(0.5rem, 1vh, 0.8rem) auto;
     }
 
     .heading-sign-in {
       font-family: var(--font-heading);
-      font-size: clamp(1.8rem, 3vh, 2.3rem);
+      font-size: clamp(1.75rem, 2.8vh, 2.2rem);
       font-weight: 800;
       color: #0f172a;
       letter-spacing: -0.025em;
@@ -390,135 +335,124 @@
     }
 
     .sub-access-desc {
-      font-size: clamp(0.82rem, 1.2vh, 0.92rem);
+      font-size: clamp(0.82rem, 1.2vh, 0.9rem);
       color: #64748b;
       margin-bottom: clamp(1rem, 2vh, 1.5rem);
       text-align: center;
       font-weight: 500;
     }
 
-    .dummy-input-box {
+    .dummy-field {
       width: 100%;
-      height: 46px;
-      border-radius: 14px;
-      background: #f8fafc;
-      border: 1.5px solid #e2e8f0;
-      padding: 0 16px;
       margin-bottom: 12px;
       display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .dummy-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #334155;
+    }
+    .dummy-input {
+      width: 100%;
+      height: 44px;
+      border-radius: 12px;
+      background: #f8fafc;
+      border: 1.5px solid #e2e8f0;
+      padding: 0 14px;
+      display: flex;
       align-items: center;
-      color: #94a3b8;
+      color: #64748b;
       font-size: 0.88rem;
     }
 
-    .dummy-btn {
+    .dummy-submit-btn {
       width: 100%;
       height: 46px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      border-radius: 12px;
+      background: #2563eb;
       color: #ffffff;
+      font-family: var(--font-heading);
       font-weight: 700;
       font-size: 0.95rem;
       border: none;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 6px;
       margin-top: 8px;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
     }
 
-    /* Responsive adjustments */
     @media (max-width: 980px) {
-      .master-card-container {
-        grid-template-columns: 1fr;
-        max-height: 90vh;
-      }
-      .left-brand-column {
-        display: none;
-      }
-      .theme-nav-dock {
-        top: 10px;
-        padding: 4px 8px;
-      }
+      .master-card-container { grid-template-columns: 1fr; }
+      .left-brand-column { display: none; }
+      .top-theme-dock { top: 10px; padding: 4px 8px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- THEME SELECTOR TOP DOCK -->
-  <nav class="theme-nav-dock" aria-label="Theme Selection Dock">
-    <div class="theme-dock-label">
+  <!-- FLOATING TOP DOCK -->
+  <nav class="top-theme-dock" aria-label="Professional Theme Selector">
+    <div class="dock-title">
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-        <circle cx="12" cy="12" r="5"></circle>
-        <line x1="12" y1="1" x2="12" y2="3"></line>
-        <line x1="12" y1="21" x2="12" y2="23"></line>
-        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-        <line x1="1" y1="12" x2="3" y2="12"></line>
-        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+        <line x1="3" y1="9" x2="21" y2="9"></line>
+        <line x1="9" y1="21" x2="9" y2="9"></line>
       </svg>
-      Themes
+      Executive Themes
     </div>
-    
-    <button class="theme-chip-btn active" data-theme="neural-mesh">
-      <span class="theme-indicator-dot" style="color:#2563eb;"></span>
-      1. Neural Sensor Mesh
-    </button>
-    <button class="theme-chip-btn" data-theme="harmonic-aurora">
-      <span class="theme-indicator-dot" style="color:#ec4899;"></span>
-      2. Harmonic Flow Waves
-    </button>
-    <button class="theme-chip-btn" data-theme="radar-grid">
-      <span class="theme-indicator-dot" style="color:#06b6d4;"></span>
-      3. Digital Security Radar
-    </button>
-    <button class="theme-chip-btn" data-theme="hex-defense">
-      <span class="theme-indicator-dot" style="color:#8b5cf6;"></span>
-      4. Hex Defense Shield
-    </button>
-    <button class="theme-chip-btn" data-theme="quantum-stream">
-      <span class="theme-indicator-dot" style="color:#f59e0b;"></span>
-      5. Quantum Lab Particle Stream
-    </button>
-    <button class="theme-chip-btn" data-theme="drone-patrol">
-      <span class="theme-indicator-dot" style="color:#10b981;"></span>
-      6. Drone Patrol Waypoints
+
+    <button class="theme-select-btn active" data-theme="slate-grid">
+      <span class="theme-color-dot" style="color:#2563eb;"></span>
+      1. Enterprise Slate & Micro-Grid
     </button>
 
-    <a href="login.html" class="apply-theme-btn" id="apply-theme-link">
+    <button class="theme-select-btn" data-theme="executive-cobalt">
+      <span class="theme-color-dot" style="color:#0284c7;"></span>
+      2. Ambient Executive Cobalt
+    </button>
+
+    <button class="theme-select-btn" data-theme="lab-precision">
+      <span class="theme-color-dot" style="color:#10b981;"></span>
+      3. Laboratory Precision Matrix
+    </button>
+
+    <button class="theme-select-btn" data-theme="minimal-studio">
+      <span class="theme-color-dot" style="color:#64748b;"></span>
+      4. Minimal Studio Light
+    </button>
+
+    <button class="apply-to-login-btn" id="applyBtn">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
         <polyline points="20 6 9 17 4 12"></polyline>
       </svg>
-      Apply to Main Login
-    </a>
+      Apply Theme to Main Login
+    </button>
   </nav>
 
-  <!-- Ambient Outer Glowing Halos -->
-  <div class="ambient-halo ambient-halo-1" aria-hidden="true"></div>
-  <div class="ambient-halo ambient-halo-2" aria-hidden="true"></div>
-  <div class="ambient-halo ambient-halo-3" aria-hidden="true"></div>
-  <div class="ambient-halo ambient-halo-4" aria-hidden="true"></div>
+  <!-- Dynamic Theme Background Layer -->
+  <canvas id="themeCanvas" class="canvas-bg" aria-hidden="true"></canvas>
 
-  <!-- Dynamic Theme Background Canvas -->
-  <canvas id="themeCanvas" class="theme-canvas" aria-hidden="true"></canvas>
-
-  <!-- Theme Info Floating Badge -->
-  <div class="theme-info-pill" id="themeInfoPill">
-    <div class="theme-info-title" id="themeTitleText">
-      <span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#2563eb;"></span>
-      Theme 1: Cyber-Laboratory Constellation & Neural Mesh
+  <!-- Bottom Floating Info Card -->
+  <div class="bottom-info-card">
+    <div class="bottom-info-title" id="infoTitle">
+      <span style="width:8px;height:8px;border-radius:50%;background:#2563eb;display:inline-block;"></span>
+      Enterprise Slate & Micro-Grid
     </div>
-    <div class="theme-info-desc" id="themeDescText">
-      Distributed IoT laboratory node network with interactive floating nodes connected with logo-colored data lines.
+    <div class="bottom-info-desc" id="infoDesc">
+      Crisp architectural dot grid with a subtle executive blue ambient aura and refined corporate styling.
     </div>
   </div>
 
-  <!-- Main Viewport Preview -->
+  <!-- Viewport Stage -->
   <div class="viewport-stage">
-    <div class="master-card-glow-frame">
+    <div class="master-card-glow-frame" id="cardFrame">
       <main class="master-card-container">
         
-        <!-- Left Brand Artwork -->
+        <!-- Left Brand Column -->
         <section class="left-brand-column">
           <img 
             src="assets/sentinel-left-brand.png" 
@@ -528,7 +462,7 @@
           />
         </section>
 
-        <!-- Right Sign In Preview Card -->
+        <!-- Right Auth Column -->
         <section class="right-auth-column">
           <div class="elevated-auth-subcard">
             
@@ -542,25 +476,35 @@
             <h2 class="heading-sign-in">Sign In</h2>
             <p class="sub-access-desc">Access your laboratory security dashboard</p>
 
-            <div class="dummy-input-box">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:12px;">
-                <rect x="2" y="4" width="20" height="16" rx="3"></rect>
-                <path d="m22 7-10 6L2 7"></path>
-              </svg>
-              <span>admin@sentinelai.com</span>
+            <div class="dummy-field">
+              <span class="dummy-label">Email Address</span>
+              <div class="dummy-input">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;">
+                  <rect x="2" y="4" width="20" height="16" rx="3"></rect>
+                  <path d="m22 7-10 6L2 7"></path>
+                </svg>
+                <span>sofianu723@gmail.com</span>
+              </div>
             </div>
 
-            <div class="dummy-input-box">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:12px;">
-                <rect x="3" y="11" width="18" height="11" rx="2.5"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-              </svg>
-              <span>••••••••••••</span>
+            <div class="dummy-field">
+              <span class="dummy-label">Password</span>
+              <div class="dummy-input">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:8px;">
+                  <rect x="3" y="11" width="18" height="11" rx="2.5"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                <span>••••••••••••</span>
+              </div>
             </div>
 
-            <button class="dummy-btn" type="button">
-              Sign In to SentinelAI-X
+            <button class="dummy-submit-btn" type="button">
+              <span>Sign In to SentinelAI-X</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
             </button>
+
           </div>
         </section>
 
@@ -569,49 +513,36 @@
   </div>
 
   <script>
-    (function initThemeShowcase() {
+    (function initThemeEngine() {
       const canvas = document.getElementById('themeCanvas');
-      if (!canvas) return;
       const ctx = canvas.getContext('2d');
       let width, height, dpr;
       let animationFrameId;
-      let activeTheme = 'neural-mesh';
+      let activeTheme = localStorage.getItem('sentinel_theme') || 'slate-grid';
       let tick = 0;
 
-      const THEME_DATA = {
-        'neural-mesh': {
-          title: 'Theme 1: Cyber-Laboratory Constellation & Neural Mesh',
-          desc: 'Connected IoT sensor nodes linking distributed lab instruments with smooth dynamic data lines.'
+      const THEMES_INFO = {
+        'slate-grid': {
+          title: '1. Enterprise Slate & Micro-Grid (Recommended)',
+          desc: 'Minimalist enterprise architectural grid with delicate connected telemetry nodes and refined soft ambient lighting.',
+          bgColor: '#f8fafc'
         },
-        'harmonic-aurora': {
-          title: 'Theme 2: Harmonic Flow Waves & Ambient Dust',
-          desc: 'Gentle, multi-layered pastel sine waves flowing gracefully in brand logo colors.'
+        'executive-cobalt': {
+          title: '2. Ambient Executive Cobalt',
+          desc: 'Deep royal blue & ice-pearl subtle diffuse aura. Clean, calm, and distraction-free.',
+          bgColor: '#f0f6ff'
         },
-        'radar-grid': {
-          title: 'Theme 3: Isometric Micro-Grid & Digital Security Radar',
-          desc: 'Technical blueprint grid with a 360° sweeping laboratory surveillance radar beam and target locks.'
+        'lab-precision': {
+          title: '3. Laboratory Precision Matrix',
+          desc: 'Subtle technical sensor coordinates, grid ticks, and soft green/blue operational status nodes.',
+          bgColor: '#f4fbf7'
         },
-        'hex-defense': {
-          title: 'Theme 4: Hexagonal Defense Shield Matrix',
-          desc: 'Translucent hexagonal barrier cells pulsing with security energy across the backdrop.'
-        },
-        'quantum-stream': {
-          title: 'Theme 5: Quantum Lab Particle & Optical Fiber Stream',
-          desc: 'Luminous light particles and curved optical fiber streams simulating quantum laboratory diagnostics.'
-        },
-        'drone-patrol': {
-          title: 'Theme 6: Drone Patrol Waypoints & Flight Paths',
-          desc: 'Animated patrol routes with glowing autonomous drone markers navigating laboratory defense zones.'
+        'minimal-studio': {
+          title: '4. Minimal Studio Light',
+          desc: 'Ultra-pure crisp studio lighting with subtle ambient diffusion. Modern and pristine.',
+          bgColor: '#fafafa'
         }
       };
-
-      const BRAND_COLORS = [
-        { stroke: 'rgba(37, 99, 235, 0.75)', fill: 'rgba(59, 130, 246, 0.15)', glow: 'rgba(59, 130, 246, 0.5)' },
-        { stroke: 'rgba(124, 58, 237, 0.70)', fill: 'rgba(139, 92, 246, 0.15)', glow: 'rgba(139, 92, 246, 0.5)' },
-        { stroke: 'rgba(236, 72, 153, 0.70)', fill: 'rgba(244, 114, 182, 0.15)', glow: 'rgba(244, 114, 182, 0.5)' },
-        { stroke: 'rgba(245, 158, 11, 0.70)', fill: 'rgba(251, 191, 36, 0.15)', glow: 'rgba(251, 191, 36, 0.5)' },
-        { stroke: 'rgba(6, 182, 212, 0.70)', fill: 'rgba(45, 212, 191, 0.15)', glow: 'rgba(45, 212, 191, 0.5)' }
-      ];
 
       function resize() {
         dpr = window.devicePixelRatio || 1;
@@ -622,94 +553,57 @@
         canvas.style.width = width + 'px';
         canvas.style.height = height + 'px';
         ctx.scale(dpr, dpr);
-        initThemeEntities();
+        initNodes();
       }
 
-      // -----------------------------------------------------------------------
-      // ENTITY INITIALIZERS
-      // -----------------------------------------------------------------------
       let nodes = [];
-      let drones = [];
-      let hexGrid = [];
-      let radarAngle = 0;
-
-      function initThemeEntities() {
-        // 1. Neural Mesh Nodes
+      function initNodes() {
         nodes = [];
-        const nodeCount = Math.min(60, Math.floor((width * height) / 20000));
-        for (let i = 0; i < nodeCount; i++) {
+        const count = 35;
+        for (let i = 0; i < count; i++) {
           nodes.push({
             x: Math.random() * width,
             y: Math.random() * height,
-            vx: (Math.random() - 0.5) * 0.6,
-            vy: (Math.random() - 0.5) * 0.6,
-            radius: Math.random() * 3 + 2,
-            color: BRAND_COLORS[i % BRAND_COLORS.length],
-            pulse: Math.random() * Math.PI
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            radius: Math.random() * 2 + 1.5,
+            pulse: Math.random() * Math.PI * 2
           });
-        }
-
-        // 2. Drones
-        drones = [
-          { x: width * 0.15, y: height * 0.25, path: [{x: width*0.12, y: height*0.2}, {x: width*0.35, y: height*0.15}, {x: width*0.28, y: height*0.4}, {x: width*0.12, y: height*0.2}], progress: 0, speed: 0.003, color: '#2563eb', label: 'DRONE-ALPHA' },
-          { x: width * 0.82, y: height * 0.7, path: [{x: width*0.75, y: height*0.65}, {x: width*0.92, y: height*0.75}, {x: width*0.85, y: height*0.9}, {x: width*0.75, y: height*0.65}], progress: 0.5, speed: 0.0025, color: '#ec4899', label: 'DRONE-BRAVO' },
-          { x: width * 0.85, y: height * 0.25, path: [{x: width*0.8, y: height*0.18}, {x: width*0.94, y: height*0.35}, {x: width*0.75, y: height*0.4}, {x: width*0.8, y: height*0.18}], progress: 0.2, speed: 0.0035, color: '#10b981', label: 'DRONE-DELTA' }
-        ];
-
-        // 3. Hex Grid
-        hexGrid = [];
-        const hexRadius = 42;
-        const hexW = Math.sqrt(3) * hexRadius;
-        const hexH = 2 * hexRadius * 0.75;
-        for (let y = -hexRadius; y < height + hexRadius * 2; y += hexH) {
-          const row = Math.floor(y / hexH);
-          for (let x = -hexRadius; x < width + hexRadius * 2; x += hexW) {
-            const offsetX = (row % 2 === 0) ? 0 : hexW / 2;
-            hexGrid.push({
-              cx: x + offsetX,
-              cy: y,
-              radius: hexRadius - 3,
-              activePulse: Math.random() * Math.PI * 2,
-              color: BRAND_COLORS[Math.floor(Math.random() * BRAND_COLORS.length)]
-            });
-          }
         }
       }
 
-      // -----------------------------------------------------------------------
-      // RENDER LOOPS FOR EACH THEME
-      // -----------------------------------------------------------------------
-      function renderCurrentTheme() {
+      function render() {
         tick++;
         ctx.clearRect(0, 0, width, height);
 
-        switch (activeTheme) {
-          case 'neural-mesh':
-            renderNeuralMesh();
-            break;
-          case 'harmonic-aurora':
-            renderHarmonicAurora();
-            break;
-          case 'radar-grid':
-            renderRadarGrid();
-            break;
-          case 'hex-defense':
-            renderHexDefense();
-            break;
-          case 'quantum-stream':
-            renderQuantumStream();
-            break;
-          case 'drone-patrol':
-            renderDronePatrol();
-            break;
+        if (activeTheme === 'slate-grid') {
+          renderSlateGrid();
+        } else if (activeTheme === 'executive-cobalt') {
+          renderExecutiveCobalt();
+        } else if (activeTheme === 'lab-precision') {
+          renderLabPrecision();
+        } else if (activeTheme === 'minimal-studio') {
+          renderMinimalStudio();
         }
 
-        animationFrameId = requestAnimationFrame(renderCurrentTheme);
+        animationFrameId = requestAnimationFrame(render);
       }
 
-      // THEME 1: Neural Mesh
-      function renderNeuralMesh() {
-        const maxDist = 140;
+      // THEME 1: Enterprise Slate & Micro-Grid
+      function renderSlateGrid() {
+        // Draw Subtle Micro-dot Grid
+        const spacing = 40;
+        ctx.fillStyle = 'rgba(148, 163, 184, 0.35)';
+        for (let x = 0; x < width; x += spacing) {
+          for (let y = 0; y < height; y += spacing) {
+            ctx.beginPath();
+            ctx.arc(x, y, 1, 0, Math.PI * 2);
+            ctx.fill();
+          }
+        }
+
+        // Draw Soft Subtle Nodes with connecting hair-lines
+        const maxDist = 130;
         for (let i = 0; i < nodes.length; i++) {
           const n1 = nodes[i];
           n1.x += n1.vx;
@@ -724,271 +618,139 @@
             const dist = Math.sqrt(dx * dx + dy * dy);
 
             if (dist < maxDist) {
-              const alpha = (1 - dist / maxDist) * 0.45;
+              const alpha = (1 - dist / maxDist) * 0.22;
               ctx.beginPath();
               ctx.moveTo(n1.x, n1.y);
               ctx.lineTo(n2.x, n2.y);
-              ctx.strokeStyle = n1.color.stroke.replace(/[\d.]+\)$/, `${alpha.toFixed(2)})`);
-              ctx.lineWidth = 1.2;
+              ctx.strokeStyle = `rgba(37, 99, 235, ${alpha.toFixed(2)})`;
+              ctx.lineWidth = 0.9;
               ctx.stroke();
             }
           }
 
-          // Node Circle
           ctx.beginPath();
-          ctx.fillStyle = n1.color.stroke;
-          ctx.shadowColor = n1.color.glow;
-          ctx.shadowBlur = 8;
+          ctx.fillStyle = 'rgba(37, 99, 235, 0.6)';
           ctx.arc(n1.x, n1.y, n1.radius, 0, Math.PI * 2);
           ctx.fill();
-          ctx.shadowBlur = 0;
         }
       }
 
-      // THEME 2: Harmonic Flow Waves with Multi-vibrant Shifting Colors
-      function renderHarmonicAurora() {
-        const waveConfigs = [
-          { yRatio: 0.18, amp: 30, freq: 0.0032, speed: 0.014, hueOffset: 0, lineWidth: 2.8, glowBlur: 14 },
-          { yRatio: 0.32, amp: 38, freq: 0.0026, speed: 0.010, hueOffset: 60, lineWidth: 2.5, glowBlur: 12 },
-          { yRatio: 0.48, amp: 44, freq: 0.0029, speed: 0.012, hueOffset: 120, lineWidth: 2.8, glowBlur: 15 },
-          { yRatio: 0.65, amp: 36, freq: 0.0035, speed: 0.015, hueOffset: 180, lineWidth: 2.4, glowBlur: 12 },
-          { yRatio: 0.80, amp: 42, freq: 0.0024, speed: 0.009, hueOffset: 240, lineWidth: 2.6, glowBlur: 14 },
-          { yRatio: 0.92, amp: 28, freq: 0.0038, speed: 0.016, hueOffset: 300, lineWidth: 2.2, glowBlur: 10 }
-        ];
+      // THEME 2: Executive Cobalt Ambient Glow
+      function renderExecutiveCobalt() {
+        const time = tick * 0.008;
+        const cx = width * 0.5 + Math.sin(time) * 40;
+        const cy = height * 0.5 + Math.cos(time) * 30;
 
-        waveConfigs.forEach((cfg) => {
-          const yCenter = height * cfg.yRatio;
-          const time = tick * cfg.speed;
+        const grad1 = ctx.createRadialGradient(cx, cy, 50, cx, cy, Math.max(width, height) * 0.65);
+        grad1.addColorStop(0, 'rgba(59, 130, 246, 0.12)');
+        grad1.addColorStop(0.5, 'rgba(96, 165, 250, 0.04)');
+        grad1.addColorStop(1, 'transparent');
+        ctx.fillStyle = grad1;
+        ctx.fillRect(0, 0, width, height);
 
-          const grad = ctx.createLinearGradient(0, yCenter - cfg.amp, width, yCenter + cfg.amp);
-          const baseHue = (tick * 0.65 + cfg.hueOffset) % 360;
-
-          grad.addColorStop(0.00, `hsla(${(baseHue + 0) % 360}, 85%, 52%, 0.85)`);
-          grad.addColorStop(0.16, `hsla(${(baseHue + 60) % 360}, 90%, 52%, 0.85)`);
-          grad.addColorStop(0.33, `hsla(${(baseHue + 120) % 360}, 85%, 50%, 0.85)`);
-          grad.addColorStop(0.50, `hsla(${(baseHue + 180) % 360}, 90%, 54%, 0.85)`);
-          grad.addColorStop(0.66, `hsla(${(baseHue + 240) % 360}, 88%, 52%, 0.85)`);
-          grad.addColorStop(0.83, `hsla(${(baseHue + 300) % 360}, 90%, 52%, 0.85)`);
-          grad.addColorStop(1.00, `hsla(${(baseHue + 360) % 360}, 85%, 52%, 0.85)`);
-
-          ctx.beginPath();
-          const step = 14;
-          for (let x = 0; x <= width + step; x += step) {
-            const wave1 = Math.sin(x * cfg.freq + time) * cfg.amp;
-            const wave2 = Math.cos(x * (cfg.freq * 0.65) + time * 0.75) * (cfg.amp * 0.45);
-            const wave3 = Math.sin(x * 0.0015 + time * 0.5) * (cfg.amp * 0.25);
-            const y = yCenter + wave1 + wave2 + wave3;
-
-            if (x === 0) ctx.moveTo(x, y);
-            else ctx.lineTo(x, y);
-          }
-
-          ctx.strokeStyle = grad;
-          ctx.lineWidth = cfg.lineWidth;
-          ctx.shadowColor = `hsla(${baseHue}, 90%, 55%, 0.4)`;
-          ctx.shadowBlur = cfg.glowBlur;
-          ctx.stroke();
-          ctx.shadowBlur = 0;
-        });
+        // Soft calm wave line
+        ctx.beginPath();
+        for (let x = 0; x <= width; x += 20) {
+          const y = height * 0.75 + Math.sin(x * 0.002 + time) * 25;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.strokeStyle = 'rgba(37, 99, 235, 0.15)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
       }
 
-      // THEME 3: Digital Security Radar
-      function renderRadarGrid() {
-        // Grid Lines
-        const gridSize = 48;
-        ctx.strokeStyle = 'rgba(59, 130, 246, 0.09)';
+      // THEME 3: Laboratory Precision Matrix
+      function renderLabPrecision() {
+        const spacing = 60;
+        ctx.strokeStyle = 'rgba(16, 185, 129, 0.08)';
         ctx.lineWidth = 1;
 
-        for (let x = 0; x <= width; x += gridSize) {
+        for (let x = 0; x < width; x += spacing) {
           ctx.beginPath();
           ctx.moveTo(x, 0);
           ctx.lineTo(x, height);
           ctx.stroke();
         }
-        for (let y = 0; y <= height; y += gridSize) {
+        for (let y = 0; y < height; y += spacing) {
           ctx.beginPath();
           ctx.moveTo(0, y);
           ctx.lineTo(width, y);
           ctx.stroke();
         }
 
-        // Radar Circles at center
-        const cx = width * 0.5;
-        const cy = height * 0.5;
-        radarAngle += 0.015;
-
-        for (let r = 120; r <= 600; r += 120) {
+        // Technical Corner Marks & Crosshairs
+        const crossPositions = [
+          { x: 100, y: 120 }, { x: width - 120, y: 140 },
+          { x: 140, y: height - 100 }, { x: width - 140, y: height - 120 }
+        ];
+        crossPositions.forEach((pos) => {
+          ctx.strokeStyle = 'rgba(16, 185, 129, 0.35)';
+          ctx.lineWidth = 1.2;
           ctx.beginPath();
-          ctx.arc(cx, cy, r, 0, Math.PI * 2);
-          ctx.strokeStyle = 'rgba(37, 99, 235, 0.12)';
-          ctx.stroke();
-        }
-
-        // Radar Sweep Beam
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(radarAngle);
-        const sweepGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, 600);
-        sweepGrad.addColorStop(0, 'rgba(59, 130, 246, 0.25)');
-        sweepGrad.addColorStop(0.8, 'rgba(6, 182, 212, 0.05)');
-        sweepGrad.addColorStop(1, 'transparent');
-
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.arc(0, 0, 600, 0, Math.PI / 4);
-        ctx.closePath();
-        ctx.fillStyle = sweepGrad;
-        ctx.fill();
-        ctx.restore();
-      }
-
-      // THEME 4: Hex Defense Shield
-      function renderHexDefense() {
-        hexGrid.forEach((hex) => {
-          const pulseVal = Math.sin(tick * 0.03 + hex.activePulse);
-          const alpha = 0.05 + Math.max(0, pulseVal) * 0.35;
-
-          ctx.beginPath();
-          for (let i = 0; i < 6; i++) {
-            const angle = (Math.PI / 3) * i;
-            const hx = hex.cx + hex.radius * Math.cos(angle);
-            const hy = hex.cy + hex.radius * Math.sin(angle);
-            if (i === 0) ctx.moveTo(hx, hy);
-            else ctx.lineTo(hx, hy);
-          }
-          ctx.closePath();
-
-          ctx.strokeStyle = hex.color.stroke.replace(/[\d.]+\)$/, `${alpha.toFixed(2)})`);
-          ctx.lineWidth = 1.4;
-          if (pulseVal > 0.8) {
-            ctx.fillStyle = hex.color.fill;
-            ctx.fill();
-          }
+          ctx.moveTo(pos.x - 8, pos.y);
+          ctx.lineTo(pos.x + 8, pos.y);
+          ctx.moveTo(pos.x, pos.y - 8);
+          ctx.lineTo(pos.x, pos.y + 8);
           ctx.stroke();
         });
+
+        // Telemetry Label
+        ctx.font = '500 11px JetBrains Mono, monospace';
+        ctx.fillStyle = 'rgba(16, 185, 129, 0.6)';
+        ctx.fillText('STATUS: ONLINE // ENCRYPTION: ACTIVE', 40, height - 35);
       }
 
-      // THEME 5: Quantum Stream
-      function renderQuantumStream() {
-        const streamCount = 6;
-        for (let s = 0; s < streamCount; s++) {
-          const color = BRAND_COLORS[s % BRAND_COLORS.length];
-          const startY = height * (0.15 + s * 0.14);
-          
-          ctx.beginPath();
-          ctx.moveTo(0, startY);
-          const cp1x = width * 0.3;
-          const cp1y = startY + Math.sin(tick * 0.02 + s) * 80;
-          const cp2x = width * 0.7;
-          const cp2y = startY - Math.cos(tick * 0.02 + s) * 80;
-          ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, width, startY + (s % 2 === 0 ? 50 : -50));
-          
-          ctx.strokeStyle = color.stroke;
-          ctx.lineWidth = 2.2;
-          ctx.shadowColor = color.glow;
-          ctx.shadowBlur = 12;
-          ctx.stroke();
-          ctx.shadowBlur = 0;
+      // THEME 4: Minimal Studio Light
+      function renderMinimalStudio() {
+        const grad = ctx.createRadialGradient(width * 0.5, height * 0.45, 100, width * 0.5, height * 0.5, width * 0.6);
+        grad.addColorStop(0, 'rgba(255, 255, 255, 1)');
+        grad.addColorStop(0.6, 'rgba(241, 245, 249, 0.6)');
+        grad.addColorStop(1, 'rgba(226, 232, 240, 0.4)');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, width, height);
+      }
 
-          // Glowing Quantum Spark along line
-          const progress = (tick * 0.005 + s * 0.2) % 1;
-          const t = progress;
-          const sparkX = Math.pow(1-t,3)*0 + 3*Math.pow(1-t,2)*t*cp1x + 3*(1-t)*Math.pow(t,2)*cp2x + Math.pow(t,3)*width;
-          const sparkY = Math.pow(1-t,3)*startY + 3*Math.pow(1-t,2)*t*cp1y + 3*(1-t)*Math.pow(t,2)*cp2y + Math.pow(t,3)*(startY + (s % 2 === 0 ? 50 : -50));
+      // Switcher Buttons
+      const themeBtns = document.querySelectorAll('.theme-select-btn');
+      const infoTitle = document.getElementById('infoTitle');
+      const infoDesc = document.getElementById('infoDesc');
+      const applyBtn = document.getElementById('applyBtn');
 
-          ctx.beginPath();
-          ctx.fillStyle = '#ffffff';
-          ctx.shadowColor = color.glow;
-          ctx.shadowBlur = 15;
-          ctx.arc(sparkX, sparkY, 4.5, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
+      function setTheme(themeKey) {
+        activeTheme = themeKey;
+        localStorage.setItem('sentinel_theme', themeKey);
+        
+        themeBtns.forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('data-theme') === themeKey);
+        });
+
+        const info = THEMES_INFO[themeKey];
+        if (info) {
+          infoTitle.textContent = info.title;
+          infoDesc.textContent = info.desc;
+          document.body.style.backgroundColor = info.bgColor;
+        }
+
+        if (applyBtn) {
+          applyBtn.onclick = () => {
+            localStorage.setItem('sentinel_theme', themeKey);
+            window.location.href = `login.html?theme=${themeKey}`;
+          };
         }
       }
 
-      // THEME 6: Drone Patrol
-      function renderDronePatrol() {
-        drones.forEach((drone) => {
-          // Draw Waypoint Route
-          ctx.beginPath();
-          drone.path.forEach((pt, idx) => {
-            if (idx === 0) ctx.moveTo(pt.x, pt.y);
-            else ctx.lineTo(pt.x, pt.y);
-          });
-          ctx.closePath();
-          ctx.strokeStyle = 'rgba(59, 130, 246, 0.25)';
-          ctx.setLineDash([5, 5]);
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-          ctx.setLineDash([]);
-
-          // Move Drone along path
-          drone.progress = (drone.progress + drone.speed) % 1;
-          const segmentCount = drone.path.length;
-          const totalProgress = drone.progress * segmentCount;
-          const currentSeg = Math.floor(totalProgress);
-          const segProgress = totalProgress - currentSeg;
-          const p1 = drone.path[currentSeg];
-          const p2 = drone.path[(currentSeg + 1) % segmentCount];
-
-          const curX = p1.x + (p2.x - p1.x) * segProgress;
-          const curY = p1.y + (p2.y - p1.y) * segProgress;
-
-          // Drone Radar Ping
-          const pingRadius = (tick * 0.8) % 35;
-          ctx.beginPath();
-          ctx.arc(curX, curY, pingRadius, 0, Math.PI * 2);
-          ctx.strokeStyle = drone.color;
-          ctx.lineWidth = 1;
-          ctx.stroke();
-
-          // Drone Core Marker
-          ctx.beginPath();
-          ctx.fillStyle = drone.color;
-          ctx.shadowColor = drone.color;
-          ctx.shadowBlur = 10;
-          ctx.arc(curX, curY, 5, 0, Math.PI * 2);
-          ctx.fill();
-          ctx.shadowBlur = 0;
-
-          // Label
-          ctx.font = '600 10px Inter, sans-serif';
-          ctx.fillStyle = '#1e293b';
-          ctx.fillText(drone.label, curX + 9, curY + 3);
-        });
-      }
-
-      // -----------------------------------------------------------------------
-      // INTERACTIVE THEME SWITCHER
-      // -----------------------------------------------------------------------
-      const themeButtons = document.querySelectorAll('.theme-chip-btn');
-      const themeTitleEl = document.getElementById('themeTitleText');
-      const themeDescEl = document.getElementById('themeDescText');
-      const applyThemeLink = document.getElementById('apply-theme-link');
-
-      themeButtons.forEach((btn) => {
+      themeBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-          themeButtons.forEach((b) => b.classList.remove('active'));
-          btn.classList.add('active');
-          activeTheme = btn.getAttribute('data-theme');
-
-          const info = THEME_DATA[activeTheme];
-          if (info && themeTitleEl && themeDescEl) {
-            themeTitleEl.textContent = info.title;
-            themeDescEl.textContent = info.desc;
-          }
-
-          if (applyThemeLink) {
-            applyThemeLink.href = `login.html?theme=${activeTheme}`;
-          }
-
-          initThemeEntities();
+          setTheme(btn.getAttribute('data-theme'));
         });
       });
 
+      // Initialize
+      setTheme(activeTheme);
       window.addEventListener('resize', resize);
       resize();
-      renderCurrentTheme();
+      render();
     })();
   </script>
 </body>
