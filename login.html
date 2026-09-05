@@ -1074,11 +1074,6 @@
         <h3 class="modal-title">Enter 4-Digit OTP</h3>
         <p class="modal-subtitle">We sent a 4-digit code to <strong id="modal-target-email-label" style="color: #7c3aed; word-break: break-all;"></strong></p>
 
-        <!-- Live OTP Testing Badge -->
-        <div id="modal-otp-preview-badge" style="background: rgba(99, 102, 241, 0.08); border: 1px dashed rgba(99, 102, 241, 0.35); border-radius: 12px; padding: 8px 14px; margin: 0.4rem 0 0.8rem 0; font-size: 0.82rem; color: #3730a3; display: flex; align-items: center; justify-content: center; gap: 8px;">
-          <span>🔑 Security OTP: <strong id="modal-live-otp-text" style="letter-spacing: 3px; font-size: 1.05rem; color: #4338ca; font-family: monospace;">----</strong></span>
-        </div>
-
         <form id="form-step-2-otp" class="modal-form-wrap" novalidate>
           <div class="otp-inputs-row">
             <input type="text" id="otp-digit-1" class="otp-digit-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" autofocus />
@@ -1653,10 +1648,7 @@
 
           // Display in Step 2
           if (targetEmailLabel) targetEmailLabel.textContent = emailVal;
-          if (liveOtpText) liveOtpText.textContent = activeGeneratedOtp;
-          for (let i = 0; i < 4; i++) {
-            if (otpInputs[i]) otpInputs[i].value = activeGeneratedOtp[i] || '';
-          }
+          otpInputs.forEach(i => i ? i.value = "" : null);
 
           showModalStep(2);
         });
