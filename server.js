@@ -399,7 +399,8 @@ const server = http.createServer(async (req, res) => {
         }
       });
     } catch (err) {
-      return sendJsonResponse(res, 500, { success: false, error: "Internal Auth Gateway error." });
+      console.error("[Login Handler Error]:", err);
+      return sendJsonResponse(res, 500, { success: false, error: "Internal Auth Gateway error: " + (err && err.message) });
     }
   }
 
