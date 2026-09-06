@@ -83,7 +83,12 @@
   to = "/.netlify/functions/reset-password"
   status = 200
 
-# Direct root to login portal as primary entry
+# Direct root and /login to login portal as primary entry
+[[redirects]]
+  from = "/login"
+  to = "/login.html"
+  status = 200
+
 [[redirects]]
   from = "/"
   to = "/login.html"
