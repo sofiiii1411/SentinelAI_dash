@@ -1623,9 +1623,9 @@
         }
       });
 
-      // --- STEP 1: SEND 4-DIGIT OTP ---
+      // --- STEP 1: SEND 4-DIGIT OTP (INSTANT ZERO-DELAY RESPONSE) ---
       if (formStep1) {
-        formStep1.addEventListener("submit", async (e) => {
+        formStep1.addEventListener("submit", (e) => {
           e.preventDefault();
           const emailVal = recoveryEmailInput ? recoveryEmailInput.value.trim().toLowerCase() : "";
 
@@ -1640,49 +1640,48 @@
             return;
           }
 
-          if (btnSendOtp) {
-            btnSendOtp.disabled = true;
-            btnSendOtp.querySelector("span").textContent = "Sending OTP...";
-          }
-
           activeRecoveryEmail = emailVal;
           const generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
           activeGeneratedOtp = generatedOtp;
 
-          // Dispatch Real Email via EmailJS directly to Gmail Inbox
-          try {
-            if (typeof emailjs !== 'undefined') {
-              const res = await emailjs.send("service_70mhtv8", "template_njrbnce", {
-                email: emailVal,
-                to_email: emailVal,
-                user_email: emailVal,
-                recipient: emailVal,
-                to: emailVal,
-                reply_to: emailVal,
-                to_name: AUTHORIZED_ACCOUNTS[emailVal]?.name || "SentinelAI-X User",
-                otp_code: generatedOtp,
-                passcode: generatedOtp,
-                code: generatedOtp,
-                otp: generatedOtp,
-                message: `Your SentinelAI-X 4-digit verification code is: ${generatedOtp}`,
-                time: "5 minutes"
-              }, "hnzDsgOGflqpJ2Zsd");
-              console.log("📧 [EmailJS Dispatch SUCCESS]:", res);
-            }
-          } catch (emailErr) {
-            console.warn("⚠️ [EmailJS Warning]:", emailErr);
-          }
-
-          if (btnSendOtp) {
-            btnSendOtp.disabled = false;
-            btnSendOtp.querySelector("span").textContent = "Send 4-Digit OTP";
-          }
-
-          // Display in Step 2
+          // Instant Transition to Step 2 (Zero Delay)
           if (targetEmailLabel) targetEmailLabel.textContent = emailVal;
           otpInputs.forEach(i => i ? i.value = "" : null);
-
           showModalStep(2);
+          if (otpInputs[0]) {
+            setTimeout(() => {
+              otpInputs[0].focus();
+              otpInputs[0].select();
+            }, 100);
+          }
+
+          // Show confirmation status banner in Step 2
+          if (errorStep2) {
+            errorStep2.textContent = "A 4-digit OTP code has been dispatched to your Gmail inbox.";
+            errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
+            errorStep2.style.color = "#059669";
+            errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
+            errorStep2.classList.remove("hidden");
+          }
+
+          // Dispatch Real Email via EmailJS in Background (Non-blocking with v4 SDK options)
+          if (typeof emailjs !== 'undefined') {
+            emailjs.send("service_70mhtv8", "template_njrbnce", {
+              otp_code: generatedOtp,
+              to_email: emailVal,
+              reply_to: emailVal,
+              email: emailVal,
+              to_name: AUTHORIZED_ACCOUNTS[emailVal]?.name || "SentinelAI-X User",
+              message: `Your SentinelAI-X 4-digit verification code is: ${generatedOtp}`,
+              time: "5 minutes"
+            }, {
+              publicKey: "hnzDsgOGflqpJ2Zsd"
+            }).then(res => {
+              console.log("📧 [EmailJS Dispatch SUCCESS]:", res);
+            }).catch(emailErr => {
+              console.warn("⚠️ [EmailJS Warning]:", emailErr);
+            });
+          }
         });
       }
 
@@ -1770,13 +1769,13 @@
             btnVerifyOtp.querySelector("span").textContent = "Verify 4-Digit OTP";
           }
           showModalStep(3);
-        }, 300);
+        }, 150);
       }
 
-      // Resend OTP Link with Loading State & Real-time Delivery
+      // Resend OTP Link with Instant Feedback & Background Delivery
       let resendCooldownTimer = null;
       if (btnResendOtpLink) {
-        btnResendOtpLink.addEventListener("click", async (e) => {
+        btnResendOtpLink.addEventListener("click", (e) => {
           e.preventDefault();
           if (btnResendOtpLink.disabled || btnResendOtpLink.classList.contains("disabled")) return;
 
@@ -1790,63 +1789,30 @@
           }
           activeRecoveryEmail = emailTarget;
 
-          // Clear previous digits and refocus first box
+          // Clear previous digits and refocus first box immediately
           otpInputs.forEach(i => { if (i) i.value = ""; });
           if (otpInputs[0]) otpInputs[0].focus();
 
-          // Set immediate loading visual feedback on the button
-          btnResendOtpLink.disabled = true;
-          const origText = "Resend OTP";
-          btnResendOtpLink.textContent = "Sending new OTP...";
-          btnResendOtpLink.style.opacity = "0.7";
-          btnResendOtpLink.style.pointerEvents = "none";
-
-          if (errorStep2) {
-            errorStep2.textContent = "Dispatching fresh 4-digit OTP to your Gmail inbox...";
-            errorStep2.style.background = "rgba(59, 130, 246, 0.1)";
-            errorStep2.style.color = "#2563eb";
-            errorStep2.style.borderColor = "rgba(59, 130, 246, 0.3)";
-            errorStep2.classList.remove("hidden");
-          }
-
-          // Generate fresh 4-digit OTP code
+          // Generate fresh 4-digit OTP code immediately
           const newCode = String(Math.floor(1000 + Math.random() * 9000));
           activeGeneratedOtp = newCode;
 
-          try {
-            if (typeof emailjs !== 'undefined') {
-              const res = await emailjs.send("service_70mhtv8", "template_njrbnce", {
-                email: emailTarget,
-                to_email: emailTarget,
-                user_email: emailTarget,
-                recipient: emailTarget,
-                to: emailTarget,
-                reply_to: emailTarget,
-                to_name: AUTHORIZED_ACCOUNTS[emailTarget]?.name || "SentinelAI-X User",
-                otp_code: newCode,
-                passcode: newCode,
-                code: newCode,
-                otp: newCode,
-                message: `Your SentinelAI-X 4-digit verification code is: ${newCode}`,
-                time: "5 minutes"
-              }, "hnzDsgOGflqpJ2Zsd");
-              console.log("📧 [EmailJS Resend SUCCESS] New OTP code sent to:", emailTarget, res);
-            }
-          } catch (err) {
-            console.warn("⚠️ [EmailJS Resend Warning]:", err);
-          }
-
+          // Instant positive feedback banner
           if (errorStep2) {
-            errorStep2.textContent = "A fresh 4-digit OTP has been sent to your Gmail inbox.";
+            errorStep2.textContent = "A fresh 4-digit OTP has been dispatched to your Gmail inbox.";
             errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
             errorStep2.style.color = "#059669";
             errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
             errorStep2.classList.remove("hidden");
           }
 
-          // Start 15s cooldown countdown
+          // Start 15s cooldown countdown immediately
+          btnResendOtpLink.disabled = true;
+          const origText = "Resend OTP";
           let countdown = 15;
           btnResendOtpLink.textContent = `Resend OTP (${countdown}s)`;
+          btnResendOtpLink.style.opacity = "0.7";
+          btnResendOtpLink.style.pointerEvents = "none";
           clearInterval(resendCooldownTimer);
           resendCooldownTimer = setInterval(() => {
             countdown--;
@@ -1860,6 +1826,25 @@
               btnResendOtpLink.textContent = origText;
             }
           }, 1000);
+
+          // Dispatch in background with v4 SDK options
+          if (typeof emailjs !== 'undefined') {
+            emailjs.send("service_70mhtv8", "template_njrbnce", {
+              otp_code: newCode,
+              to_email: emailTarget,
+              reply_to: emailTarget,
+              email: emailTarget,
+              to_name: AUTHORIZED_ACCOUNTS[emailTarget]?.name || "SentinelAI-X User",
+              message: `Your SentinelAI-X 4-digit verification code is: ${newCode}`,
+              time: "5 minutes"
+            }, {
+              publicKey: "hnzDsgOGflqpJ2Zsd"
+            }).then(res => {
+              console.log("📧 [EmailJS Resend SUCCESS] New OTP code sent to:", emailTarget, res);
+            }).catch(err => {
+              console.warn("⚠️ [EmailJS Resend Warning]:", err);
+            });
+          }
         });
       }
 

@@ -12,6 +12,16 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
 
+  <!-- EmailJS Browser SDK -->
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="text/javascript">
+    (function() {
+      if (typeof emailjs !== 'undefined') {
+        emailjs.init({ publicKey: "hnzDsgOGflqpJ2Zsd" });
+      }
+    })();
+  </script>
+
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
@@ -1485,37 +1495,48 @@
           }
 
           activeRecoveryEmail = emailVal;
+          const generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
+          activeGeneratedOtp = generatedOtp;
 
-          try {
-            // Attempt API call with fallback for client-side demo
-            const res = await fetch("/api/auth/forgot-password", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email: emailVal })
-            });
-            const data = await res.json();
-
-            if (res.ok && data.success) {
-              activeGeneratedOtp = data.debugOtp || String(Math.floor(1000 + Math.random() * 9000));
-            } else {
-              // Fallback generate 4-digit OTP if offline
-              activeGeneratedOtp = String(Math.floor(1000 + Math.random() * 9000));
-            }
-          } catch (err) {
-            // Fallback generate 4-digit OTP
-            activeGeneratedOtp = String(Math.floor(1000 + Math.random() * 9000));
-          }
-
-          if (btnSendOtp) {
-            btnSendOtp.disabled = false;
-            btnSendOtp.querySelector("span").textContent = "Send 4-Digit OTP";
-          }
-
-          // Display in Step 2
+          // Instant Transition to Step 2 (Zero Delay)
           if (targetEmailLabel) targetEmailLabel.textContent = emailVal;
           if (liveOtpText) liveOtpText.textContent = activeGeneratedOtp;
-
+          otpInputs.forEach(i => i ? i.value = "" : null);
           showModalStep(2);
+          if (otpInputs[0]) {
+            setTimeout(() => {
+              otpInputs[0].focus();
+              otpInputs[0].select();
+            }, 100);
+          }
+
+          // Show confirmation status banner in Step 2
+          if (errorStep2) {
+            errorStep2.textContent = "A 4-digit OTP code has been dispatched to your Gmail inbox.";
+            errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
+            errorStep2.style.color = "#059669";
+            errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
+            errorStep2.classList.remove("hidden");
+          }
+
+          // Dispatch Real Email via EmailJS in Background (Non-blocking with v4 SDK options)
+          if (typeof emailjs !== 'undefined') {
+            emailjs.send("service_70mhtv8", "template_njrbnce", {
+              otp_code: generatedOtp,
+              to_email: emailVal,
+              reply_to: emailVal,
+              email: emailVal,
+              to_name: AUTHORIZED_ACCOUNTS[emailVal]?.name || "SentinelAI-X User",
+              message: `Your SentinelAI-X 4-digit verification code is: ${generatedOtp}`,
+              time: "5 minutes"
+            }, {
+              publicKey: "hnzDsgOGflqpJ2Zsd"
+            }).then(res => {
+              console.log("📧 [EmailJS Dispatch SUCCESS]:", res);
+            }).catch(emailErr => {
+              console.warn("⚠️ [EmailJS Warning]:", emailErr);
+            });
+          }
         });
       }
 
@@ -1630,35 +1651,79 @@
         }
       }
 
-      // Resend OTP Link
+      // Resend OTP Link with Instant Feedback & Background Delivery
+      let resendCooldownTimer = null;
       if (btnResendOtpLink) {
-        btnResendOtpLink.addEventListener("click", async () => {
-          otpInputs.forEach(i => i.value = "");
-          otpInputs[0].focus();
-          
-          try {
-            const res = await fetch("/api/auth/forgot-password", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email: activeRecoveryEmail })
-            });
-            const data = await res.json();
-            if (res.ok && data.success) {
-              activeGeneratedOtp = data.debugOtp || String(Math.floor(1000 + Math.random() * 9000));
-            } else {
-              activeGeneratedOtp = String(Math.floor(1000 + Math.random() * 9000));
-            }
-          } catch (e) {
-            activeGeneratedOtp = String(Math.floor(1000 + Math.random() * 9000));
-          }
+        btnResendOtpLink.addEventListener("click", (e) => {
+          e.preventDefault();
+          if (btnResendOtpLink.disabled || btnResendOtpLink.classList.contains("disabled")) return;
 
-          if (liveOtpText) liveOtpText.textContent = activeGeneratedOtp;
+          const emailTarget = activeRecoveryEmail || 
+                              (recoveryEmailInput ? recoveryEmailInput.value.trim().toLowerCase() : "") ||
+                              (targetEmailLabel ? targetEmailLabel.textContent.trim().toLowerCase() : "");
+
+          if (!emailTarget) {
+            showModalError(errorStep2, "Please return to Step 1 and enter your registered email address.");
+            return;
+          }
+          activeRecoveryEmail = emailTarget;
+
+          // Clear previous digits and refocus first box immediately
+          otpInputs.forEach(i => { if (i) i.value = ""; });
+          if (otpInputs[0]) otpInputs[0].focus();
+
+          // Generate fresh 4-digit OTP code immediately
+          const newCode = String(Math.floor(1000 + Math.random() * 9000));
+          activeGeneratedOtp = newCode;
+          if (liveOtpText) liveOtpText.textContent = newCode;
+
+          // Instant positive feedback banner
           if (errorStep2) {
-            errorStep2.textContent = "A new 4-digit OTP has been generated.";
+            errorStep2.textContent = "A fresh 4-digit OTP has been dispatched to your Gmail inbox.";
             errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
             errorStep2.style.color = "#059669";
             errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
             errorStep2.classList.remove("hidden");
+          }
+
+          // Start 15s cooldown countdown immediately
+          btnResendOtpLink.disabled = true;
+          const origText = "Resend OTP";
+          let countdown = 15;
+          btnResendOtpLink.textContent = `Resend OTP (${countdown}s)`;
+          btnResendOtpLink.style.opacity = "0.7";
+          btnResendOtpLink.style.pointerEvents = "none";
+          clearInterval(resendCooldownTimer);
+          resendCooldownTimer = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+              btnResendOtpLink.textContent = `Resend OTP (${countdown}s)`;
+            } else {
+              clearInterval(resendCooldownTimer);
+              btnResendOtpLink.disabled = false;
+              btnResendOtpLink.style.opacity = "";
+              btnResendOtpLink.style.pointerEvents = "";
+              btnResendOtpLink.textContent = origText;
+            }
+          }, 1000);
+
+          // Dispatch in background with v4 SDK options
+          if (typeof emailjs !== 'undefined') {
+            emailjs.send("service_70mhtv8", "template_njrbnce", {
+              otp_code: newCode,
+              to_email: emailTarget,
+              reply_to: emailTarget,
+              email: emailTarget,
+              to_name: AUTHORIZED_ACCOUNTS[emailTarget]?.name || "SentinelAI-X User",
+              message: `Your SentinelAI-X 4-digit verification code is: ${newCode}`,
+              time: "5 minutes"
+            }, {
+              publicKey: "hnzDsgOGflqpJ2Zsd"
+            }).then(res => {
+              console.log("📧 [EmailJS Resend SUCCESS] New OTP code sent to:", emailTarget, res);
+            }).catch(err => {
+              console.warn("⚠️ [EmailJS Resend Warning]:", err);
+            });
           }
         });
       }
