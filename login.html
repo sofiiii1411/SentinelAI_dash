@@ -1894,10 +1894,10 @@
           otpInputs.forEach(i => { if (i) i.value = ""; });
           if (otpInputs[0]) otpInputs[0].focus();
 
-          // Start 30s cooldown countdown
+          // 5s small cooldown
           btnResendOtpLink.disabled = true;
           const origText = "Resend OTP";
-          let countdown = 30;
+          let countdown = 5;
           btnResendOtpLink.textContent = `Resend OTP (${countdown}s)`;
           btnResendOtpLink.style.opacity = "0.7";
           btnResendOtpLink.style.pointerEvents = "none";
@@ -1920,6 +1920,23 @@
           validGeneratedOtps.add(newCode);
 
           const accountName = AUTHORIZED_ACCOUNTS[emailTarget]?.name || "SentinelAI-X User";
+          
+          // Sync fresh OTP to Firebase Realtime Database
+          const sanitizedEmail = emailTarget.replace(/[^a-zA-Z0-9]/g, '_');
+          fetch(`${FIREBASE_DB_URL}/passwordResetRequests/${sanitizedEmail}.json`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: emailTarget,
+              otp: newCode,
+              expiresAt: Date.now() + 300000,
+              used: false,
+              attempts: 0,
+              requestId: Date.now() + "_" + Math.random(),
+              createdAt: new Date().toISOString()
+            })
+          }).catch(() => {});
+
           dispatchOtpToInbox(emailTarget, newCode, accountName);
 
           if (errorStep2) {
