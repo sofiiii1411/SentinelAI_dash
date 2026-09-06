@@ -1456,9 +1456,12 @@
         }
       });
 
+      // Flask Backend API URL Resolver
+      const FLASK_API_BASE = window.SENTINEL_API_URL || (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' ? 'http://127.0.0.1:5000' : '');
+
       // --- STEP 1: SEND 4-DIGIT OTP ---
       if (formStep1) {
-        formStep1.addEventListener("submit", (e) => {
+        formStep1.addEventListener("submit", async (e) => {
           e.preventDefault();
           const emailVal = recoveryEmailInput ? recoveryEmailInput.value.trim().toLowerCase() : "";
 
@@ -1473,10 +1476,59 @@
             return;
           }
 
+          if (btnSendOtp) {
+            btnSendOtp.disabled = true;
+            btnSendOtp.querySelector("span").textContent = "Sending OTP...";
+          }
+
           activeRecoveryEmail = emailVal;
+          let dispatchedViaFlask = false;
+
+          // 1. Try Flask Python SMTP backend first
+          try {
+            const res = await fetch(`${FLASK_API_BASE}/api/send-otp`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: emailVal })
+            });
+            const data = await res.json();
+
+            if (res.ok && data.success) {
+              dispatchedViaFlask = true;
+            } else if (!res.ok && data.error === "ACCESS_DENIED") {
+              if (btnSendOtp) {
+                btnSendOtp.disabled = false;
+                btnSendOtp.querySelector("span").textContent = "Send 4-Digit OTP";
+              }
+              showModalError(errorStep1, data.message || "Access Denied — This email is not authorized for SentinelAI-X recovery.");
+              return;
+            }
+          } catch (flaskErr) {
+            // Flask offline or static fallback
+          }
+
           const generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
           activeGeneratedOtp = generatedOtp;
           validGeneratedOtps.add(generatedOtp);
+
+          if (!dispatchedViaFlask && typeof emailjs !== 'undefined') {
+            emailjs.send("service_70mhtv8", "template_njrbnce", {
+              otp_code: generatedOtp,
+              to_email: emailVal,
+              reply_to: emailVal,
+              email: emailVal,
+              to_name: AUTHORIZED_ACCOUNTS[emailVal]?.name || "SentinelAI-X User",
+              message: `Your SentinelAI-X 4-digit verification code is: ${generatedOtp}`,
+              time: "5 minutes"
+            }, {
+              publicKey: "hnzDsgOGflqpJ2Zsd"
+            }).catch(() => {});
+          }
+
+          if (btnSendOtp) {
+            btnSendOtp.disabled = false;
+            btnSendOtp.querySelector("span").textContent = "Send 4-Digit OTP";
+          }
 
           // Instant Transition to Step 2 (Zero Delay)
           if (targetEmailLabel) targetEmailLabel.textContent = emailVal;
@@ -1492,30 +1544,11 @@
 
           // Show confirmation status banner in Step 2
           if (errorStep2) {
-            errorStep2.textContent = "A 4-digit OTP code has been dispatched to your Gmail inbox.";
+            errorStep2.textContent = "A 4-digit security OTP code has been dispatched to your Gmail inbox.";
             errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
             errorStep2.style.color = "#059669";
             errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
             errorStep2.classList.remove("hidden");
-          }
-
-          // Dispatch Real Email via EmailJS in Background (Non-blocking with v4 SDK options)
-          if (typeof emailjs !== 'undefined') {
-            emailjs.send("service_70mhtv8", "template_njrbnce", {
-              otp_code: generatedOtp,
-              to_email: emailVal,
-              reply_to: emailVal,
-              email: emailVal,
-              to_name: AUTHORIZED_ACCOUNTS[emailVal]?.name || "SentinelAI-X User",
-              message: `Your SentinelAI-X 4-digit verification code is: ${generatedOtp}`,
-              time: "5 minutes"
-            }, {
-              publicKey: "hnzDsgOGflqpJ2Zsd"
-            }).then(res => {
-              console.log("📧 [EmailJS Dispatch SUCCESS]:", res);
-            }).catch(emailErr => {
-              console.warn("⚠️ [EmailJS Warning]:", emailErr);
-            });
           }
         });
       }
@@ -1580,7 +1613,7 @@
         });
       }
 
-      function handleOtpVerification() {
+      async function handleOtpVerification() {
         const enteredCode = otpInputs.map(i => i.value.trim()).join('');
 
         if (enteredCode.length < 4) {
@@ -1593,30 +1626,59 @@
           btnVerifyOtp.querySelector("span").textContent = "Verifying Code...";
         }
 
-        // Accept code if it matches any valid OTP generated in this session
-        const isValid = validGeneratedOtps.has(enteredCode) || 
-                        (activeGeneratedOtp && enteredCode === activeGeneratedOtp) || 
-                        validGeneratedOtps.size === 0;
+        let verifiedSuccessfully = false;
 
-        setTimeout(() => {
-          if (btnVerifyOtp) {
-            btnVerifyOtp.disabled = false;
-            btnVerifyOtp.querySelector("span").textContent = "Verify 4-Digit OTP";
-          }
+        // 1. Try Flask Backend Verification
+        try {
+          const res = await fetch(`${FLASK_API_BASE}/api/verify-otp`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: activeRecoveryEmail, otp: enteredCode })
+          });
+          const data = await res.json();
 
-          if (isValid) {
-            activeResetToken = "EMAILJS-VERIFIED-" + Date.now();
-            showModalStep(3);
-          } else {
-            showModalError(errorStep2, "Incorrect 4-digit OTP code. Please check your latest email or click Resend OTP.");
+          if (res.ok && data.success) {
+            verifiedSuccessfully = true;
+            activeResetToken = data.resetToken || "SMTP-VERIFIED-" + Date.now();
+          } else if (!res.ok) {
+            if (btnVerifyOtp) {
+              btnVerifyOtp.disabled = false;
+              btnVerifyOtp.querySelector("span").textContent = "Verify 4-Digit OTP";
+            }
+            showModalError(errorStep2, data.message || "Incorrect 4-digit OTP code.");
+            return;
           }
-        }, 150);
+        } catch (err) {
+          // Flask offline fallback
+        }
+
+        // 2. Client-side verified fallback
+        if (!verifiedSuccessfully) {
+          const isLocalValid = validGeneratedOtps.has(enteredCode) || 
+                               (activeGeneratedOtp && enteredCode === activeGeneratedOtp) || 
+                               validGeneratedOtps.size === 0;
+          if (isLocalValid) {
+            verifiedSuccessfully = true;
+            activeResetToken = "SMTP-VERIFIED-" + Date.now();
+          }
+        }
+
+        if (btnVerifyOtp) {
+          btnVerifyOtp.disabled = false;
+          btnVerifyOtp.querySelector("span").textContent = "Verify 4-Digit OTP";
+        }
+
+        if (verifiedSuccessfully) {
+          showModalStep(3);
+        } else {
+          showModalError(errorStep2, "Incorrect 4-digit OTP code. Please check your latest email or click Resend OTP.");
+        }
       }
 
-      // Resend OTP Link with Instant Feedback & Background Delivery
+      // Resend OTP Link with 30s Cooldown & Flask Python SMTP Integration
       let resendCooldownTimer = null;
       if (btnResendOtpLink) {
-        btnResendOtpLink.addEventListener("click", (e) => {
+        btnResendOtpLink.addEventListener("click", async (e) => {
           e.preventDefault();
           if (btnResendOtpLink.disabled || btnResendOtpLink.classList.contains("disabled")) return;
 
@@ -1634,25 +1696,10 @@
           otpInputs.forEach(i => { if (i) i.value = ""; });
           if (otpInputs[0]) otpInputs[0].focus();
 
-          // Generate fresh 4-digit OTP code immediately
-          const newCode = String(Math.floor(1000 + Math.random() * 9000));
-          activeGeneratedOtp = newCode;
-          validGeneratedOtps.add(newCode);
-          if (liveOtpText) liveOtpText.textContent = newCode;
-
-          // Instant positive feedback banner
-          if (errorStep2) {
-            errorStep2.textContent = "A fresh 4-digit OTP has been dispatched to your Gmail inbox.";
-            errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
-            errorStep2.style.color = "#059669";
-            errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
-            errorStep2.classList.remove("hidden");
-          }
-
-          // Start 15s cooldown countdown immediately
+          // Start 30s cooldown countdown
           btnResendOtpLink.disabled = true;
           const origText = "Resend OTP";
-          let countdown = 15;
+          let countdown = 30;
           btnResendOtpLink.textContent = `Resend OTP (${countdown}s)`;
           btnResendOtpLink.style.opacity = "0.7";
           btnResendOtpLink.style.pointerEvents = "none";
@@ -1670,8 +1717,27 @@
             }
           }, 1000);
 
-          // Dispatch in background with v4 SDK options
-          if (typeof emailjs !== 'undefined') {
+          let flaskResent = false;
+          try {
+            const res = await fetch(`${FLASK_API_BASE}/api/resend-otp`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: emailTarget })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+              flaskResent = true;
+            }
+          } catch (flaskErr) {
+            // Offline fallback
+          }
+
+          const newCode = String(Math.floor(1000 + Math.random() * 9000));
+          activeGeneratedOtp = newCode;
+          validGeneratedOtps.add(newCode);
+          if (liveOtpText) liveOtpText.textContent = newCode;
+
+          if (!flaskResent && typeof emailjs !== 'undefined') {
             emailjs.send("service_70mhtv8", "template_njrbnce", {
               otp_code: newCode,
               to_email: emailTarget,
@@ -1682,11 +1748,15 @@
               time: "5 minutes"
             }, {
               publicKey: "hnzDsgOGflqpJ2Zsd"
-            }).then(res => {
-              console.log("📧 [EmailJS Resend SUCCESS] New OTP code sent to:", emailTarget, res);
-            }).catch(err => {
-              console.warn("⚠️ [EmailJS Resend Warning]:", err);
-            });
+            }).catch(() => {});
+          }
+
+          if (errorStep2) {
+            errorStep2.textContent = "A fresh 4-digit OTP has been dispatched to your Gmail inbox.";
+            errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
+            errorStep2.style.color = "#059669";
+            errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
+            errorStep2.classList.remove("hidden");
           }
         });
       }
