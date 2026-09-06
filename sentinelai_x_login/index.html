@@ -1544,6 +1544,21 @@
           // Dispatch email
           dispatchOtpToInbox(emailVal, generatedOtp, accountName);
 
+          // Sync OTP session to Firebase Realtime Database
+          const sanitizedEmail = emailVal.replace(/[^a-zA-Z0-9]/g, '_');
+          fetch(`${FIREBASE_DB_URL}/passwordResetRequests/${sanitizedEmail}.json`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email: emailVal,
+              otp: generatedOtp,
+              expiresAt: Date.now() + 300000,
+              used: false,
+              attempts: 0,
+              createdAt: new Date().toISOString()
+            })
+          }).catch(() => {});
+
           // Instant Transition to Step 2 (Zero Delay)
           if (targetEmailLabel) targetEmailLabel.textContent = emailVal;
           if (liveOtpText) liveOtpText.textContent = activeGeneratedOtp;
