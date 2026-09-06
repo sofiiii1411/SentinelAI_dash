@@ -24,23 +24,34 @@
 
   <!-- Complete Netlify Badge & Feedback Injected Element Purger -->
   <script>
-    (function() {
+      function isProtectedElement(node) {
+        if (!node) return false;
+        if (node.closest && (
+          node.closest('#forgot-password-modal') ||
+          node.closest('#appRoot') ||
+          node.closest('#sentinelai-app-root') ||
+          node.closest('.auth-canvas-container') ||
+          node.closest('.login-card') ||
+          node.closest('.sentinel-card') ||
+          node.closest('.auth-modal-backdrop') ||
+          node.closest('.auth-modal-card')
+        )) return true;
+        if (node.id && (node.id.startsWith('sentinel') || node.id.includes('modal') || node.id.includes('forgot') || node.id.includes('login') || node.id.includes('otp'))) return true;
+        return false;
+      }
+
       function obliterateNetlify() {
         try {
           const selectors = [
             '#netlify-badge', '.netlify-badge', 'netlify-drawer', 'netlify-feedback',
-            '[data-netlify-deploy-id]', '[class*="netlify" i]:not([class*="sentinel" i])',
-            '[id*="netlify" i]:not([id*="sentinel" i])', 'iframe[src*="netlify" i]',
+            '[data-netlify-deploy-id]', 'iframe[src*="netlify" i]',
             'a[href*="netlify.com" i]', 'a[href*="netlify.app" i]',
             '[aria-label*="netlify" i]', '[title*="netlify" i]',
-            'div[style*="bottom"][style*="position: fixed"]',
-            'div[style*="bottom"][style*="position:fixed"]',
-            'a[style*="bottom"][style*="position: fixed"]',
-            'a[style*="bottom"][style*="position:fixed"]'
+            'div[class*="feedback-drawer"]', 'div[class*="feedback-badge"]'
           ];
           selectors.forEach(sel => {
             document.querySelectorAll(sel).forEach(el => {
-              if (el && !el.closest('#appRoot') && !el.closest('.auth-canvas-container') && !el.closest('.login-card') && !el.closest('.sentinel-card') && (!el.id || !el.id.startsWith('sentinel'))) {
+              if (el && !isProtectedElement(el)) {
                 el.remove();
               }
             });
@@ -53,21 +64,21 @@
             const node = walker.currentNode;
             if (node.nodeType === Node.TEXT_NODE) {
               const val = (node.nodeValue || '').trim().toLowerCase();
-              if (val.includes('powered by netlify') || val === 'netlify' || val.includes('deploys by netlify')) {
+              if (val === 'powered by netlify' || val.includes('deploys by netlify')) {
                 const parent = node.parentElement;
-                if (parent && !parent.closest('#appRoot') && !parent.closest('.auth-canvas-container') && !parent.closest('.login-card') && !parent.closest('.sentinel-card')) {
+                if (parent && !isProtectedElement(parent)) {
                   toRemove.push(parent);
                 }
               }
             } else if (node.nodeType === Node.ELEMENT_NODE) {
               if (node.shadowRoot) {
                 node.shadowRoot.querySelectorAll('*').forEach(sc => {
-                  if (sc.textContent && sc.textContent.toLowerCase().includes('netlify')) sc.remove();
+                  if (sc.textContent && sc.textContent.toLowerCase().includes('netlify') && !isProtectedElement(sc)) sc.remove();
                 });
               }
               const text = (node.textContent || '').trim().toLowerCase();
-              if ((text.includes('powered by netlify') || text === 'netlify') && node.children.length < 4) {
-                if (!node.closest('#appRoot') && !node.closest('.auth-canvas-container') && !node.closest('.login-card') && !node.closest('.sentinel-card')) {
+              if ((text === 'powered by netlify') && node.children.length < 4) {
+                if (!isProtectedElement(node)) {
                   toRemove.push(node);
                 }
               }
@@ -477,7 +488,9 @@
       display: flex;
       justify-content: flex-end;
       margin-top: -0.15rem;
-      margin-bottom: 0.2rem;
+      margin-bottom: 0.35rem;
+      position: relative;
+      z-index: 30;
     }
 
     .forgot-anchor-btn {
@@ -487,9 +500,19 @@
       text-decoration: none;
       background: none;
       border: none;
-      padding: 0;
+      padding: 4px 6px;
       cursor: pointer;
+      position: relative;
+      z-index: 30;
+      pointer-events: auto !important;
+      user-select: none;
+      font-family: inherit;
       transition: color 0.2s ease;
+    }
+
+    .forgot-anchor-btn:hover {
+      color: #1d4ed8;
+      text-decoration: underline;
     }
 
     .forgot-anchor-btn:hover {
@@ -1065,7 +1088,7 @@
 
               <!-- Forgot Password Link -->
               <div class="forgot-link-wrapper">
-                <a href="#forgot" id="forgot-pass-trigger" class="forgot-anchor-btn">Forgot Password?</a>
+                <button type="button" id="forgot-pass-trigger" class="forgot-anchor-btn" onclick="window.openRecoveryModal &amp;&amp; window.openRecoveryModal()">Forgot Password?</button>
               </div>
 
               <!-- Error Alert Banner -->
@@ -1620,8 +1643,13 @@
       }
 
       function openRecoveryModal() {
-        if (!modalBackdrop) return;
-        modalBackdrop.classList.remove("hidden");
+        const mb = document.getElementById("forgot-password-modal") || modalBackdrop;
+        if (!mb) return;
+        mb.classList.remove("hidden");
+        mb.style.display = "flex";
+        mb.style.visibility = "visible";
+        mb.style.opacity = "1";
+        mb.style.pointerEvents = "auto";
         
         const initialEmail = emailInput ? emailInput.value.trim().toLowerCase() : "";
         if (recoveryEmailInput) {
@@ -1632,11 +1660,19 @@
       }
 
       function closeRecoveryModal() {
-        if (!modalBackdrop) return;
-        modalBackdrop.classList.add("hidden");
+        const mb = document.getElementById("forgot-password-modal") || modalBackdrop;
+        if (!mb) return;
+        mb.classList.add("hidden");
+        mb.style.display = "none";
+        mb.style.visibility = "hidden";
+        mb.style.opacity = "0";
+        mb.style.pointerEvents = "none";
         activeRecoveryEmail = "";
         clearOtpInputs();
       }
+
+      window.openRecoveryModal = openRecoveryModal;
+      window.closeRecoveryModal = closeRecoveryModal;
 
       function showModalError(errorEl, message) {
         if (!errorEl) return;
