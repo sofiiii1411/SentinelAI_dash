@@ -74,7 +74,7 @@ exports.handler = async function (event) {
   try {
     const data = JSON.parse(event.body || '{}');
     const email = (data.email || '').trim().toLowerCase();
-    const enteredOtp = String(data.otp || '').trim();
+    const enteredOtp = String(data.otp || data.otpCode || data.code || '').trim();
 
     if (!email || !enteredOtp) {
       return {

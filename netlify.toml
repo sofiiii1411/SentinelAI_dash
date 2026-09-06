@@ -64,6 +64,16 @@
   status = 200
 
 [[redirects]]
+  from = "/api/auth/verify-reset-otp"
+  to = "/.netlify/functions/verify-otp"
+  status = 200
+
+[[redirects]]
+  from = "/api/verify-reset-otp"
+  to = "/.netlify/functions/verify-otp"
+  status = 200
+
+[[redirects]]
   from = "/api/auth/reset-password"
   to = "/.netlify/functions/reset-password"
   status = 200
