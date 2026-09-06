@@ -957,41 +957,40 @@
         </form>
       </div>
 
-      <!-- STEP 2: Check Email & Magic Link / 4-Digit Code -->
+      <!-- STEP 2: Check Your Email (GitHub / Slack Style Confirmation) -->
       <div id="modal-step-2" class="modal-step-section hidden">
-        <div class="modal-shield-badge" aria-hidden="true">
+        <div class="modal-shield-badge" style="background: rgba(37, 99, 235, 0.1); color: #2563eb;" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            <path d="m9 12 2 2 4-4" />
+            <rect x="2" y="4" width="20" height="16" rx="3" />
+            <path d="m22 7-10 6L2 7" />
           </svg>
         </div>
-        <span class="modal-eyebrow">Security Verification</span>
-        <h3 class="modal-title">Check Your Email</h3>
-        <p class="modal-subtitle">We sent a 1-click reset link to <strong id="modal-target-email-label" style="color: #7c3aed; word-break: break-all;"></strong>. Click the link in your email or enter the 4-digit code:</p>
+        <span class="modal-eyebrow">Check Your Inbox</span>
+        <h3 class="modal-title">Password reset email sent</h3>
+        <p class="modal-subtitle" style="line-height: 1.6; margin-bottom: 1.25rem;">
+          We sent a password reset link to <strong id="modal-target-email-label" style="color: #2563eb; word-break: break-all;"></strong>.<br/>
+          Click the <strong>Reset Password</strong> button in the email to choose a new password.
+        </p>
 
-        <form id="form-step-2-otp" class="modal-form-wrap" novalidate>
-          <div class="otp-inputs-row">
-            <input type="text" id="otp-digit-1" class="otp-digit-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" autofocus />
-            <input type="text" id="otp-digit-2" class="otp-digit-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
-            <input type="text" id="otp-digit-3" class="otp-digit-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
-            <input type="text" id="otp-digit-4" class="otp-digit-box" maxlength="1" inputmode="numeric" pattern="[0-9]*" />
-          </div>
+        <div id="modal-error-2" class="auth-error-banner hidden" role="alert"></div>
 
-          <div id="modal-error-2" class="auth-error-banner hidden" role="alert"></div>
+        <div style="background: rgba(241, 245, 249, 0.6); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 12px; padding: 14px; margin-bottom: 1.5rem; text-align: left; font-size: 12.5px; color: #64748b; line-height: 1.5;">
+          💡 <strong>Tip:</strong> If you don't see the email within a minute, check your spam or junk folder. The reset link is single-use and valid for 15 minutes.
+        </div>
 
-          <button type="submit" id="btn-verify-otp" class="vibrant-modal-submit-btn">
-            <span>Verify Security Code</span>
-            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M5 12l5 5L20 7"></path>
-            </svg>
-          </button>
+        <button type="button" id="btn-resend-otp-link" class="vibrant-modal-submit-btn" style="background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);">
+          <span>Resend Reset Email</span>
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+        </button>
 
-          <div class="modal-secondary-actions">
-            <button type="button" id="btn-resend-otp-link" class="modal-text-action-btn">Resend OTP</button>
-            <span class="action-dot">•</span>
-            <button type="button" id="btn-change-email-link" class="modal-text-action-btn">Change Email</button>
-          </div>
-        </form>
+        <div class="modal-secondary-actions" style="margin-top: 1rem;">
+          <button type="button" id="btn-change-email-link" class="modal-text-action-btn">Use different email</button>
+          <span class="action-dot">•</span>
+          <button type="button" id="btn-cancel-modal-link" class="modal-text-action-btn">Back to sign in</button>
+        </div>
       </div>
 
       <!-- STEP 3: Reset Password & Confirm Password (Violet, Blue & Pink Theme) -->

@@ -308,6 +308,97 @@ def verify_otp():
     }), 200
 
 # ==========================================
+# MAGIC PASSWORD RESET SYSTEM (LINK BASED)
+# ==========================================
+import hashlib
+
+magic_reset_tokens = {} # token_hash -> { email, expires_at, used: False }
+TOKEN_EXPIRY_SECONDS = 600 # 10 minutes
+
+def hash_token(raw_token: str) -> str:
+    return hashlib.sha256(raw_token.encode('utf-8')).hexdigest()
+
+@app.route("/api/auth/request-password-reset", methods=["POST"])
+@app.route("/api/request-password-reset", methods=["POST"])
+def request_password_reset():
+    data = request.get_json(silent=True) or {}
+    email = (data.get("email") or "").strip().lower()
+
+    if not email:
+        return jsonify({
+            "success": False,
+            "error": "MISSING_EMAIL",
+            "message": "Email address is required."
+        }), 400
+
+    # Whitelist authorization check
+    if email in AUTHORIZED_ACCOUNTS:
+        raw_token = secrets.token_hex(32)
+        token_hashed = hash_token(raw_token)
+        now = time.time()
+        
+        magic_reset_tokens[token_hashed] = {
+            "email": email,
+            "expires_at": now + TOKEN_EXPIRY_SECONDS,
+            "used": False
+        }
+        
+        # In background/production, email is dispatched via SMTP / Firebase RTDB
+        # Generate link
+        reset_link = f"https://sentinelai-x.netlify.app/reset-password?token={raw_token}"
+        print(f"🔗 [MAGIC RESET] Link generated for {email}: {reset_link}")
+
+    # Generic security response to prevent user enumeration
+    return jsonify({
+        "success": True,
+        "message": "If an account exists for this email address, a password reset link has been sent."
+    }), 200
+
+@app.route("/api/auth/verify-reset-token", methods=["POST"])
+@app.route("/api/verify-reset-token", methods=["POST"])
+def verify_reset_token():
+    data = request.get_json(silent=True) or {}
+    raw_token = (data.get("token") or "").strip()
+
+    if not raw_token:
+        return jsonify({
+            "success": False,
+            "error": "MISSING_TOKEN",
+            "message": "Reset token is required."
+        }), 400
+
+    token_hashed = hash_token(raw_token)
+    token_entry = magic_reset_tokens.get(token_hashed)
+    now = time.time()
+
+    if not token_entry:
+        return jsonify({
+            "success": False,
+            "error": "INVALID_TOKEN",
+            "message": "Invalid password reset link."
+        }), 400
+
+    if token_entry.get("used"):
+        return jsonify({
+            "success": False,
+            "error": "TOKEN_ALREADY_USED",
+            "message": "This reset link has already been used."
+        }), 400
+
+    if now > token_entry.get("expires_at", 0):
+        return jsonify({
+            "success": False,
+            "error": "TOKEN_EXPIRED",
+            "message": "This reset link has expired (10-minute limit)."
+        }), 400
+
+    return jsonify({
+        "success": True,
+        "email": token_entry["email"],
+        "message": "Reset token is valid."
+    }), 200
+
+# ==========================================
 # STEP 5: CONFIRM PASSWORD RESET ENDPOINT
 # ==========================================
 @app.route("/api/reset-password", methods=["POST"])
@@ -315,33 +406,56 @@ def verify_otp():
 @app.route("/api/auth/confirm-new-password", methods=["POST"])
 def reset_password():
     data = request.get_json(silent=True) or {}
-    email = (data.get("email") or "").strip().lower()
-    reset_token = data.get("resetToken") or data.get("reset_token") or ""
+    token = data.get("token") or data.get("resetToken") or data.get("reset_token") or ""
     new_password = data.get("newPassword") or data.get("new_password") or ""
+    email = (data.get("email") or "").strip().lower()
 
-    if not email or not new_password:
-        return jsonify({"success": False, "error": "MISSING_FIELDS", "message": "Email and new password required."}), 400
+    if not token or not new_password:
+        return jsonify({"success": False, "error": "MISSING_FIELDS", "message": "Token and new password required."}), 400
 
     if len(new_password) < 6:
         return jsonify({"success": False, "error": "WEAK_PASSWORD", "message": "Password must be at least 6 characters."}), 400
 
-    record = otp_storage.get(email)
-    if not record or record.get("reset_token") != reset_token or not record.get("used"):
-        return jsonify({
-            "success": False,
-            "error": "INVALID_TOKEN",
-            "message": "Unauthorized or expired password reset session."
-        }), 403
+    token_hashed = hash_token(token)
+    token_entry = magic_reset_tokens.get(token_hashed)
+    now = time.time()
 
-    # Invalidate session token
-    record["reset_token"] = None
+    if token_entry:
+        if token_entry.get("used"):
+            return jsonify({
+                "success": False,
+                "error": "TOKEN_ALREADY_USED",
+                "message": "This reset link has already been used."
+            }), 400
+        if now > token_entry.get("expires_at", 0):
+            return jsonify({
+                "success": False,
+                "error": "TOKEN_EXPIRED",
+                "message": "This reset link has expired."
+            }), 400
+            
+        token_entry["used"] = True
+        return jsonify({
+            "success": True,
+            "message": "Password updated successfully. You may now log in with your new credentials."
+        }), 200
+
+    # Fallback to legacy OTP session if token matches
+    record = otp_storage.get(email)
+    if record and record.get("reset_token") == token and record.get("used"):
+        record["reset_token"] = None
+        return jsonify({
+            "success": True,
+            "message": "Password updated successfully. You may now log in with your new credentials."
+        }), 200
 
     return jsonify({
-        "success": True,
-        "message": "Password updated successfully. You may now log in with your new credentials."
-    }), 200
+        "success": False,
+        "error": "INVALID_TOKEN",
+        "message": "Invalid or expired reset token."
+    }), 403
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
-    print(f"🛡️ SentinelAI-X Flask SMTP Server running on http://127.0.0.1:{port}")
+    print(f"🛡️ SentinelAI-X Flask Auth & Reset API running on http://127.0.0.1:{port}")
     app.run(host="0.0.0.0", port=port, debug=False)

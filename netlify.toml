@@ -6,6 +6,32 @@
   node_bundler = "esbuild"
   included_files = ["netlify/functions/**"]
 
+# Password Reset Links & Function Rewrites
+[[redirects]]
+  from = "/reset-password"
+  to = "/reset-password.html"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/request-password-reset"
+  to = "/.netlify/functions/request-password-reset"
+  status = 200
+
+[[redirects]]
+  from = "/api/request-password-reset"
+  to = "/.netlify/functions/request-password-reset"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/verify-reset-token"
+  to = "/.netlify/functions/verify-reset-token"
+  status = 200
+
+[[redirects]]
+  from = "/api/verify-reset-token"
+  to = "/.netlify/functions/verify-reset-token"
+  status = 200
+
 # API Route Rewrites to Netlify Functions
 [[redirects]]
   from = "/api/auth/send-otp"
