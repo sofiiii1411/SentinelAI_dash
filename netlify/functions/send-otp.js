@@ -87,23 +87,33 @@ async function dispatchEmail(toEmail, otpCode, accountName) {
         to: toEmail,
         subject: "SentinelAI-X Security Verification Code",
         text: `Your SentinelAI-X 4-digit verification code is: ${otpCode}. Valid for 5 minutes.`,
-        html: `<!DOCTYPE html>
-<html>
-<body style="font-family: 'Segoe UI', Arial, sans-serif; text-align: center; max-width: 480px; margin: 0 auto; padding: 28px; border: 1px solid #e2e8f0; border-radius: 18px; background: #ffffff;">
-  <h2 style="color: #0f172a; font-size: 22px; font-weight: 800; margin: 0 0 16px 0;">SentinelAI-X | Security Verification</h2>
+        html: `<div style="font-family: 'Segoe UI', Arial, sans-serif; text-align: center; max-width: 480px; margin: 0 auto; padding: 28px; border: 1px solid #e2e8f0; border-radius: 18px; background: #ffffff;">
+  
+  <!-- Centered SentinelAI-X Official Logo -->
+  <div style="margin-bottom: 18px;">
+    <img src="https://sentinelai-x.netlify.app/logo-transparent.png" width="220" alt="SentinelAI-X Logo" style="display: block; margin: 0 auto;" />
+  </div>
+
+  <h2 style="color: #0f172a; font-size: 20px; font-weight: 800; margin: 0 0 16px 0;">SentinelAI-X | Security Verification</h2>
+
   <p style="font-size: 15px; color: #334155; margin: 0 0 12px 0;">
-    Hello <strong>${accountName}</strong>, your one-time verification code is:
-    <strong style="font-size: 32px; color: #2563eb; letter-spacing: 6px; display: block; margin: 16px 0; font-family: monospace; background: #f1f5f9; padding: 12px; border-radius: 8px;">${otpCode}</strong>
+    Your one-time verification code is:
+    <strong style="font-size: 28px; color: #2563eb; letter-spacing: 4px; display: block; margin: 12px 0; font-family: monospace;">${otpCode}</strong>
   </p>
+
   <p style="font-size: 13px; color: #64748b; margin: 0 0 16px 0;">
     This OTP is valid for <strong>5 minutes</strong> and can be used only once.
   </p>
+
   <div style="font-size: 12px; color: #dc2626; background: #fef2f2; border: 1px solid #fee2e2; padding: 10px 14px; border-radius: 8px; margin: 0 0 20px 0; line-height: 1.5;">
     For your security, <strong>do not share this code with anyone</strong>. If you did not request this verification, please disregard this message.
   </div>
-  <p style="font-size: 12px; color: #64748b; font-weight: 700; margin: 0;">— SentinelAI-X Security Team</p>
-</body>
-</html>`
+
+  <p style="font-size: 12px; color: #64748b; font-weight: 700; margin: 0;">
+    — SentinelAI-X Security System
+  </p>
+
+</div>`
       });
       console.log(`✅ Direct Gmail SMTP sent successfully to ${toEmail}, messageId: ${mailInfo.messageId}`);
       return { success: true, provider: 'Gmail SMTP', messageId: mailInfo.messageId };

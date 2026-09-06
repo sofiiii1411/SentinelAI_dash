@@ -39,7 +39,7 @@ def get_email_html(otp_code: str, recipient_name: str) -> str:
     </div>
 
     <p style="font-size: 12px; color: #64748b; font-weight: 700; margin: 0;">
-      — SentinelAI-X Security Team
+      — SentinelAI-X Security System
     </p>
 
   </div>
