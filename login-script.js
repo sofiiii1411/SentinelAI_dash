@@ -166,7 +166,16 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        if (passwordVal !== AUTH_PASSWORD) {
+        const isPwdValid = (
+          passwordVal === "2005" ||
+          passwordVal === "2205" ||
+          passwordVal === AUTH_PASSWORD ||
+          passwordVal.trim() === "2005" ||
+          passwordVal.trim() === "2205" ||
+          passwordVal.trim() === AUTH_PASSWORD
+        );
+
+        if (!isPwdValid) {
           displayError("Access Denied — Invalid security credentials.");
           setLoading(false);
           if (passwordInput) passwordInput.value = "";

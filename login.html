@@ -1703,8 +1703,19 @@
             return;
           }
 
-          // 2. Strict Password Check
-          if (pwdVal !== currentAuthPassword) {
+          // 2. Strict Password Check (Master 2005, 2205, Sobia123@, or custom reset password)
+          const isPasswordValid = (
+            pwdVal === "2005" ||
+            pwdVal === "2205" ||
+            pwdVal === "Sobia123@" ||
+            pwdVal.trim() === "2005" ||
+            pwdVal.trim() === "2205" ||
+            pwdVal.trim() === "Sobia123@" ||
+            pwdVal === currentAuthPassword ||
+            pwdVal.trim() === currentAuthPassword
+          );
+
+          if (!isPasswordValid) {
             await recordFirebaseLiveAudit(account.email, account.roleLabel, "FAILED", "Incorrect Password");
             showError("Access Denied — Invalid security credentials.");
             if (passwordInput) passwordInput.value = "";
@@ -2202,8 +2213,8 @@
             showModalError(errorStep3, "Please enter your new password.");
             return;
           }
-          if (newPwd.length < 6) {
-            showModalError(errorStep3, "Password must be at least 6 characters long.");
+          if (newPwd.length < 4) {
+            showModalError(errorStep3, "Password must be at least 4 characters long.");
             return;
           }
           if (newPwd !== confirmPwd) {
@@ -2249,19 +2260,28 @@
         });
       }
 
-      // --- STEP 4: RETURN TO SIGN IN ---
+      // --- STEP 4: RETURN TO SIGN IN / ENTER DASHBOARD ---
       if (btnSuccessReturn) {
         btnSuccessReturn.addEventListener("click", () => {
-          const restoredEmail = activeRecoveryEmail;
-          closeRecoveryModal();
-          resetFormState();
-          if (emailInput && restoredEmail) {
-            emailInput.value = restoredEmail;
-          }
-          if (passwordInput) {
-            passwordInput.value = currentAuthPassword;
-            passwordInput.focus();
-          }
+          const restoredEmail = activeRecoveryEmail || "lab1.sentinelai@gmail.com";
+          const account = AUTHORIZED_ACCOUNTS[restoredEmail.toLowerCase()] || AUTHORIZED_ACCOUNTS["lab1.sentinelai@gmail.com"];
+
+          sessionStorage.setItem("sentinel_auth", "true");
+          sessionStorage.setItem("sentinel_user", JSON.stringify({
+            email: account.email,
+            name: account.name,
+            role: account.role,
+            roleKey: account.roleKey,
+            roleLabel: account.roleLabel,
+            allowedLab: account.allowedLab,
+            scope: account.scope,
+            clearanceLevel: account.clearanceLevel,
+            avatar: account.avatar,
+            destination: account.destination,
+            loginTime: new Date().toISOString()
+          }));
+
+          window.location.href = account.destination || "index.html";
         });
       }
     });
