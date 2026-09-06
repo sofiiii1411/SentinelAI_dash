@@ -47,41 +47,39 @@ SentinelAI-X Security Team
 """
         msg.set_content(plain_body)
 
-        # HTML Body
+        # HTML Body (Exact Official SentinelAI-X Format)
         html_body = f"""<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <style>
-    body {{ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f1f5fc; margin: 0; padding: 30px; }}
-    .card {{ max-width: 520px; margin: 0 auto; background: #ffffff; border-radius: 16px; padding: 36px; border: 1px solid #e2e8f0; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }}
-    .badge {{ display: inline-block; padding: 6px 14px; background: rgba(59, 130, 246, 0.1); color: #2563eb; font-weight: 700; font-size: 11px; letter-spacing: 1.5px; border-radius: 9999px; text-transform: uppercase; margin-bottom: 16px; }}
-    .title {{ color: #0f172a; font-size: 22px; font-weight: 800; margin: 0 0 12px; }}
-    .desc {{ color: #475569; font-size: 14px; line-height: 1.6; margin: 0 0 24px; }}
-    .otp-box {{ background: linear-gradient(135deg, #f8fafc 0%, #edf2f9 100%); border: 2px dashed #93c5fd; border-radius: 12px; padding: 22px; text-align: center; margin-bottom: 24px; }}
-    .otp-code {{ font-family: monospace, Courier, monospace; font-size: 34px; font-weight: 900; letter-spacing: 10px; color: #1d4ed8; }}
-    .footer {{ color: #94a3b8; font-size: 12px; border-top: 1px solid #f1f5f9; padding-top: 18px; margin-top: 24px; line-height: 1.5; }}
-  </style>
 </head>
-<body>
-  <div class="card">
-    <div class="badge">Security Verification</div>
-    <h2 class="title">SentinelAI-X Security Verification</h2>
-    <p class="desc">Hello <strong>{recipient_name}</strong>,<br>You requested a single-use 4-digit security code to verify your identity on the SentinelAI-X Platform.</p>
+<body style="background-color: #f8fafc; margin: 0; padding: 30px 10px;">
+  <div style="font-family: 'Segoe UI', Arial, sans-serif; text-align: center; max-width: 480px; margin: 0 auto; padding: 28px; border: 1px solid #e2e8f0; border-radius: 18px; background: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.04);">
     
-    <div class="otp-box">
-      <div style="font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: 600; margin-bottom: 6px; letter-spacing: 1px;">Your 4-Digit Verification Code</div>
-      <div class="otp-code">{otp_code}</div>
+    <!-- Centered SentinelAI-X Official Logo -->
+    <div style="margin-bottom: 18px;">
+      <img src="https://sentinelai-x.netlify.app/logo-transparent.png" width="220" alt="SentinelAI-X Logo" style="display: block; margin: 0 auto;" />
     </div>
-    
-    <p class="desc">This code is valid for <strong>5 minutes</strong>. For your security, do not share this code with anyone.</p>
-    <p class="desc">If you did not request this verification code, please ignore this email.</p>
-    
-    <div class="footer">
-      Regards,<br>
-      <strong>SentinelAI-X Security Operations Team</strong><br>
-      Enterprise Automated Verification System
+
+    <h2 style="color: #0f172a; font-size: 20px; font-weight: 800; margin: 0 0 16px 0;">SentinelAI-X | Security Verification</h2>
+
+    <p style="font-size: 15px; color: #334155; margin: 0 0 12px 0;">
+      Your one-time verification code is:
+      <strong style="font-size: 28px; color: #2563eb; letter-spacing: 4px; display: block; margin: 12px 0; font-family: monospace;">{otp_code}</strong>
+    </p>
+
+    <p style="font-size: 13px; color: #64748b; margin: 0 0 16px 0;">
+      This OTP is valid for <strong>5 minutes</strong> and can be used only once.
+    </p>
+
+    <div style="font-size: 12px; color: #dc2626; background: #fef2f2; border: 1px solid #fee2e2; padding: 10px 14px; border-radius: 8px; margin: 0 0 20px 0; line-height: 1.5;">
+      For your security, <strong>do not share this code with anyone</strong>. If you did not request this verification, please disregard this message.
     </div>
+
+    <p style="font-size: 12px; color: #64748b; font-weight: 700; margin: 0;">
+      — SentinelAI-X Security System
+    </p>
+
   </div>
 </body>
 </html>
