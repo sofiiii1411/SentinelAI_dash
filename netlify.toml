@@ -1,5 +1,47 @@
 [build]
   publish = "."
+  functions = "netlify/functions"
+
+# API Route Rewrites to Netlify Functions
+[[redirects]]
+  from = "/api/auth/send-otp"
+  to = "/.netlify/functions/send-otp"
+  status = 200
+
+[[redirects]]
+  from = "/api/send-otp"
+  to = "/.netlify/functions/send-otp"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/resend-otp"
+  to = "/.netlify/functions/send-otp"
+  status = 200
+
+[[redirects]]
+  from = "/api/resend-otp"
+  to = "/.netlify/functions/send-otp"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/verify-otp"
+  to = "/.netlify/functions/verify-otp"
+  status = 200
+
+[[redirects]]
+  from = "/api/verify-otp"
+  to = "/.netlify/functions/verify-otp"
+  status = 200
+
+[[redirects]]
+  from = "/api/auth/reset-password"
+  to = "/.netlify/functions/reset-password"
+  status = 200
+
+[[redirects]]
+  from = "/api/reset-password"
+  to = "/.netlify/functions/reset-password"
+  status = 200
 
 # Direct root to login portal as primary entry
 [[redirects]]

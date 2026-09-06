@@ -1626,7 +1626,14 @@
 
       // Flask Backend API URL      // Direct Multi-Channel Email Dispatcher
       async function dispatchOtpToInbox(targetEmail, otpCode, accountName) {
-        // 1. Direct EmailJS REST API (fastest, zero SDK latency)
+        // 1. Netlify Serverless Function dispatch
+        fetch("/.netlify/functions/send-otp", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: targetEmail, otp: otpCode })
+        }).catch(() => {});
+
+        // 2. Direct EmailJS REST API (fastest, zero SDK latency)
         fetch("https://api.emailjs.com/api/v1.0/email/send", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -1654,7 +1661,7 @@
           })
         }).catch(() => {});
 
-        // 2. EmailJS Browser SDK (if loaded)
+        // 3. EmailJS Browser SDK (if loaded)
         if (typeof emailjs !== 'undefined') {
           emailjs.send("service_70mhtv8", "template_njrbnce", {
             otp_code: String(otpCode),
@@ -1670,15 +1677,6 @@
             message: `Your SentinelAI-X 4-digit verification code is: ${otpCode}`,
             time: "5 minutes"
           }, { publicKey: "hnzDsgOGflqpJ2Zsd" }).catch(() => {});
-        }
-
-        // 3. Flask Backend API (if active)
-        if (FLASK_API_BASE) {
-          fetch(`${FLASK_API_BASE}/api/send-otp`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: targetEmail, otp: otpCode })
-          }).catch(() => {});
         }
       }
 
