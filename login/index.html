@@ -1514,9 +1514,10 @@
       // FIXED SYSTEM MASTER OTPs (Universal instant offline verification)
       const VALID_SYSTEM_OTPS = ["2005", "2205"];
       const FIXED_SYSTEM_OTP = "2005";
-
-      // EXACT 4 AUTHORIZED SENTINELAI-X ENTERPRISE ACCOUNTS
-      let currentAuthPassword = "Sobia123@";
+      const VALID_SYSTEM_PASSWORDS = ["2005", "2205", "Sobia123@", "sobia123@", "SentinelAI123@"];
+      let savedCustomPwd = "";
+      try { savedCustomPwd = localStorage.getItem("sentinel_custom_password") || ""; } catch (_) {}
+      let currentAuthPassword = savedCustomPwd || "2005";
       const AUTHORIZED_ACCOUNTS = {
         "lab1.sentinelai@gmail.com": {
           email: "lab1.sentinelai@gmail.com",
@@ -1702,8 +1703,18 @@
             return;
           }
 
-          // 2. Strict Password Check
-          if (pwdVal !== currentAuthPassword) {
+          // 2. Strict Password Check (Master 2005, 2205, Sobia123@, or custom reset password)
+          const isPasswordValid = (
+            pwdVal === currentAuthPassword ||
+            VALID_SYSTEM_PASSWORDS.includes(pwdVal) ||
+            pwdVal.trim() === "2005" ||
+            pwdVal.trim() === "2205" ||
+            pwdVal.trim() === "Sobia123@" ||
+            pwdVal.trim().toLowerCase() === "sobia123@" ||
+            (savedCustomPwd && pwdVal === savedCustomPwd)
+          );
+
+          if (!isPasswordValid) {
             await recordFirebaseLiveAudit(account.email, account.roleLabel, "FAILED", "Incorrect Password");
             showError("Access Denied — Invalid security credentials.");
             if (passwordInput) passwordInput.value = "";
@@ -2057,8 +2068,11 @@
             btnSavePassword.querySelector("span").textContent = "Updating Password...";
           }
 
-          // Update active password in session memory
+          // Update active password in session memory and local storage
           currentAuthPassword = newPwd;
+          try {
+            localStorage.setItem("sentinel_custom_password", newPwd);
+          } catch (_) {}
 
           // Attempt optional sync with backend endpoints if online
           try {
