@@ -35,31 +35,34 @@ function makeHttpsPut(urlStr, body) {
   });
 }
 
+const path = require('path');
+const fs = require('fs');
+
 function getEmailHtml(resetLink) {
   return `<!DOCTYPE html>
 <html>
 <head><meta charset="utf-8"></head>
-<body style="margin: 0; padding: 24px 10px; background-color: #f8fafc;">
-  <div style="font-family: 'Segoe UI', Arial, sans-serif; text-align: center; max-width: 480px; margin: 0 auto; padding: 28px; border: 1px solid #e2e8f0; border-radius: 18px; background: #ffffff;">
+<body style="margin: 0; padding: 28px 12px; background-color: #f1f5f9; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Arial, sans-serif;">
+  <div style="text-align: center; max-width: 480px; margin: 0 auto; padding: 32px 24px; border: 1px solid #e2e8f0; border-radius: 24px; background: #ffffff; box-shadow: 0 12px 30px rgba(0,0,0,0.06);">
     
-    <!-- Centered SentinelAI-X Official Logo -->
-    <div style="margin-bottom: 18px;">
-      <img src="https://sentinelai-x.netlify.app/logo-transparent.png" width="220" alt="SentinelAI-X Logo" style="display: block; margin: 0 auto;" />
+    <!-- SentinelAI-X Official Hexagon Profile Logo -->
+    <div style="margin-bottom: 20px;">
+      <img src="cid:profile_logo" width="105" height="105" alt="SentinelAI-X Logo" style="display: block; margin: 0 auto; width: 105px; height: 105px; object-fit: contain; border-radius: 22px; filter: drop-shadow(0 6px 16px rgba(0, 112, 243, 0.25));" onerror="this.src='https://sentinelai-x.netlify.app/assets/sentinelai-profile-logo.png'" />
     </div>
 
-    <h2 style="color: #0f172a; font-size: 20px; font-weight: 800; margin: 0 0 16px 0;">SentinelAI-X | Password Reset</h2>
+    <h2 style="color: #0f172a; font-size: 21px; font-weight: 800; margin: 0 0 14px 0; letter-spacing: -0.02em;">SentinelAI-X | Password Reset</h2>
 
-    <p style="font-size: 15px; color: #334155; margin: 0 0 12px 0;">
+    <p style="font-size: 15px; color: #334155; line-height: 1.55; margin: 0 0 12px 0;">
       We received a request to reset the password for your SentinelAI-X account.
     </p>
 
-    <p style="font-size: 14px; color: #475569; margin: 0 0 20px 0;">
+    <p style="font-size: 14px; color: #475569; margin: 0 0 22px 0;">
       Click the button below to securely create a new password.
     </p>
 
     <!-- Prominent Reset Password Button -->
-    <div style="margin: 24px 0;">
-      <a href="${resetLink}" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%); color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 700; padding: 14px 32px; border-radius: 10px; box-shadow: 0 4px 14px rgba(124, 58, 237, 0.3); letter-spacing: 0.5px;">
+    <div style="margin: 26px 0;">
+      <a href="${resetLink}" target="_blank" style="display: inline-block; background: linear-gradient(135deg, #7c3aed 0%, #2563eb 100%); color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 700; padding: 14px 34px; border-radius: 12px; box-shadow: 0 6px 18px rgba(124, 58, 237, 0.35); letter-spacing: 0.5px;">
         RESET PASSWORD
       </a>
     </div>
@@ -68,8 +71,8 @@ function getEmailHtml(resetLink) {
       This secure reset link is valid for <strong>10 minutes</strong> and can be used only once.
     </p>
 
-    <div style="font-size: 12px; color: #dc2626; background: #fef2f2; border: 1px solid #fee2e2; padding: 10px 14px; border-radius: 8px; margin: 0 0 20px 0; line-height: 1.5; text-align: left;">
-      For your security, do not share this reset link with anyone. If you did not request a password reset, please disregard this email.
+    <div style="font-size: 12px; color: #dc2626; background: #fef2f2; border: 1px solid #fee2e2; padding: 12px 16px; border-radius: 10px; margin: 0 0 22px 0; line-height: 1.5; text-align: left;">
+      🔒 <strong>Security Notice:</strong> For your security, do not share this reset link with anyone. If you did not request a password reset, please disregard this email.
     </div>
 
     <p style="font-size: 12px; color: #64748b; font-weight: 700; margin: 0;">
@@ -95,12 +98,37 @@ async function sendResetEmail(toEmail, resetLink) {
         }
       });
 
+      // Prepare profile image attachment
+      const logoCandidates = [
+        path.join(__dirname, '../../assets/sentinelai-profile-logo.png'),
+        path.join(__dirname, '../assets/sentinelai-profile-logo.png'),
+        path.join(process.cwd(), 'assets/sentinelai-profile-logo.png'),
+        path.join(process.cwd(), 'sentinelai-profile-logo.png')
+      ];
+      let logoBuffer = null;
+      for (const p of logoCandidates) {
+        if (fs.existsSync(p)) {
+          logoBuffer = fs.readFileSync(p);
+          break;
+        }
+      }
+
+      const attachments = [];
+      if (logoBuffer) {
+        attachments.push({
+          filename: 'sentinelai-profile-logo.png',
+          content: logoBuffer,
+          cid: 'profile_logo'
+        });
+      }
+
       const mailInfo = await transporter.sendMail({
         from: `"SentinelAI-X Security" <${gmailUser}>`,
         to: toEmail,
         subject: "SentinelAI-X | Password Reset",
         text: `SentinelAI-X Password Reset\n\nWe received a request to reset your password.\nClick the link below to securely create a new password:\n${resetLink}\n\nThis link is valid for 10 minutes and can be used only once.\n\n— SentinelAI-X Security System`,
-        html: getEmailHtml(resetLink)
+        html: getEmailHtml(resetLink),
+        attachments: attachments
       });
       console.log(`✅ Reset email dispatched to ${toEmail} | MessageId: ${mailInfo.messageId}`);
       return { success: true, messageId: mailInfo.messageId };
