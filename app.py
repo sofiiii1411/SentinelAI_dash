@@ -1,3 +1,4 @@
+
 import os
 import time
 import secrets
@@ -10,8 +11,19 @@ from email_service import send_otp_email
 load_dotenv()
 
 app = Flask(__name__)
-# Enable CORS for React/Netlify and local development
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+# Configure CORS explicitly for Netlify production origin and local development
+CORS(app, resources={r"/api/*": {
+    "origins": [
+        "https://sentinelai-x.netlify.app",
+        "https://sentinel-ai.netlify.app",
+        "http://localhost:5000",
+        "http://127.0.0.1:5000",
+        "http://localhost:3000",
+        "http://localhost:8080"
+    ],
+    "methods": ["GET", "POST", "OPTIONS"],
+    "allow_headers": ["Content-Type", "Authorization"]
+}})
 
 # EXACT 4 AUTHORIZED SENTINELAI-X ENTERPRISE ACCOUNTS
 AUTHORIZED_ACCOUNTS = {
@@ -46,7 +58,6 @@ AUTHORIZED_ACCOUNTS = {
 }
 
 # In-Memory OTP Store
-# Structure: { email: { "otp": str, "expires_at": float, "last_sent_at": float, "attempts": int, "used": bool, "reset_token": str } }
 otp_storage = {}
 
 OTP_EXPIRY_SECONDS = 300       # 5 minutes
@@ -57,12 +68,59 @@ def generate_secure_4digit_otp() -> str:
     """Generates a secure 4-digit numeric OTP (1000-9999)."""
     return str(secrets.randbelow(9000) + 1000)
 
+# ==========================================
+# PHASE 1: HEALTH ENDPOINT
+# ==========================================
 @app.route("/api/health", methods=["GET"])
 def health():
     return jsonify({
-        "status": "healthy",
-        "service": "SentinelAI-X Flask SMTP Service",
-        "smtp_configured": bool(os.getenv("SMTP_USERNAME") and os.getenv("SMTP_PASSWORD"))
+        "success": True,
+        "message": "SentinelAI-X backend is running",
+        "service": "SentinelAI-X Flask OTP & Auth API",
+        "authorized_accounts_count": len(AUTHORIZED_ACCOUNTS)
+    }), 200
+
+# ==========================================
+# PHASE 3: DIAGNOSTIC TEST-OTP ENDPOINT (NO EMAIL DISPATCH)
+# ==========================================
+@app.route("/api/auth/test-otp", methods=["POST"])
+def test_otp():
+    data = request.get_json(silent=True) or {}
+    email = (data.get("email") or "").strip().lower()
+
+    if not email:
+        return jsonify({
+            "success": False,
+            "error": "MISSING_EMAIL",
+            "message": "Email address is required."
+        }), 400
+
+    # Whitelist authorization verification
+    if email not in AUTHORIZED_ACCOUNTS:
+        return jsonify({
+            "success": False,
+            "error": "UNAUTHORIZED_EMAIL",
+            "message": "This email address is not authorized for password recovery."
+        }), 403
+
+    now = time.time()
+    otp_code = generate_secure_4digit_otp()
+
+    # Store OTP securely without sending email
+    otp_storage[email] = {
+        "otp": otp_code,
+        "expires_at": now + OTP_EXPIRY_SECONDS,
+        "last_sent_at": now,
+        "attempts": 0,
+        "used": False,
+        "reset_token": None
+    }
+
+    # Safe response — NEVER leaks the OTP
+    return jsonify({
+        "success": True,
+        "message": "OTP generated successfully",
+        "expires_in": OTP_EXPIRY_SECONDS
     }), 200
 
 # ==========================================
