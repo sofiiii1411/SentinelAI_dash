@@ -10,8 +10,6 @@
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
-
   <!-- EmailJS Browser SDK -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script type="text/javascript">
@@ -34,7 +32,8 @@
           node.closest('.login-card') ||
           node.closest('.sentinel-card') ||
           node.closest('.auth-modal-backdrop') ||
-          node.closest('.auth-modal-card')
+          node.closest('.auth-modal-card') ||
+          node.closest('.modal-glow-frame')
         )) return true;
         if (node.id && (node.id.startsWith('sentinel') || node.id.includes('modal') || node.id.includes('forgot') || node.id.includes('login') || node.id.includes('otp'))) return true;
         return false;
@@ -110,7 +109,36 @@
       padding: 0;
     }
 
-    /* Completely Purge Netlify Injected Badge, Floating Pill, Drawer & Feedback Widgets */
+    :root {
+      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-heading: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-body);
+      background-color: #f1f5fc;
+      background-image: 
+        radial-gradient(circle at 18% 18%, rgba(59, 130, 246, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 82% 16%, rgba(244, 114, 182, 0.14) 0%, transparent 45%),
+        radial-gradient(circle at 80% 84%, rgba(251, 191, 36, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 20% 82%, rgba(139, 92, 246, 0.14) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, #ffffff 0%, #edf2f9 100%);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Completely Purge Netlify Badge, Floating Pill, Drawer & Injected Widgets */
     #netlify-badge,
     .netlify-badge,
     netlify-drawer,
@@ -156,63 +184,92 @@
       overflow: hidden !important;
     }
 
-    :root {
-      --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      --font-heading: 'Plus Jakarta Sans', 'Inter', sans-serif;
-    }
-
-    html, body {
-      width: 100%;
-      height: 100vh;
-      height: 100dvh;
-      margin: 0;
-      padding: 0;
-      font-family: var(--font-body);
-      background-color: #fafbfd;
-      background-image: 
-        radial-gradient(circle at 10% 12%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 35% 85%, rgba(52, 211, 153, 0.10) 0%, transparent 45%),
-        radial-gradient(circle at 75% 15%, rgba(244, 114, 182, 0.12) 0%, transparent 45%),
-        radial-gradient(circle at 90% 80%, rgba(167, 139, 250, 0.12) 0%, transparent 48%),
-        linear-gradient(135deg, #ffffff 0%, #f8fafc 50%, #fdfdff 100%);
-      background-attachment: fixed;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    /* Ambient Outer Pastel Glows */
-    .ambient-halo-top-left {
+    /* Ambient Outer Glowing Auras (Light Luminous Logo Pastels) */
+    .ambient-halo-blue {
       position: fixed;
-      top: -12vw;
-      left: -12vw;
+      top: -10vw;
+      left: -10vw;
       width: 50vw;
       height: 50vw;
-      background: radial-gradient(circle, rgba(56, 189, 248, 0.20) 0%, rgba(52, 211, 153, 0.14) 40%, transparent 70%);
-      filter: blur(80px);
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.22) 0%, rgba(96, 165, 250, 0.06) 50%, transparent 70%);
+      filter: blur(90px);
       pointer-events: none;
       z-index: 0;
+      animation: floatAuraBlue 14s ease-in-out infinite alternate;
     }
 
-    .ambient-halo-bottom-right {
+    .ambient-halo-magenta {
       position: fixed;
-      bottom: -12vw;
-      right: -12vw;
-      width: 52vw;
-      height: 52vw;
-      background: radial-gradient(circle, rgba(244, 114, 182, 0.20) 0%, rgba(167, 139, 250, 0.16) 45%, transparent 70%);
-      filter: blur(80px);
+      top: -6vw;
+      right: 4vw;
+      width: 46vw;
+      height: 46vw;
+      background: radial-gradient(circle, rgba(244, 114, 182, 0.20) 0%, rgba(251, 113, 133, 0.05) 50%, transparent 70%);
+      filter: blur(90px);
       pointer-events: none;
       z-index: 0;
+      animation: floatAuraMagenta 16s ease-in-out infinite alternate;
     }
 
-    /* Viewport Stage: Single point view on desktop */
+    .ambient-halo-amber {
+      position: fixed;
+      bottom: -10vw;
+      right: -10vw;
+      width: 48vw;
+      height: 48vw;
+      background: radial-gradient(circle, rgba(251, 191, 36, 0.18) 0%, rgba(253, 224, 71, 0.05) 50%, transparent 70%);
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+      animation: floatAuraAmber 18s ease-in-out infinite alternate;
+    }
+
+    .ambient-halo-violet {
+      position: fixed;
+      bottom: -8vw;
+      left: 8vw;
+      width: 48vw;
+      height: 48vw;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.20) 0%, rgba(192, 132, 252, 0.06) 50%, transparent 70%);
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+      animation: floatAuraViolet 15s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatAuraBlue {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(4vw, 3vh) scale(1.1); }
+    }
+    @keyframes floatAuraMagenta {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-3vw, 4vh) scale(1.08); }
+    }
+    @keyframes floatAuraAmber {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(-4vw, -3vh) scale(1.12); }
+    }
+    @keyframes floatAuraViolet {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(3vw, -4vh) scale(1.08); }
+    }
+
+    /* Fullscreen Light Flow Canvas */
+    .multicolor-bg-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      height: 100dvh;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Viewport Stage */
     .viewport-stage {
       position: relative;
-      z-index: 1;
+      z-index: 2;
       width: 100%;
       max-width: 1280px;
       padding: clamp(0.75rem, 2vh, 1.8rem) clamp(1rem, 2.5vw, 2.5rem);
@@ -224,28 +281,23 @@
       max-height: 100vh;
     }
 
-    /* Animated Multi-vibrant Border Frame */
+    /* Master Card Glow Frame with Dynamic Shifting Spectrum Border */
     .master-card-glow-frame {
       width: 100%;
       position: relative;
-      border-radius: 32px;
+      border-radius: 28px;
       padding: 2.5px;
-      background: linear-gradient(120deg, 
-        rgba(56, 189, 248, 0.70), 
-        rgba(52, 211, 153, 0.60), 
-        rgba(251, 191, 36, 0.55), 
-        rgba(244, 114, 182, 0.65), 
-        rgba(167, 139, 250, 0.65), 
-        rgba(56, 189, 248, 0.70));
+      background: linear-gradient(135deg, #10b981, #f59e0b, #ef4444, #ec4899, #8b5cf6, #2563eb, #06b6d4, #10b981);
       background-size: 300% 300%;
-      animation: movingVibrantBorder 6s ease infinite;
       box-shadow: 
-        0 24px 65px -15px rgba(99, 102, 241, 0.16),
-        0 10px 30px -8px rgba(244, 114, 182, 0.14),
-        0 0 35px 0 rgba(56, 189, 248, 0.15);
+        0 20px 50px -12px rgba(37, 99, 235, 0.16),
+        0 10px 25px -8px rgba(236, 72, 153, 0.10),
+        0 0 30px rgba(59, 130, 246, 0.12),
+        0 0 30px rgba(245, 158, 11, 0.10);
+      animation: spectrumGradientFlow 7s ease infinite;
     }
 
-    @keyframes movingVibrantBorder {
+    @keyframes spectrumGradientFlow {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
@@ -254,12 +306,8 @@
     /* Master Card Container: Left Artwork + Right Sign-In Card */
     .master-card-container {
       width: 100%;
-      background: #f8fafc;
-      background-image: 
-        radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.08) 0%, transparent 45%),
-        radial-gradient(circle at 85% 82%, rgba(217, 70, 239, 0.07) 0%, transparent 48%),
-        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.98) 100%);
-      border-radius: 29px;
+      background: #ffffff;
+      border-radius: 26px;
       display: grid;
       grid-template-columns: 1.35fr 1fr;
       align-items: center;
@@ -267,6 +315,7 @@
       position: relative;
       max-height: calc(100vh - clamp(1.5rem, 4vh, 3.6rem));
       max-height: calc(100dvh - clamp(1.5rem, 4vh, 3.6rem));
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.95);
     }
 
     /* Left Column: Crystal Clear Artwork in Full View */
@@ -295,7 +344,16 @@
       border-radius: 22px;
       image-rendering: -webkit-optimize-contrast;
       image-rendering: high-quality;
-      box-shadow: 0 12px 35px -8px rgba(0, 0, 0, 0.06);
+      /* Ultra-thin multi-vibrant blue gradient border */
+      border: 1.2px solid transparent;
+      background-clip: padding-box, border-box;
+      background-origin: padding-box, border-box;
+      background-image: 
+        linear-gradient(to bottom, #ffffff, #ffffff), 
+        linear-gradient(135deg, #00f2fe 0%, #00c6ff 18%, #2563eb 42%, #3b82f6 65%, #6366f1 85%, #0284c7 100%);
+      box-shadow: 
+        0 12px 35px -8px rgba(37, 99, 235, 0.14),
+        0 0 15px rgba(0, 198, 255, 0.12);
     }
 
     /* Right Column: Clean Presentation Sign In Card */
@@ -309,7 +367,7 @@
       height: 100%;
     }
 
-    /* Floating Sign In Card with Multi-vibrant Blue, Violet & Pink Border */
+    /* Floating Sign In Card with Dynamic Shifting Multi-vibrant Border */
     .elevated-auth-subcard {
       width: 100%;
       max-width: 440px;
@@ -326,13 +384,21 @@
         0 24px 50px -12px rgba(0, 112, 243, 0.16),
         0 10px 24px -6px rgba(236, 72, 153, 0.12),
         0 0 25px rgba(139, 92, 246, 0.10);
-      /* Multi-vibrant Blue, Violet & Pink Border Line */
+      /* Multi-vibrant Flowing Border Line */
       border: 2px solid transparent;
       background-clip: padding-box, border-box;
       background-origin: padding-box, border-box;
       background-image: 
         linear-gradient(to bottom, #ffffff, #ffffff), 
-        linear-gradient(135deg, #00d2ff 0%, #3b82f6 28%, #8b5cf6 58%, #ec4899 85%, #f43f5e 100%);
+        linear-gradient(135deg, #00d2ff 0%, #3b82f6 20%, #8b5cf6 40%, #ec4899 60%, #f43f5e 80%, #f59e0b 90%, #10b981 100%);
+      background-size: 100% 100%, 300% 300%;
+      animation: innerBorderFlow 8s ease infinite;
+    }
+
+    @keyframes innerBorderFlow {
+      0% { background-position: 0% 0%, 0% 50%; }
+      50% { background-position: 0% 0%, 100% 50%; }
+      100% { background-position: 0% 0%, 0% 50%; }
     }
 
     /* Shield Icon Container */
@@ -352,27 +418,41 @@
       filter: drop-shadow(0 8px 20px rgba(0, 112, 243, 0.38));
     }
 
-    /* Eyebrow: SECURE ACCESS */
+    /* Eyebrow: SECURE ACCESS with Continuous Multicolor Hue Shift */
     .eyebrow-secure-access {
       font-family: var(--font-heading);
       font-size: clamp(0.8rem, 1.25vh, 0.9rem);
       font-weight: 800;
       letter-spacing: 0.28em;
-      background: linear-gradient(90deg, #0284c7 0%, #2563eb 60%, #db2777 85%, #f43f5e 100%);
+      background: linear-gradient(90deg, #0284c7 0%, #2563eb 25%, #7c3aed 50%, #db2777 75%, #f59e0b 100%);
+      background-size: 200% auto;
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       text-transform: uppercase;
       text-align: center;
       margin-bottom: 0.25rem;
+      animation: textShineFlow 5s linear infinite;
     }
 
-    /* Multi-vibrant Accent Line */
+    @keyframes textShineFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    /* Multi-vibrant Accent Line with Continuous Shifting Colors */
     .secure-access-multicolor-line {
-      width: 54px;
-      height: 3px;
-      background: linear-gradient(90deg, #0284c7 0%, #2563eb 50%, #f43f5e 100%);
+      width: 64px;
+      height: 3.5px;
+      background: linear-gradient(90deg, #10b981, #f59e0b, #ef4444, #ec4899, #8b5cf6, #2563eb, #06b6d4, #10b981);
+      background-size: 250% 100%;
       border-radius: 99px;
       margin: 0.2rem auto clamp(0.6rem, 1.3vh, 1rem) auto;
+      animation: lineGradientFlow 4s linear infinite;
+    }
+
+    @keyframes lineGradientFlow {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 250% 50%; }
     }
 
     /* Sign In Header */
@@ -515,37 +595,32 @@
       text-decoration: underline;
     }
 
-    .forgot-anchor-btn:hover {
-      color: #1d4ed8;
-      text-decoration: underline;
-    }
-
-    /* Gradient Login Submit Button */
+    /* Clean Tech Blue Login Submit Button */
     .login-submit-button {
       width: 100%;
       height: clamp(46px, 5.6vh, 52px);
-      background: linear-gradient(90deg, #1d6bf3 0%, #6366f1 50%, #9333ea 100%);
+      background: #2563eb;
       border: none;
-      border-radius: 14px;
+      border-radius: 12px;
       color: #ffffff;
       font-family: var(--font-heading);
       font-size: clamp(0.96rem, 1.45vh, 1.06rem);
       font-weight: 700;
       letter-spacing: 0.01em;
       cursor: pointer;
-      box-shadow: 0 10px 24px -4px rgba(99, 102, 241, 0.45);
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.28);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
       margin-top: 0.4rem;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.2s ease;
     }
 
     .login-submit-button:hover {
-      background: linear-gradient(90deg, #2563eb 0%, #4f46e5 50%, #a855f7 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 14px 28px -4px rgba(99, 102, 241, 0.55);
+      background: #1d4ed8;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
     }
 
     .auth-error-banner {
@@ -665,34 +740,45 @@
       display: none !important;
     }
 
+    .modal-glow-frame {
+      width: 100%;
+      max-width: 454px;
+      position: relative;
+      border-radius: 30px;
+      padding: 4.5px;
+      background: linear-gradient(135deg, #00d2ff 0%, #3b82f6 18%, #8b5cf6 38%, #ec4899 58%, #f43f5e 74%, #f59e0b 88%, #10b981 100%);
+      background-size: 300% 300%;
+      box-shadow: 
+        0 25px 70px -10px rgba(15, 23, 42, 0.40),
+        0 15px 40px -8px rgba(37, 99, 235, 0.35),
+        0 0 38px rgba(139, 92, 246, 0.32),
+        0 0 38px rgba(236, 72, 153, 0.28);
+      animation: modalGlowBorderFlow 6s ease infinite;
+      transform: scale(1);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes modalGlowBorderFlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .auth-modal-backdrop.hidden .modal-glow-frame {
+      transform: scale(0.94);
+    }
+
     .auth-modal-card {
       width: 100%;
-      max-width: 440px;
       background: #ffffff;
-      border-radius: 28px;
+      border-radius: 27px;
       position: relative;
       padding: clamp(1.8rem, 3.5vh, 2.5rem) clamp(1.5rem, 2.2vw, 2.2rem);
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      box-shadow: 
-        0 25px 60px -12px rgba(15, 23, 42, 0.4),
-        0 0 35px rgba(139, 92, 246, 0.25),
-        0 0 20px rgba(236, 72, 153, 0.2);
-      /* Mixed Violet, Blue & Pink 2px Gradient Border */
-      border: 2px solid transparent;
-      background-clip: padding-box, border-box;
-      background-origin: padding-box, border-box;
-      background-image: 
-        linear-gradient(to bottom, #ffffff, #ffffff), 
-        linear-gradient(135deg, #00d2ff 0%, #3b82f6 28%, #8b5cf6 58%, #ec4899 85%, #f43f5e 100%);
-      transform: scale(1);
-      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .auth-modal-backdrop.hidden .auth-modal-card {
-      transform: scale(0.94);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.95);
     }
 
     .modal-close-btn {
@@ -703,7 +789,7 @@
       height: 34px;
       border-radius: 50%;
       background: #f1f5f9;
-      border: none;
+      border: 1px solid #e2e8f0;
       color: #64748b;
       cursor: pointer;
       display: flex;
@@ -719,17 +805,19 @@
     }
 
     .modal-shield-badge {
-      width: 58px;
-      height: 58px;
-      border-radius: 18px;
-      background: linear-gradient(135deg, rgba(0, 210, 255, 0.12) 0%, rgba(139, 92, 246, 0.15) 50%, rgba(236, 72, 153, 0.15) 100%);
-      border: 1.5px solid rgba(139, 92, 246, 0.3);
+      width: 60px;
+      height: 60px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(0, 210, 255, 0.14) 0%, rgba(139, 92, 246, 0.18) 50%, rgba(236, 72, 153, 0.16) 100%);
+      border: 1.5px solid rgba(139, 92, 246, 0.35);
       color: #7c3aed;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 0.9rem;
-      box-shadow: 0 8px 20px rgba(139, 92, 246, 0.2);
+      box-shadow: 
+        0 10px 25px rgba(139, 92, 246, 0.22),
+        0 4px 12px rgba(0, 210, 255, 0.18);
     }
 
     .modal-step-section {
@@ -919,7 +1007,8 @@
     .vibrant-modal-submit-btn {
       width: 100%;
       height: 48px;
-      background: linear-gradient(90deg, #1d6bf3 0%, #7c3aed 48%, #ec4899 100%);
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #ec4899 100%);
+      background-size: 200% 100%;
       border: none;
       border-radius: 14px;
       color: #ffffff;
@@ -927,19 +1016,25 @@
       font-size: 0.98rem;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 10px 24px -4px rgba(124, 58, 237, 0.45);
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.32);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
       margin-top: 0.3rem;
-      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.25s ease;
     }
 
     .vibrant-modal-submit-btn:hover {
-      background: linear-gradient(90deg, #2563eb 0%, #6d28d9 48%, #db2777 100%);
-      transform: translateY(-2px);
-      box-shadow: 0 14px 28px -4px rgba(124, 58, 237, 0.55);
+      background-position: 100% 0;
+      transform: translateY(-1.5px);
+      box-shadow: 0 8px 24px rgba(124, 58, 237, 0.4);
+    }
+
+    .auth-modal-card .text-input-field:focus {
+      background-color: #ffffff;
+      border-color: #8b5cf6;
+      box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.18), 0 4px 12px rgba(37, 99, 235, 0.12);
     }
 
     .modal-secondary-actions {
@@ -970,32 +1065,23 @@
       color: #cbd5e1;
       font-size: 0.8rem;
     }
-
-    .success-icon-badge {
-      width: 68px;
-      height: 68px;
-      border-radius: 50%;
-      background: rgba(16, 185, 129, 0.12);
-      border: 2px solid #10b981;
-      color: #10b981;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 0.9rem;
-      box-shadow: 0 0 25px rgba(16, 185, 129, 0.25);
-    }
   </style>
 </head>
 <body>
 
-  <!-- Ambient Outer Glowing Auras -->
-  <div class="ambient-halo-top-left" aria-hidden="true"></div>
-  <div class="ambient-halo-bottom-right" aria-hidden="true"></div>
+  <!-- Ambient Outer 3D Logo-Spectrum Glowing Auras (Royal Blue, Magenta Pink, Amber Gold, Violet) -->
+  <div class="ambient-halo-blue" aria-hidden="true"></div>
+  <div class="ambient-halo-magenta" aria-hidden="true"></div>
+  <div class="ambient-halo-amber" aria-hidden="true"></div>
+  <div class="ambient-halo-violet" aria-hidden="true"></div>
 
-  <div class="viewport-stage">
+  <!-- Fullscreen Multicolor Ambient Canvas -->
+  <canvas id="multicolorBgCanvas" class="multicolor-bg-canvas" aria-hidden="true"></canvas>
+
+  <div class="viewport-stage" id="viewportStage">
     
-    <!-- Multi-vibrant Animated Border Frame -->
-    <div class="master-card-glow-frame">
+    <!-- 3D Parallax Master Card Glow Frame -->
+    <div class="master-card-glow-frame" id="masterCardGlowFrame">
       
       <!-- Master Container -->
       <main class="master-card-container" aria-label="SentinelAI-X Security Access Portal">
@@ -1114,10 +1200,11 @@
        FORGOT PASSWORD & MAGIC PASSWORD RESET LINK RECOVERY MODAL
        ========================================================================== -->
   <div id="forgot-password-modal" class="auth-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title-dyn">
-    <div class="auth-modal-card">
-      
-      <!-- Close Modal Button -->
-      <button type="button" id="modal-close-btn" class="modal-close-btn" aria-label="Close recovery dialog">
+    <div class="modal-glow-frame">
+      <div class="auth-modal-card">
+        
+        <!-- Close Modal Button -->
+        <button type="button" id="modal-close-btn" class="modal-close-btn" aria-label="Close recovery dialog">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
           <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -1133,6 +1220,7 @@
           </svg>
         </div>
         <span class="modal-eyebrow">Recovery Verification</span>
+        <div class="secure-access-multicolor-line" style="margin: 0.25rem auto 0.6rem auto; width: 54px;" aria-hidden="true"></div>
         <h3 id="modal-title-dyn" class="modal-title">Forgot Password?</h3>
         <p class="modal-subtitle">Enter your registered email address to receive your verification code</p>
 
@@ -1175,6 +1263,7 @@
           </svg>
         </div>
         <span class="modal-eyebrow">SECURITY CODE VERIFICATION</span>
+        <div class="secure-access-multicolor-line" style="margin: 0.25rem auto 0.6rem auto; width: 54px;" aria-hidden="true"></div>
         <h3 class="modal-title">Enter 4–Digit OTP</h3>
         <p class="modal-subtitle" style="margin-bottom: 1.25rem;">
           We sent a 4-digit code to <strong id="modal-target-email-label" style="color: #6366f1; word-break: break-all;"></strong>
@@ -1216,6 +1305,7 @@
           </svg>
         </div>
         <span class="modal-eyebrow">Credential Reset</span>
+        <div class="secure-access-multicolor-line" style="margin: 0.25rem auto 0.6rem auto; width: 54px;" aria-hidden="true"></div>
         <h3 class="modal-title">Create New Password</h3>
         <p class="modal-subtitle">Enter and confirm your new secure password for SentinelAI-X.</p>
 
@@ -1312,11 +1402,38 @@
         </button>
       </div>
 
+      </div>
     </div>
   </div>
 
   <script>
+    // Automatically purge any injected Netlify badge or drawer from DOM
+    const purgeNetlifyInjections = () => {
+      const selectors = [
+        '#netlify-badge', '.netlify-badge', 'netlify-drawer',
+        '[data-netlify-deploy-id]', '[class*="netlify"]',
+        '[id*="netlify"]', 'iframe[src*="netlify"]',
+        'a[href*="netlify.com"]'
+      ];
+      selectors.forEach(sel => {
+        document.querySelectorAll(sel).forEach(el => el.remove());
+      });
+      // Purge any floating badge element mentioning Netlify
+      document.querySelectorAll('div, a, span, button, p, section, aside, header, footer').forEach(el => {
+        if (el.textContent && el.textContent.toLowerCase().includes('powered by netlify') && el.children.length < 5) {
+          el.remove();
+        }
+      });
+    };
+    purgeNetlifyInjections();
+    window.addEventListener('load', purgeNetlifyInjections);
+    setInterval(purgeNetlifyInjections, 300);
+    if (document.body) {
+      new MutationObserver(purgeNetlifyInjections).observe(document.body, { childList: true, subtree: true });
+    }
+
     document.addEventListener("DOMContentLoaded", () => {
+      purgeNetlifyInjections();
       // Main Login Elements
       const emailInput = document.getElementById("user-email");
       const passwordInput = document.getElementById("user-password");
@@ -1388,7 +1505,7 @@
           scope: "LAB_1_ONLY",
           clearanceLevel: 2,
           avatar: "L1",
-          destination: "../index.html#lab1-dashboard"
+          destination: "index.html#lab1-dashboard"
         },
         "lab2.sentinelai@gmail.com": {
           email: "lab2.sentinelai@gmail.com",
@@ -1400,7 +1517,7 @@
           scope: "LAB_2_ONLY",
           clearanceLevel: 2,
           avatar: "L2",
-          destination: "../index.html#lab2-dashboard"
+          destination: "index.html#lab2-dashboard"
         },
         "global.sentinelai@gmail.com": {
           email: "global.sentinelai@gmail.com",
@@ -1412,7 +1529,7 @@
           scope: "FULL_ACCESS",
           clearanceLevel: 4,
           avatar: "AD",
-          destination: "../index.html#system-overview"
+          destination: "index.html#system-overview"
         },
         "securitysuper.sentinelai@gmail.com": {
           email: "securitysuper.sentinelai@gmail.com",
@@ -1424,7 +1541,7 @@
           scope: "SUPER_ADMIN",
           clearanceLevel: 5,
           avatar: "SA",
-          destination: "../index.html#system-overview"
+          destination: "index.html#system-overview"
         }
       };
 
@@ -1959,6 +2076,519 @@
         });
       }
     });
+
+    // =========================================================================
+    // SENTINELAI-X: PROFESSIONAL THEME ENGINE (8 DYNAMIC MODES)
+    // =========================================================================
+    (function initSentinelThemeEngine() {
+      const canvas = document.getElementById('multicolorBgCanvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let width, height, dpr;
+      let animationFrameId;
+
+      // Default active theme: Enterprise Sensor Mesh
+      const urlParams = new URLSearchParams(window.location.search);
+      let activeTheme = urlParams.get('theme') || localStorage.getItem('sentinel_active_theme') || 'enterprise-mesh';
+
+      let tick = 0;
+      let nodes = [], molecules = [], orbitalRings = [], particles = [], hexCells = [], radarAngle = 0;
+
+      function resize() {
+        dpr = window.devicePixelRatio || 1;
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
+        ctx.scale(dpr, dpr);
+        initEntities();
+      }
+
+      function initEntities() {
+        // 1. Enterprise Mesh Nodes (IoT Lab Nodes)
+        nodes = [];
+        const nodeCount = Math.min(60, Math.floor((width * height) / 20000));
+        for (let i = 0; i < nodeCount; i++) {
+          nodes.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            vx: (Math.random() - 0.5) * 0.45,
+            vy: (Math.random() - 0.5) * 0.45,
+            radius: Math.random() * 2.8 + 1.6,
+            baseHue: (i * 35) % 360,
+            pulse: Math.random() * Math.PI * 2,
+            pulseSpeed: Math.random() * 0.025 + 0.015
+          });
+        }
+
+        // 2. Molecular Lattice
+        molecules = [];
+        for (let i = 0; i < 20; i++) {
+          molecules.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            orbitRadius: Math.random() * 24 + 18,
+            angle: Math.random() * Math.PI * 2,
+            speed: (Math.random() - 0.5) * 0.03,
+            vx: (Math.random() - 0.5) * 0.35,
+            vy: (Math.random() - 0.5) * 0.35,
+            hue: Math.random() * 360
+          });
+        }
+
+        // 3. Orbital Rings
+        orbitalRings = [
+          { cx: width * 0.12, cy: height * 0.3, r: 110, speed: 0.012, blips: [0, 2.1, 4.2], hue: 215 },
+          { cx: width * 0.88, cy: height * 0.25, r: 130, speed: -0.009, blips: [1.2, 3.8], hue: 330 },
+          { cx: width * 0.84, cy: height * 0.78, r: 150, speed: 0.008, blips: [0.5, 2.8, 5.0], hue: 270 },
+          { cx: width * 0.15, cy: height * 0.82, r: 120, speed: -0.011, blips: [1.8, 4.5], hue: 45 }
+        ];
+
+        // 4. Hex Cells
+        hexCells = [];
+        const hexR = 38;
+        const hexW = Math.sqrt(3) * hexR;
+        const hexH = 2 * hexR * 0.75;
+        for (let y = -hexR; y < height + hexR * 2; y += hexH) {
+          const row = Math.floor(y / hexH);
+          for (let x = -hexR; x < width + hexR * 2; x += hexW) {
+            const offsetX = (row % 2 === 0) ? 0 : hexW / 2;
+            hexCells.push({
+              cx: x + offsetX,
+              cy: y,
+              radius: hexR - 2.5,
+              phase: Math.random() * Math.PI * 2,
+              hue: Math.random() * 360
+            });
+          }
+        }
+
+        // 5. Particles
+        particles = [];
+        const partCount = Math.min(55, Math.floor((width * height) / 22000));
+        for (let i = 0; i < partCount; i++) {
+          particles.push({
+            x: Math.random() * width,
+            y: Math.random() * height,
+            radius: Math.random() * 2.6 + 1.2,
+            vx: (Math.random() - 0.5) * 0.45,
+            vy: -Math.random() * 0.45 - 0.15,
+            baseHue: Math.random() * 360,
+            alpha: Math.random() * 0.4 + 0.3,
+            pulseSpeed: Math.random() * 0.02 + 0.01,
+            pulseOffset: Math.random() * Math.PI * 2
+          });
+        }
+      }
+
+      function renderTheme() {
+        tick++;
+        ctx.clearRect(0, 0, width, height);
+
+        switch (activeTheme) {
+          case 'laser-spectrum-waves':
+            renderLaserSpectrumWaves();
+            break;
+          case 'quantum-lattice':
+            renderQuantumLattice();
+            break;
+          case 'orbital-telemetry':
+            renderOrbitalTelemetry();
+            break;
+          case 'command-grid-hud':
+            renderCommandGridHud();
+            break;
+          case 'hex-cyber-shield':
+            renderHexCyberShield();
+            break;
+          case 'aurora-prism':
+            renderAuroraPrism();
+            break;
+          case 'particle-stream':
+            renderParticleStream();
+            break;
+          case 'enterprise-mesh':
+          default:
+            renderEnterpriseMesh();
+            break;
+        }
+
+        animationFrameId = requestAnimationFrame(renderTheme);
+      }
+
+      // =======================================================================
+      // THEME: Enterprise Sensor Mesh (IoT Lab Telemetry Network)
+      // =======================================================================
+      function renderEnterpriseMesh() {
+        const maxDist = 145;
+        for (let i = 0; i < nodes.length; i++) {
+          const n1 = nodes[i];
+          n1.x += n1.vx;
+          n1.y += n1.vy;
+          if (n1.x < -10) n1.x = width + 10;
+          if (n1.x > width + 10) n1.x = -10;
+          if (n1.y < -10) n1.y = height + 10;
+          if (n1.y > height + 10) n1.y = -10;
+
+          const hue1 = (n1.baseHue + tick * 0.35) % 360;
+
+          for (let j = i + 1; j < nodes.length; j++) {
+            const n2 = nodes[j];
+            const dx = n1.x - n2.x;
+            const dy = n1.y - n2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < maxDist) {
+              const alpha = (1 - dist / maxDist) * 0.42;
+              
+              // Connecting line
+              ctx.beginPath();
+              ctx.moveTo(n1.x, n1.y);
+              ctx.lineTo(n2.x, n2.y);
+              ctx.strokeStyle = `hsla(${hue1}, 82%, 52%, ${alpha.toFixed(2)})`;
+              ctx.lineWidth = 1.15;
+              ctx.stroke();
+
+              // Micro Data Packet moving along active connection
+              const packetProgress = (tick * 0.015 + (i + j) * 0.12) % 1;
+              const px = n1.x + (n2.x - n1.x) * packetProgress;
+              const py = n1.y + (n2.y - n1.y) * packetProgress;
+              ctx.beginPath();
+              ctx.fillStyle = `hsla(${hue1}, 95%, 58%, ${(alpha * 1.5).toFixed(2)})`;
+              ctx.shadowColor = `hsla(${hue1}, 95%, 60%, 0.6)`;
+              ctx.shadowBlur = 6;
+              ctx.arc(px, py, 1.8, 0, Math.PI * 2);
+              ctx.fill();
+              ctx.shadowBlur = 0;
+            }
+          }
+
+          // Node Beacon with soft breathing aura
+          const pulseVal = Math.sin(tick * n1.pulseSpeed + n1.pulse);
+          const currentRadius = Math.max(1.5, n1.radius + pulseVal * 0.8);
+          
+          ctx.beginPath();
+          ctx.fillStyle = `hsla(${hue1}, 88%, 52%, 0.9)`;
+          ctx.shadowColor = `hsla(${hue1}, 90%, 55%, 0.5)`;
+          ctx.shadowBlur = 9;
+          ctx.arc(n1.x, n1.y, currentRadius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+
+        renderParticles();
+      }
+
+      // THEME 1: Moving Spectrum Waves
+      function renderLaserSpectrumWaves() {
+        const waveConfigs = [
+          { yRatio: 0.18, amp: 30, freq: 0.0032, speed: 0.014, hueOffset: 0, lineWidth: 2.8, glowBlur: 14 },
+          { yRatio: 0.32, amp: 38, freq: 0.0026, speed: 0.010, hueOffset: 60, lineWidth: 2.5, glowBlur: 12 },
+          { yRatio: 0.48, amp: 44, freq: 0.0029, speed: 0.012, hueOffset: 120, lineWidth: 2.8, glowBlur: 15 },
+          { yRatio: 0.65, amp: 36, freq: 0.0035, speed: 0.015, hueOffset: 180, lineWidth: 2.4, glowBlur: 12 },
+          { yRatio: 0.80, amp: 42, freq: 0.0024, speed: 0.009, hueOffset: 240, lineWidth: 2.6, glowBlur: 14 },
+          { yRatio: 0.92, amp: 28, freq: 0.0038, speed: 0.016, hueOffset: 300, lineWidth: 2.2, glowBlur: 10 }
+        ];
+
+        waveConfigs.forEach((cfg) => {
+          const yCenter = height * cfg.yRatio;
+          const time = tick * cfg.speed;
+
+          const grad = ctx.createLinearGradient(0, yCenter - cfg.amp, width, yCenter + cfg.amp);
+          const baseHue = (tick * 0.65 + cfg.hueOffset) % 360;
+
+          grad.addColorStop(0.00, `hsla(${(baseHue + 0) % 360}, 85%, 52%, 0.85)`);
+          grad.addColorStop(0.16, `hsla(${(baseHue + 60) % 360}, 90%, 52%, 0.85)`);
+          grad.addColorStop(0.33, `hsla(${(baseHue + 120) % 360}, 85%, 50%, 0.85)`);
+          grad.addColorStop(0.50, `hsla(${(baseHue + 180) % 360}, 90%, 54%, 0.85)`);
+          grad.addColorStop(0.66, `hsla(${(baseHue + 240) % 360}, 88%, 52%, 0.85)`);
+          grad.addColorStop(0.83, `hsla(${(baseHue + 300) % 360}, 90%, 52%, 0.85)`);
+          grad.addColorStop(1.00, `hsla(${(baseHue + 360) % 360}, 85%, 52%, 0.85)`);
+
+          ctx.beginPath();
+          const step = 14;
+          for (let x = 0; x <= width + step; x += step) {
+            const wave1 = Math.sin(x * cfg.freq + time) * cfg.amp;
+            const wave2 = Math.cos(x * (cfg.freq * 0.65) + time * 0.75) * (cfg.amp * 0.45);
+            const wave3 = Math.sin(x * 0.0015 + time * 0.5) * (cfg.amp * 0.25);
+            const y = yCenter + wave1 + wave2 + wave3;
+
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+
+          ctx.strokeStyle = grad;
+          ctx.lineWidth = cfg.lineWidth;
+          ctx.shadowColor = `hsla(${baseHue}, 90%, 55%, 0.4)`;
+          ctx.shadowBlur = cfg.glowBlur;
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+        });
+
+        renderParticles();
+      }
+
+      // THEME 2: Enterprise Mesh
+      function renderEnterpriseMesh() {
+        const maxDist = 135;
+        for (let i = 0; i < nodes.length; i++) {
+          const n1 = nodes[i];
+          n1.x += n1.vx;
+          n1.y += n1.vy;
+          if (n1.x < 0 || n1.x > width) n1.vx *= -1;
+          if (n1.y < 0 || n1.y > height) n1.vy *= -1;
+
+          const hue1 = (n1.baseHue + tick * 0.4) % 360;
+
+          for (let j = i + 1; j < nodes.length; j++) {
+            const n2 = nodes[j];
+            const dx = n1.x - n2.x;
+            const dy = n1.y - n2.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < maxDist) {
+              const alpha = (1 - dist / maxDist) * 0.4;
+              ctx.beginPath();
+              ctx.moveTo(n1.x, n1.y);
+              ctx.lineTo(n2.x, n2.y);
+              ctx.strokeStyle = `hsla(${hue1}, 80%, 50%, ${alpha.toFixed(2)})`;
+              ctx.lineWidth = 1.1;
+              ctx.stroke();
+            }
+          }
+
+          ctx.beginPath();
+          ctx.fillStyle = `hsla(${hue1}, 85%, 52%, 0.9)`;
+          ctx.shadowColor = `hsla(${hue1}, 90%, 55%, 0.5)`;
+          ctx.shadowBlur = 8;
+          ctx.arc(n1.x, n1.y, n1.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        }
+      }
+
+      // THEME 3: Quantum Lattice
+      function renderQuantumLattice() {
+        molecules.forEach((m) => {
+          m.x += m.vx;
+          m.y += m.vy;
+          if (m.x < 50 || m.x > width - 50) m.vx *= -1;
+          if (m.y < 50 || m.y > height - 50) m.vy *= -1;
+
+          m.angle += m.speed;
+          const currentHue = (m.hue + tick * 0.5) % 360;
+
+          ctx.beginPath();
+          ctx.fillStyle = `hsla(${currentHue}, 85%, 52%, 0.8)`;
+          ctx.shadowColor = `hsla(${currentHue}, 90%, 55%, 0.5)`;
+          ctx.shadowBlur = 10;
+          ctx.arc(m.x, m.y, 4, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+
+          ctx.beginPath();
+          ctx.arc(m.x, m.y, m.orbitRadius, 0, Math.PI * 2);
+          ctx.strokeStyle = `hsla(${currentHue}, 80%, 50%, 0.2)`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+
+          const ex = m.x + Math.cos(m.angle) * m.orbitRadius;
+          const ey = m.y + Math.sin(m.angle) * m.orbitRadius;
+          ctx.beginPath();
+          ctx.fillStyle = `hsla(${(currentHue + 60) % 360}, 90%, 55%, 0.9)`;
+          ctx.arc(ex, ey, 2.5, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      }
+
+      // THEME 4: Orbital Telemetry
+      function renderOrbitalTelemetry() {
+        orbitalRings.forEach((ring) => {
+          const baseHue = (ring.hue + tick * 0.3) % 360;
+
+          ctx.beginPath();
+          ctx.arc(ring.cx, ring.cy, ring.r, 0, Math.PI * 2);
+          ctx.strokeStyle = `hsla(${baseHue}, 80%, 50%, 0.25)`;
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.setLineDash([4, 6]);
+          ctx.arc(ring.cx, ring.cy, ring.r + 20, 0, Math.PI * 2);
+          ctx.strokeStyle = `hsla(${baseHue}, 80%, 50%, 0.18)`;
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          ring.blips.forEach((blipAngle, bIdx) => {
+            const curAngle = blipAngle + tick * ring.speed;
+            const px = ring.cx + Math.cos(curAngle) * ring.r;
+            const py = ring.cy + Math.sin(curAngle) * ring.r;
+
+            ctx.beginPath();
+            ctx.fillStyle = `hsla(${(baseHue + bIdx * 45) % 360}, 90%, 52%, 0.9)`;
+            ctx.shadowColor = `hsla(${baseHue}, 90%, 55%, 0.6)`;
+            ctx.shadowBlur = 8;
+            ctx.arc(px, py, 3.5, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+          });
+        });
+      }
+
+      // THEME 5: SOC Command Grid HUD
+      function renderCommandGridHud() {
+        const gridSize = 45;
+        ctx.strokeStyle = 'rgba(59, 130, 246, 0.08)';
+        ctx.lineWidth = 1;
+
+        for (let x = 0; x <= width; x += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, height);
+          ctx.stroke();
+        }
+        for (let y = 0; y <= height; y += gridSize) {
+          ctx.beginPath();
+          ctx.moveTo(0, y);
+          ctx.lineTo(width, y);
+          ctx.stroke();
+        }
+
+        const cx = width * 0.5;
+        const cy = height * 0.5;
+        radarAngle += 0.015;
+
+        for (let r = 100; r <= 500; r += 100) {
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          ctx.strokeStyle = 'rgba(37, 99, 235, 0.12)';
+          ctx.stroke();
+        }
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(radarAngle);
+        const sweepGrad = ctx.createRadialGradient(0, 0, 10, 0, 0, 500);
+        sweepGrad.addColorStop(0, 'rgba(59, 130, 246, 0.22)');
+        sweepGrad.addColorStop(0.8, 'rgba(6, 182, 212, 0.04)');
+        sweepGrad.addColorStop(1, 'transparent');
+
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.arc(0, 0, 500, 0, Math.PI / 4);
+        ctx.closePath();
+        ctx.fillStyle = sweepGrad;
+        ctx.fill();
+        ctx.restore();
+
+        ctx.font = '500 11px JetBrains Mono, monospace';
+        ctx.fillStyle = '#64748b';
+        ctx.fillText(`SYS.ZONE: LAB-NORTH // [${Math.floor(tick * 0.1) % 999}]`, 30, height - 30);
+        ctx.fillText('STATUS: AI-SHIELD ONLINE', width - 210, height - 30);
+      }
+
+      // THEME 6: Hex Cyber Shield
+      function renderHexCyberShield() {
+        hexCells.forEach((hex) => {
+          const pulseVal = Math.sin(tick * 0.025 + hex.phase);
+          const alpha = 0.06 + Math.max(0, pulseVal) * 0.35;
+          const hue = (hex.hue + tick * 0.4) % 360;
+
+          ctx.beginPath();
+          for (let i = 0; i < 6; i++) {
+            const angle = (Math.PI / 3) * i;
+            const hx = hex.cx + hex.radius * Math.cos(angle);
+            const hy = hex.cy + hex.radius * Math.sin(angle);
+            if (i === 0) ctx.moveTo(hx, hy);
+            else ctx.lineTo(hx, hy);
+          }
+          ctx.closePath();
+
+          ctx.strokeStyle = `hsla(${hue}, 80%, 52%, ${alpha.toFixed(2)})`;
+          ctx.lineWidth = 1.3;
+          if (pulseVal > 0.8) {
+            ctx.fillStyle = `hsla(${hue}, 85%, 55%, 0.08)`;
+            ctx.fill();
+          }
+          ctx.stroke();
+        });
+      }
+
+      // THEME 7: Luminous Prism Aurora
+      function renderAuroraPrism() {
+        for (let b = 0; b < 4; b++) {
+          const hue = (tick * 0.3 + b * 90) % 360;
+          const cx = width * (0.2 + b * 0.2) + Math.sin(tick * 0.01 + b) * 60;
+          const cy = height * (0.3 + (b % 2) * 0.35) + Math.cos(tick * 0.01 + b) * 50;
+          const r = Math.min(width, height) * 0.28;
+
+          const grad = ctx.createRadialGradient(cx, cy, 10, cx, cy, r);
+          grad.addColorStop(0, `hsla(${hue}, 85%, 60%, 0.18)`);
+          grad.addColorStop(0.5, `hsla(${(hue + 45) % 360}, 80%, 55%, 0.06)`);
+          grad.addColorStop(1, 'transparent');
+
+          ctx.beginPath();
+          ctx.arc(cx, cy, r, 0, Math.PI * 2);
+          ctx.fillStyle = grad;
+          ctx.fill();
+        }
+      }
+
+      // THEME 8: Quantum Particle Stream
+      function renderParticleStream() {
+        for (let s = 0; s < 5; s++) {
+          const hue = (tick * 0.5 + s * 70) % 360;
+          const startY = height * (0.2 + s * 0.15);
+
+          ctx.beginPath();
+          ctx.moveTo(0, startY);
+          const cp1x = width * 0.35;
+          const cp1y = startY + Math.sin(tick * 0.018 + s) * 70;
+          const cp2x = width * 0.65;
+          const cp2y = startY - Math.cos(tick * 0.018 + s) * 70;
+          ctx.bezierCurveTo(cp1x, cp1y, cp2x, cp2y, width, startY + (s % 2 === 0 ? 40 : -40));
+
+          ctx.strokeStyle = `hsla(${hue}, 85%, 52%, 0.65)`;
+          ctx.lineWidth = 2.2;
+          ctx.shadowColor = `hsla(${hue}, 90%, 55%, 0.4)`;
+          ctx.shadowBlur = 10;
+          ctx.stroke();
+          ctx.shadowBlur = 0;
+        }
+
+        renderParticles();
+      }
+
+      function renderParticles() {
+        particles.forEach((p) => {
+          p.x += p.vx;
+          p.y += p.vy;
+
+          if (p.x < -10) p.x = width + 10;
+          if (p.x > width + 10) p.x = -10;
+          if (p.y < -10) p.y = height + 10;
+          if (p.y > height + 10) p.y = -10;
+
+          const currentHue = (p.baseHue + tick * 0.6) % 360;
+          const currentAlpha = p.alpha + Math.sin(tick * p.pulseSpeed + p.pulseOffset) * 0.18;
+          const clampedAlpha = Math.max(0.18, Math.min(0.9, currentAlpha));
+
+          ctx.beginPath();
+          ctx.fillStyle = `hsla(${currentHue}, 85%, 54%, ${clampedAlpha.toFixed(2)})`;
+          ctx.shadowColor = `hsla(${currentHue}, 90%, 55%, 0.55)`;
+          ctx.shadowBlur = 8;
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.shadowBlur = 0;
+        });
+      }
+
+      window.addEventListener('resize', resize);
+      resize();
+      renderTheme();
+    })();
   </script>
 </body>
 </html>
