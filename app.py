@@ -69,6 +69,7 @@ def health():
 # STEP 2: SEND OTP ENDPOINT
 # ==========================================
 @app.route("/api/send-otp", methods=["POST"])
+@app.route("/api/auth/send-otp", methods=["POST"])
 @app.route("/api/auth/forgot-password", methods=["POST"])
 def send_otp():
     data = request.get_json(silent=True) or {}
@@ -130,6 +131,7 @@ def send_otp():
 # STEP 3: RESEND OTP ENDPOINT
 # ==========================================
 @app.route("/api/resend-otp", methods=["POST"])
+@app.route("/api/auth/resend-otp", methods=["POST"])
 def resend_otp():
     data = request.get_json(silent=True) or {}
     email = (data.get("email") or "").strip().lower()
@@ -184,6 +186,7 @@ def resend_otp():
 # STEP 4: VERIFY OTP ENDPOINT
 # ==========================================
 @app.route("/api/verify-otp", methods=["POST"])
+@app.route("/api/auth/verify-otp", methods=["POST"])
 @app.route("/api/auth/verify-reset-otp", methods=["POST"])
 def verify_otp():
     data = request.get_json(silent=True) or {}
@@ -250,6 +253,7 @@ def verify_otp():
 # STEP 5: CONFIRM PASSWORD RESET ENDPOINT
 # ==========================================
 @app.route("/api/reset-password", methods=["POST"])
+@app.route("/api/auth/reset-password", methods=["POST"])
 @app.route("/api/auth/confirm-new-password", methods=["POST"])
 def reset_password():
     data = request.get_json(silent=True) or {}
