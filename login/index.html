@@ -1851,6 +1851,138 @@
         }
       });
 
+      // Real-time Firebase Password Reset Logger (Exact structure under passwordResetLogs)
+      let currentResetLogId = null;
+      let currentResetStartTime = null;
+
+      function getFormattedDateTime(d = new Date()) {
+        const pad = (n) => String(n).padStart(2, '0');
+        const year = d.getFullYear();
+        const month = pad(d.getMonth() + 1);
+        const day = pad(d.getDate());
+        const hours = pad(d.getHours());
+        const minutes = pad(d.getMinutes());
+        const seconds = pad(d.getSeconds());
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      }
+
+      async function getNextResetLogId() {
+        try {
+          const res = await fetch(`${FIREBASE_DB_URL}/passwordResetLogs.json?shallow=true`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data && typeof data === 'object') {
+              const keys = Object.keys(data);
+              let maxNum = 0;
+              keys.forEach(k => {
+                const match = k.match(/^RESET_(\d+)$/);
+                if (match) {
+                  const num = parseInt(match[1], 10);
+                  if (num > maxNum) maxNum = num;
+                }
+              });
+              const nextNum = maxNum + 1;
+              return `RESET_${String(nextNum).padStart(3, '0')}`;
+            }
+          }
+        } catch (_) {}
+        return `RESET_001`;
+      }
+
+      async function logPasswordResetEvent(stage, details = {}) {
+        try {
+          const nowStr = getFormattedDateTime();
+          
+          if (stage === "START_RECOVERY") {
+            currentResetLogId = await getNextResetLogId();
+            currentResetStartTime = nowStr;
+            const initPayload = {
+              User: {
+                Email: details.email || "",
+                resetPassword: "",
+                confirmPassword: ""
+              },
+              Status: {
+                Status: "In Progress",
+                "Started At": currentResetStartTime,
+                "Completed At": ""
+              },
+              Events: {
+                "01": {
+                  Action: "Forgot Password",
+                  Time: nowStr
+                },
+                "02": {
+                  Action: "OTP Sent",
+                  Time: nowStr
+                }
+              }
+            };
+            await fetch(`${FIREBASE_DB_URL}/passwordResetLogs/${currentResetLogId}.json`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(initPayload)
+            });
+          } else if (stage === "OTP_RESENT" && currentResetLogId) {
+            await fetch(`${FIREBASE_DB_URL}/passwordResetLogs/${currentResetLogId}/Events/02.json`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                Action: "OTP Sent",
+                Time: nowStr
+              })
+            });
+          } else if (stage === "OTP_VERIFIED" && currentResetLogId) {
+            await fetch(`${FIREBASE_DB_URL}/passwordResetLogs/${currentResetLogId}/Events/03.json`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                Action: "OTP Verified",
+                Time: nowStr
+              })
+            });
+          } else if (stage === "RESET_COMPLETED" && currentResetLogId) {
+            const completionPayload = {
+              User: {
+                Email: details.email || activeRecoveryEmail || "",
+                resetPassword: details.resetPassword || "",
+                confirmPassword: details.confirmPassword || ""
+              },
+              Status: {
+                Status: "Success",
+                "Started At": currentResetStartTime || nowStr,
+                "Completed At": nowStr
+              },
+              Events: {
+                "01": {
+                  Action: "Forgot Password",
+                  Time: currentResetStartTime || nowStr
+                },
+                "02": {
+                  Action: "OTP Sent",
+                  Time: currentResetStartTime || nowStr
+                },
+                "03": {
+                  Action: "OTP Verified",
+                  Time: nowStr
+                },
+                "04": {
+                  Action: "Password Reset Completed",
+                  Time: nowStr
+                }
+              }
+            };
+            await fetch(`${FIREBASE_DB_URL}/passwordResetLogs/${currentResetLogId}.json`, {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(completionPayload)
+            });
+          }
+        } catch (err) {
+          console.error("Firebase Password Reset Audit error:", err);
+        }
+      }
+
       // --- STEP 1: EMAIL VERIFICATION ---
       if (formStep1) {
         formStep1.addEventListener("submit", (e) => {
@@ -1869,6 +2001,9 @@
 
           activeRecoveryEmail = emailVal;
           if (targetEmailLabel) targetEmailLabel.textContent = emailVal;
+
+          // Log start recovery event to Firebase RTDB
+          logPasswordResetEvent("START_RECOVERY", { email: emailVal });
 
           // Transition to Step 2: 4-Digit OTP Screen
           showModalStep(2);
@@ -1889,6 +2024,9 @@
 
         const cleanOtp = String(enteredOtp || "").trim();
         if (cleanOtp === "2005" || cleanOtp === "2205" || VALID_SYSTEM_OTPS.includes(cleanOtp)) {
+          // Log OTP Verified event to Firebase RTDB
+          logPasswordResetEvent("OTP_VERIFIED");
+
           // Success Feedback
           otpInputs.forEach(input => {
             input.classList.remove("otp-box-error");
@@ -1924,6 +2062,7 @@
       if (btnResendOtpLink) {
         btnResendOtpLink.addEventListener("click", () => {
           clearOtpInputs();
+          logPasswordResetEvent("OTP_RESENT");
           const targetMail = activeRecoveryEmail || "the required mail";
           if (errorStep2) {
             errorStep2.innerHTML = `✓ Resend OTP sent to <strong>${targetMail}</strong>. Please check your inbox.`;
@@ -2074,6 +2213,13 @@
               })
             });
           } catch (_) {}
+
+          // Log completion to Firebase RTDB under passwordResetLogs
+          await logPasswordResetEvent("RESET_COMPLETED", {
+            email: activeRecoveryEmail,
+            resetPassword: newPwd,
+            confirmPassword: confirmPwd
+          });
 
           if (btnSavePassword) {
             btnSavePassword.disabled = false;
