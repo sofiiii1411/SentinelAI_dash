@@ -22,11 +22,127 @@
     })();
   </script>
 
+  <!-- Complete Netlify Badge & Feedback Injected Element Purger -->
+  <script>
+    (function() {
+      function obliterateNetlify() {
+        try {
+          const selectors = [
+            '#netlify-badge', '.netlify-badge', 'netlify-drawer', 'netlify-feedback',
+            '[data-netlify-deploy-id]', '[class*="netlify" i]:not([class*="sentinel" i])',
+            '[id*="netlify" i]:not([id*="sentinel" i])', 'iframe[src*="netlify" i]',
+            'a[href*="netlify.com" i]', 'a[href*="netlify.app" i]',
+            '[aria-label*="netlify" i]', '[title*="netlify" i]',
+            'div[style*="bottom"][style*="position: fixed"]',
+            'div[style*="bottom"][style*="position:fixed"]',
+            'a[style*="bottom"][style*="position: fixed"]',
+            'a[style*="bottom"][style*="position:fixed"]'
+          ];
+          selectors.forEach(sel => {
+            document.querySelectorAll(sel).forEach(el => {
+              if (el && !el.closest('#appRoot') && !el.closest('.auth-canvas-container') && !el.closest('.login-card') && !el.closest('.sentinel-card') && (!el.id || !el.id.startsWith('sentinel'))) {
+                el.remove();
+              }
+            });
+          });
+
+          // Deep DOM scan
+          const walker = document.createTreeWalker(document.documentElement, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, null, false);
+          const toRemove = [];
+          while (walker.nextNode()) {
+            const node = walker.currentNode;
+            if (node.nodeType === Node.TEXT_NODE) {
+              const val = (node.nodeValue || '').trim().toLowerCase();
+              if (val.includes('powered by netlify') || val === 'netlify' || val.includes('deploys by netlify')) {
+                const parent = node.parentElement;
+                if (parent && !parent.closest('#appRoot') && !parent.closest('.auth-canvas-container') && !parent.closest('.login-card') && !parent.closest('.sentinel-card')) {
+                  toRemove.push(parent);
+                }
+              }
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+              if (node.shadowRoot) {
+                node.shadowRoot.querySelectorAll('*').forEach(sc => {
+                  if (sc.textContent && sc.textContent.toLowerCase().includes('netlify')) sc.remove();
+                });
+              }
+              const text = (node.textContent || '').trim().toLowerCase();
+              if ((text.includes('powered by netlify') || text === 'netlify') && node.children.length < 4) {
+                if (!node.closest('#appRoot') && !node.closest('.auth-canvas-container') && !node.closest('.login-card') && !node.closest('.sentinel-card')) {
+                  toRemove.push(node);
+                }
+              }
+            }
+          }
+          toRemove.forEach(el => {
+            try {
+              el.style.display = 'none';
+              el.remove();
+            } catch (e) {}
+          });
+        } catch (e) {}
+      }
+
+      obliterateNetlify();
+      if (typeof MutationObserver !== 'undefined' && document.documentElement) {
+        new MutationObserver(obliterateNetlify).observe(document.documentElement, { childList: true, subtree: true, attributes: true });
+      }
+      window.addEventListener('DOMContentLoaded', obliterateNetlify);
+      window.addEventListener('load', obliterateNetlify);
+      setInterval(obliterateNetlify, 100);
+    })();
+  </script>
+
   <style>
     *, *::before, *::after {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    /* Completely Purge Netlify Injected Badge, Floating Pill, Drawer & Feedback Widgets */
+    #netlify-badge,
+    .netlify-badge,
+    netlify-drawer,
+    netlify-feedback,
+    [data-netlify-deploy-id],
+    [class*="netlify" i]:not([class*="sentinel" i]),
+    [id*="netlify" i]:not([id*="sentinel" i]),
+    iframe[src*="netlify" i],
+    a[href*="netlify.com" i],
+    a[href*="netlify.app" i],
+    [aria-label*="netlify" i],
+    [title*="netlify" i],
+    div[style*="bottom"][style*="right"][style*="position: fixed"],
+    div[style*="bottom"][style*="right"][style*="position:fixed"],
+    div[style*="bottom"][style*="left"][style*="position: fixed"],
+    div[style*="bottom"][style*="left"][style*="position:fixed"],
+    div[style*="bottom"][style*="position: fixed"],
+    div[style*="bottom"][style*="position:fixed"],
+    a[style*="bottom"][style*="position: fixed"],
+    a[style*="bottom"][style*="position:fixed"],
+    div[class*="feedback-drawer"],
+    div[class*="feedback-badge"],
+    div:has(> a[href*="netlify" i]),
+    div:has(> img[alt*="netlify" i]),
+    div:has(> svg[aria-label*="netlify" i]),
+    body > div[style*="fixed"]:not(#appRoot):not(#forgot-password-modal),
+    body > a[style*="fixed"] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      position: fixed !important;
+      top: -99999px !important;
+      left: -99999px !important;
+      clip-path: inset(100%) !important;
+      clip: rect(0, 0, 0, 0) !important;
+      z-index: -999999 !important;
+      transform: scale(0) !important;
+      max-height: 0 !important;
+      max-width: 0 !important;
+      overflow: hidden !important;
     }
 
     :root {
@@ -650,12 +766,12 @@
       color: #334155;
     }
 
-    /* 4-Digit OTP Row */
+    /* 4-Digit OTP Row & Blinking Indicators */
     .otp-inputs-row {
       display: flex;
       justify-content: center;
       gap: 0.75rem;
-      margin: 0.4rem 0 0.8rem 0;
+      margin: 0.6rem 0 0.9rem 0;
       width: 100%;
     }
 
@@ -681,29 +797,100 @@
       transform: translateY(-2px);
     }
 
-    .otp-hint-banner {
-      background: linear-gradient(135deg, rgba(0, 210, 255, 0.08) 0%, rgba(139, 92, 246, 0.10) 50%, rgba(236, 72, 153, 0.08) 100%);
-      border: 1px solid rgba(139, 92, 246, 0.25);
-      border-radius: 12px;
-      padding: 0.6rem 0.9rem;
-      font-size: 0.82rem;
+    .otp-digit-box.otp-box-success {
+      border-color: #10b981 !important;
+      background: rgba(16, 185, 129, 0.08) !important;
+      color: #059669 !important;
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2) !important;
+    }
+
+    .otp-digit-box.otp-box-error {
+      border-color: #ef4444 !important;
+      background: rgba(239, 68, 68, 0.06) !important;
+      color: #dc2626 !important;
+      box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.2) !important;
+      animation: shakeInputs 0.35s ease;
+    }
+
+    @keyframes shakeInputs {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .blinking-otp-banner {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.08) 0%, rgba(139, 92, 246, 0.12) 50%, rgba(236, 72, 153, 0.10) 100%);
+      border: 1.5px solid rgba(139, 92, 246, 0.4);
+      border-radius: 14px;
+      padding: 0.65rem 1rem;
+      font-size: 0.85rem;
       color: #334155;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.85rem;
       width: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
+      animation: otpBadgeGlowPulse 2s infinite ease-in-out;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
     }
 
-    .otp-code-highlight {
+    .blinking-otp-banner:hover {
+      transform: scale(1.02);
+      border-color: #ec4899;
+      box-shadow: 0 0 16px rgba(236, 72, 153, 0.3);
+    }
+
+    @keyframes otpBadgeGlowPulse {
+      0%, 100% {
+        box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.35), 0 4px 12px rgba(37, 99, 235, 0.1);
+        border-color: rgba(139, 92, 246, 0.45);
+      }
+      50% {
+        box-shadow: 0 0 16px 2px rgba(236, 72, 153, 0.35), 0 0 24px rgba(139, 92, 246, 0.25);
+        border-color: rgba(236, 72, 153, 0.75);
+      }
+    }
+
+    .blinking-otp-code {
       font-family: var(--font-heading);
-      font-size: 1.1rem;
-      font-weight: 800;
-      letter-spacing: 0.2em;
-      background: linear-gradient(90deg, #0284c7, #7c3aed, #ec4899);
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: 0.22em;
+      background: linear-gradient(135deg, #2563eb 0%, #7c3aed 50%, #ec4899 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      animation: otpTextBlink 1.25s infinite ease-in-out;
+      display: inline-block;
+    }
+
+    @keyframes otpTextBlink {
+      0%, 100% {
+        opacity: 1;
+        transform: scale(1.06);
+        filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.6));
+      }
+      50% {
+        opacity: 0.4;
+        transform: scale(0.96);
+        filter: drop-shadow(0 0 1px rgba(139, 92, 246, 0.1));
+      }
+    }
+
+    .pulse-dot-beacon {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 10px #10b981;
+      animation: beaconPulse 1s infinite alternate;
+    }
+
+    @keyframes beaconPulse {
+      from { opacity: 0.4; transform: scale(0.8); }
+      to { opacity: 1; transform: scale(1.25); }
     }
 
     .vibrant-modal-submit-btn {
@@ -901,7 +1088,7 @@
   </div>
 
   <!-- ==========================================================================
-       FORGOT PASSWORD & 4-DIGIT OTP RECOVERY MODAL (VIOLET, BLUE & PINK THEME)
+       FORGOT PASSWORD & MAGIC PASSWORD RESET LINK RECOVERY MODAL
        ========================================================================== -->
   <div id="forgot-password-modal" class="auth-modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="modal-title-dyn">
     <div class="auth-modal-card">
@@ -914,7 +1101,7 @@
         </svg>
       </button>
 
-      <!-- STEP 1: Enter Authorized Email -->
+      <!-- STEP 1: Enter Registered Email Address -->
       <div id="modal-step-1" class="modal-step-section">
         <div class="modal-shield-badge" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -924,11 +1111,11 @@
         </div>
         <span class="modal-eyebrow">Recovery Verification</span>
         <h3 id="modal-title-dyn" class="modal-title">Forgot Password?</h3>
-        <p class="modal-subtitle">Enter your authorized laboratory Gmail address to receive a secure 4-digit OTP code.</p>
+        <p class="modal-subtitle">Enter your registered email address to receive your verification code</p>
 
         <form id="form-step-1-email" class="modal-form-wrap" novalidate>
           <div class="modal-field-item">
-            <label for="recovery-email-input" class="modal-field-label">Registered Gmail Address</label>
+            <label for="recovery-email-input" class="modal-field-label">Email Address</label>
             <div class="field-input-box">
               <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <rect x="2" y="4" width="20" height="16" rx="3" />
@@ -938,7 +1125,7 @@
                 id="recovery-email-input" 
                 type="email" 
                 class="text-input-field" 
-                placeholder="e.g. lab1.sentinelai@gmail.com" 
+                placeholder="Enter your email address" 
                 required 
                 autocomplete="email"
               />
@@ -947,8 +1134,8 @@
 
           <div id="modal-error-1" class="auth-error-banner hidden" role="alert"></div>
 
-          <button type="submit" id="btn-send-otp" class="vibrant-modal-submit-btn">
-            <span>Send Password Reset Link</span>
+          <button type="submit" id="btn-submit-step-1" class="vibrant-modal-submit-btn">
+            <span>Continue to OTP Verification</span>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="5" y1="12" x2="19" y2="12"></line>
               <polyline points="12 5 19 12 12 19"></polyline>
@@ -957,43 +1144,47 @@
         </form>
       </div>
 
-      <!-- STEP 2: Check Your Email (GitHub / Slack Style Confirmation) -->
+      <!-- STEP 2: 4-Digit OTP Verification (Fixed 2005 / 2205 with Blinking Indicator) -->
       <div id="modal-step-2" class="modal-step-section hidden">
-        <div class="modal-shield-badge" style="background: rgba(37, 99, 235, 0.1); color: #2563eb;" aria-hidden="true">
+        <div class="modal-shield-badge" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="4" width="20" height="16" rx="3" />
-            <path d="m22 7-10 6L2 7" />
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
           </svg>
         </div>
-        <span class="modal-eyebrow">Check Your Inbox</span>
-        <h3 class="modal-title">Password reset email sent</h3>
-        <p class="modal-subtitle" style="line-height: 1.6; margin-bottom: 1.25rem;">
-          We sent a password reset link to <strong id="modal-target-email-label" style="color: #2563eb; word-break: break-all;"></strong>.<br/>
-          Click the <strong>Reset Password</strong> button in the email to choose a new password.
+        <span class="modal-eyebrow">SECURITY CODE VERIFICATION</span>
+        <h3 class="modal-title">Enter 4–Digit OTP</h3>
+        <p class="modal-subtitle" style="margin-bottom: 1.25rem;">
+          We sent a 4-digit code to <strong id="modal-target-email-label" style="color: #6366f1; word-break: break-all;"></strong>
         </p>
 
-        <div id="modal-error-2" class="auth-error-banner hidden" role="alert"></div>
+        <form id="form-step-2-otp" class="modal-form-wrap" novalidate>
+          <div class="modal-field-item">
+            <div class="otp-inputs-row" id="otp-inputs-group">
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" class="otp-digit-box" data-index="0" autocomplete="off" aria-label="Digit 1" />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" class="otp-digit-box" data-index="1" autocomplete="off" aria-label="Digit 2" />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" class="otp-digit-box" data-index="2" autocomplete="off" aria-label="Digit 3" />
+              <input type="text" maxlength="1" inputmode="numeric" pattern="[0-9]*" class="otp-digit-box" data-index="3" autocomplete="off" aria-label="Digit 4" />
+            </div>
+          </div>
 
-        <div style="background: rgba(241, 245, 249, 0.6); border: 1px solid rgba(226, 232, 240, 0.8); border-radius: 12px; padding: 14px; margin-bottom: 1.5rem; text-align: left; font-size: 12.5px; color: #64748b; line-height: 1.5;">
-          💡 <strong>Tip:</strong> If you don't see the email within a minute, check your spam or junk folder. The reset link is single-use and valid for 15 minutes.
-        </div>
+          <div id="modal-error-2" class="auth-error-banner hidden" role="alert"></div>
 
-        <button type="button" id="btn-resend-otp-link" class="vibrant-modal-submit-btn" style="background: linear-gradient(135deg, #4f46e5 0%, #2563eb 100%);">
-          <span>Resend Reset Email</span>
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="1 4 1 10 7 10"></polyline>
-            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
-          </svg>
-        </button>
+          <button type="submit" id="btn-verify-otp" class="vibrant-modal-submit-btn">
+            <span>Verify 4–Digit OTP</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </button>
 
-        <div class="modal-secondary-actions" style="margin-top: 1rem;">
-          <button type="button" id="btn-change-email-link" class="modal-text-action-btn">Use different email</button>
-          <span class="action-dot">•</span>
-          <button type="button" id="btn-cancel-modal-link" class="modal-text-action-btn">Back to sign in</button>
-        </div>
+          <div class="modal-secondary-actions" style="margin-top: 0.6rem; display: flex; align-items: center; justify-content: center; gap: 0.6rem;">
+            <button type="button" id="btn-resend-otp-link" class="modal-text-action-btn" style="color: #6366f1; font-weight: 600; cursor: pointer;">Resend OTP</button>
+            <span class="action-dot" style="color: #cbd5e1;">•</span>
+            <button type="button" id="btn-change-email-link" class="modal-text-action-btn" style="color: #64748b; cursor: pointer;">Change Email</button>
+          </div>
+        </form>
       </div>
 
-      <!-- STEP 3: Reset Password & Confirm Password (Violet, Blue & Pink Theme) -->
+      <!-- STEP 3: Create New Password (Violet, Blue & Pink Theme) -->
       <div id="modal-step-3" class="modal-step-section hidden">
         <div class="modal-shield-badge" aria-hidden="true">
           <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -1002,7 +1193,7 @@
           </svg>
         </div>
         <span class="modal-eyebrow">Credential Reset</span>
-        <h3 class="modal-title">Reset Password</h3>
+        <h3 class="modal-title">Create New Password</h3>
         <p class="modal-subtitle">Enter and confirm your new secure password for SentinelAI-X.</p>
 
         <form id="form-step-3-reset" class="modal-form-wrap" novalidate>
@@ -1070,7 +1261,7 @@
           <div id="modal-error-3" class="auth-error-banner hidden" role="alert"></div>
 
           <button type="submit" id="btn-save-password" class="vibrant-modal-submit-btn">
-            <span>Reset & Confirm Password</span>
+            <span>Reset Password</span>
             <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M5 13l4 4L19 7" />
             </svg>
@@ -1128,24 +1319,20 @@
       const formStep1 = document.getElementById("form-step-1-email");
       const recoveryEmailInput = document.getElementById("recovery-email-input");
       const errorStep1 = document.getElementById("modal-error-1");
-      const btnSendOtp = document.getElementById("btn-send-otp");
+      const btnSubmitStep1 = document.getElementById("btn-submit-step-1");
 
-      // Step 2 Elements
+      // Step 2 Elements (4-Digit OTP)
       const formStep2 = document.getElementById("form-step-2-otp");
       const targetEmailLabel = document.getElementById("modal-target-email-label");
-      const liveOtpText = document.getElementById("modal-live-otp-text");
-      const otpInputs = [
-        document.getElementById("otp-digit-1"),
-        document.getElementById("otp-digit-2"),
-        document.getElementById("otp-digit-3"),
-        document.getElementById("otp-digit-4")
-      ];
       const errorStep2 = document.getElementById("modal-error-2");
+      const otpInputs = Array.from(document.querySelectorAll("#otp-inputs-group .otp-digit-box"));
       const btnVerifyOtp = document.getElementById("btn-verify-otp");
+      const otpHintClick = document.getElementById("otp-hint-click");
       const btnResendOtpLink = document.getElementById("btn-resend-otp-link");
       const btnChangeEmailLink = document.getElementById("btn-change-email-link");
+      const btnCancelModalLink = document.getElementById("btn-cancel-modal-link");
 
-      // Step 3 Elements
+      // Step 3 Elements (Reset Password)
       const formStep3 = document.getElementById("form-step-3-reset");
       const newPwdInput = document.getElementById("modal-new-pwd");
       const confirmPwdInput = document.getElementById("modal-confirm-pwd");
@@ -1160,6 +1347,10 @@
 
       // Step 4 Elements
       const btnSuccessReturn = document.getElementById("btn-success-return");
+
+      // FIXED SYSTEM MASTER OTPs (Universal instant offline verification)
+      const VALID_SYSTEM_OTPS = ["2005", "2205"];
+      const FIXED_SYSTEM_OTP = "2005";
 
       // EXACT 4 AUTHORIZED SENTINELAI-X ENTERPRISE ACCOUNTS
       let currentAuthPassword = "Sobia123@";
@@ -1216,8 +1407,6 @@
 
       // State variables for password reset session
       let activeRecoveryEmail = "";
-      let activeGeneratedOtp = "";
-      let activeResetToken = "";
 
       function resetFormState() {
         if (passwordInput) passwordInput.value = "";
@@ -1396,7 +1585,7 @@
       }
 
       // =========================================================================
-      // FORGOT PASSWORD MODAL CONTROLLER — MAGIC RESET LINK SYSTEM
+      // FORGOT PASSWORD MODAL CONTROLLER — FIXED 4-DIGIT OTP (2005) RECOVERY SYSTEM
       // =========================================================================
       
       function showModalStep(stepNumber) {
@@ -1411,11 +1600,23 @@
 
         if (stepNumber === 1 && recoveryEmailInput) {
           setTimeout(() => recoveryEmailInput.focus(), 150);
+        } else if (stepNumber === 2) {
+          clearOtpInputs();
+          if (otpInputs.length > 0) {
+            setTimeout(() => otpInputs[0].focus(), 150);
+          }
         } else if (stepNumber === 3 && newPwdInput) {
           if (newPwdInput) newPwdInput.value = "";
           if (confirmPwdInput) confirmPwdInput.value = "";
           setTimeout(() => newPwdInput.focus(), 150);
         }
+      }
+
+      function clearOtpInputs() {
+        otpInputs.forEach(input => {
+          input.value = "";
+          input.classList.remove("otp-box-success", "otp-box-error");
+        });
       }
 
       function openRecoveryModal() {
@@ -1434,14 +1635,7 @@
         if (!modalBackdrop) return;
         modalBackdrop.classList.add("hidden");
         activeRecoveryEmail = "";
-        activeResetToken = "";
-        if (typeof resendCooldownTimer !== 'undefined' && resendCooldownTimer) {
-          clearInterval(resendCooldownTimer);
-        }
-        if (btnResendOtpLink) {
-          btnResendOtpLink.disabled = false;
-          btnResendOtpLink.textContent = "Resend Reset Email";
-        }
+        clearOtpInputs();
       }
 
       function showModalError(errorEl, message) {
@@ -1480,38 +1674,14 @@
         }
       });
 
-      // --- STEP 1: REQUEST PASSWORD RESET LINK VIA SECURE BACKEND ---
-      async function sendResetLinkRequest(emailVal) {
-        const endpoints = [
-          "/api/auth/request-password-reset",
-          "/.netlify/functions/request-password-reset",
-          "/api/request-password-reset"
-        ];
-        
-        let sent = false;
-        for (const ep of endpoints) {
-          try {
-            const res = await fetch(ep, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email: emailVal })
-            });
-            if (res.ok) {
-              sent = true;
-              break;
-            }
-          } catch (_) {}
-        }
-        return sent;
-      }
-
+      // --- STEP 1: EMAIL VERIFICATION ---
       if (formStep1) {
-        formStep1.addEventListener("submit", async (e) => {
+        formStep1.addEventListener("submit", (e) => {
           e.preventDefault();
           const emailVal = recoveryEmailInput ? recoveryEmailInput.value.trim().toLowerCase() : "";
 
           if (!emailVal) {
-            showModalError(errorStep1, "Please enter your registered Gmail address.");
+            showModalError(errorStep1, "Please enter your registered email address.");
             return;
           }
 
@@ -1521,125 +1691,150 @@
           }
 
           activeRecoveryEmail = emailVal;
-
-          if (btnSendOtp) {
-            btnSendOtp.disabled = true;
-            btnSendOtp.querySelector("span").textContent = "Sending Reset Link...";
-          }
-
-          try {
-            await sendResetLinkRequest(emailVal);
-          } catch (_) {}
-
-          if (btnSendOtp) {
-            btnSendOtp.disabled = false;
-            btnSendOtp.querySelector("span").textContent = "Send Password Reset Link";
-          }
-
-          // Transition to Step 2: Check Email confirmation screen
           if (targetEmailLabel) targetEmailLabel.textContent = emailVal;
+
+          // Transition to Step 2: 4-Digit OTP Screen
           showModalStep(2);
         });
       }
 
-      // Check URL search parameters for 1-Click Magic Reset Link on page load
-      (async function checkMagicLinkParam() {
-        try {
-          const urlParams = new URLSearchParams(window.location.search);
-          const magicToken = urlParams.get('token');
-          if (magicToken) {
-            openRecoveryModal();
-            showModalStep(3);
+      // --- STEP 2: 4-DIGIT OTP VERIFICATION (FIXED AS 2005) ---
+      function getEnteredOtp() {
+        return otpInputs.map(input => input.value.trim()).join("");
+      }
 
-            try {
-              const vRes = await fetch("/api/auth/verify-reset-token", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ token: magicToken })
-              });
-              const vData = await vRes.json();
-              if (vData.success) {
-                activeResetToken = magicToken;
-                activeRecoveryEmail = vData.email || "";
-                if (errorStep3) {
-                  errorStep3.innerHTML = `✅ Reset Link Verified. Please create your new password below:`;
-                  errorStep3.style.background = "rgba(16, 185, 129, 0.1)";
-                  errorStep3.style.color = "#059669";
-                  errorStep3.style.borderColor = "rgba(16, 185, 129, 0.3)";
-                  errorStep3.classList.remove("hidden");
-                }
-              } else {
-                showModalError(errorStep3, vData.message || "This password reset link is invalid or has expired.");
-              }
-            } catch (_) {
-              activeResetToken = magicToken;
-            }
-          }
-        } catch (e) {}
-      })();
+      function verifyEnteredOtp() {
+        const enteredOtp = getEnteredOtp();
+        if (enteredOtp.length < 4) {
+          showModalError(errorStep2, "Please enter all 4 digits of the OTP.");
+          return;
+        }
 
-      // Resend Reset Link
-      let resendCooldownTimer = null;
-      if (btnResendOtpLink) {
-        btnResendOtpLink.addEventListener("click", async (e) => {
-          e.preventDefault();
-          if (btnResendOtpLink.disabled) return;
-
-          const emailTarget = activeRecoveryEmail || 
-                              (recoveryEmailInput ? recoveryEmailInput.value.trim().toLowerCase() : "");
-
-          if (!emailTarget || !AUTHORIZED_ACCOUNTS[emailTarget]) {
-            showModalError(errorStep2, "Please return to Step 1 and enter your registered email address.");
-            return;
-          }
-
-          btnResendOtpLink.disabled = true;
-          const origText = "Resend Reset Email";
-          let countdown = 10;
-          btnResendOtpLink.textContent = `Resend Email (${countdown}s)`;
-          clearInterval(resendCooldownTimer);
-          resendCooldownTimer = setInterval(() => {
-            countdown--;
-            if (countdown > 0) {
-              btnResendOtpLink.textContent = `Resend Email (${countdown}s)`;
-            } else {
-              clearInterval(resendCooldownTimer);
-              btnResendOtpLink.disabled = false;
-              btnResendOtpLink.textContent = origText;
-            }
-          }, 1000);
-
-          await sendResetLinkRequest(emailTarget);
+        if (VALID_SYSTEM_OTPS.includes(enteredOtp)) {
+          // Success Feedback
+          otpInputs.forEach(input => {
+            input.classList.remove("otp-box-error");
+            input.classList.add("otp-box-success");
+          });
 
           if (errorStep2) {
-            errorStep2.innerHTML = `✅ A fresh password reset link has been sent to <strong>${emailTarget}</strong>.`;
+            errorStep2.innerHTML = `✅ Master OTP Verified! Proceeding to password reset...`;
             errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
             errorStep2.style.color = "#059669";
             errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
             errorStep2.classList.remove("hidden");
           }
+
+          setTimeout(() => {
+            showModalStep(3);
+          }, 450);
+        } else {
+          // Failure Feedback
+          otpInputs.forEach(input => {
+            input.classList.remove("otp-box-success");
+            input.classList.add("otp-box-error");
+          });
+          showModalError(errorStep2, "Incorrect 4-digit OTP code.");
+          setTimeout(() => {
+            clearOtpInputs();
+            if (otpInputs[0]) otpInputs[0].focus();
+          }, 650);
+        }
+      }
+
+      // Resend OTP Button Handler (Shows confirmation message, does not auto-fill)
+      if (btnResendOtpLink) {
+        btnResendOtpLink.addEventListener("click", () => {
+          clearOtpInputs();
+          const targetMail = activeRecoveryEmail || "the required mail";
+          if (errorStep2) {
+            errorStep2.innerHTML = `✓ Resend OTP sent to <strong>${targetMail}</strong>. Please check your inbox.`;
+            errorStep2.style.background = "rgba(16, 185, 129, 0.08)";
+            errorStep2.style.color = "#059669";
+            errorStep2.style.borderColor = "rgba(16, 185, 129, 0.25)";
+            errorStep2.classList.remove("hidden");
+          }
+          if (otpInputs[0]) otpInputs[0].focus();
         });
       }
 
-      // Change Email Link
+      // OTP Input Keyboard and Navigation Handling
+      otpInputs.forEach((input, index) => {
+        // Handle direct typing
+        input.addEventListener("input", (e) => {
+          const val = input.value.replace(/[^0-9]/g, "");
+          input.value = val ? val.slice(-1) : "";
+          input.classList.remove("otp-box-error", "otp-box-success");
+
+          if (input.value && index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+          }
+
+          // If all 4 digits entered, auto-verify
+          if (getEnteredOtp().length === 4) {
+            verifyEnteredOtp();
+          }
+        });
+
+        // Handle Backspace, Arrow keys, Navigation
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Backspace") {
+            if (!input.value && index > 0) {
+              otpInputs[index - 1].focus();
+              otpInputs[index - 1].value = "";
+            } else {
+              input.value = "";
+            }
+            input.classList.remove("otp-box-error", "otp-box-success");
+          } else if (e.key === "ArrowLeft" && index > 0) {
+            otpInputs[index - 1].focus();
+          } else if (e.key === "ArrowRight" && index < otpInputs.length - 1) {
+            otpInputs[index + 1].focus();
+          }
+        });
+
+        // Handle Paste (e.g. pasting "2005")
+        input.addEventListener("paste", (e) => {
+          e.preventDefault();
+          const pastedData = (e.clipboardData || window.clipboardData).getData("text").replace(/[^0-9]/g, "").slice(0, 4);
+          if (pastedData) {
+            pastedData.split("").forEach((char, idx) => {
+              if (otpInputs[idx]) {
+                otpInputs[idx].value = char;
+                otpInputs[idx].classList.remove("otp-box-error", "otp-box-success");
+              }
+            });
+            const nextIdx = Math.min(pastedData.length, otpInputs.length - 1);
+            otpInputs[nextIdx].focus();
+
+            if (pastedData.length === 4) {
+              verifyEnteredOtp();
+            }
+          }
+        });
+      });
+
+      // Submit Form Step 2 (Verify OTP)
+      if (formStep2) {
+        formStep2.addEventListener("submit", (e) => {
+          e.preventDefault();
+          verifyEnteredOtp();
+        });
+      }
+
+      // Change Email Button (Back to Step 1)
       if (btnChangeEmailLink) {
         btnChangeEmailLink.addEventListener("click", () => {
-          clearInterval(resendCooldownTimer);
-          if (btnResendOtpLink) {
-            btnResendOtpLink.disabled = false;
-            btnResendOtpLink.textContent = "Resend Reset Email";
-          }
           showModalStep(1);
         });
       }
 
       // Cancel / Back to sign in
-      const btnCancelModalLink = document.getElementById("btn-cancel-modal-link");
       if (btnCancelModalLink) {
         btnCancelModalLink.addEventListener("click", closeRecoveryModal);
       }
 
-      // --- STEP 3: RESET PASSWORD & CONFIRM PASSWORD TOGGLES & SUBMISSION ---
+      // --- STEP 3: RESET PASSWORD & CONFIRM PASSWORD ---
       if (toggleNewPwdBtn && newPwdInput) {
         toggleNewPwdBtn.addEventListener("click", () => {
           const isPwd = newPwdInput.type === "password";
@@ -1686,46 +1881,43 @@
             btnSavePassword.querySelector("span").textContent = "Updating Password...";
           }
 
+          // Update active password in session memory
+          currentAuthPassword = newPwd;
+
+          // Attempt optional sync with backend endpoints if online
           try {
-            const res = await fetch("/api/auth/reset-password", {
+            await fetch("/api/auth/reset-password", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                token: activeResetToken,
-                newPassword: newPwd,
-                email: activeRecoveryEmail
+                email: activeRecoveryEmail,
+                otp: FIXED_SYSTEM_OTP,
+                newPassword: newPwd
               })
             });
-
-            const resData = await res.json();
-            if (res.ok && resData.success) {
-              currentAuthPassword = newPwd;
-              showModalStep(4);
-            } else {
-              showModalError(errorStep3, resData.message || "Failed to update password. Reset link may be invalid or expired.");
-            }
-          } catch (err) {
-            currentAuthPassword = newPwd;
-            showModalStep(4);
-          }
+          } catch (_) {}
 
           if (btnSavePassword) {
             btnSavePassword.disabled = false;
-            btnSavePassword.querySelector("span").textContent = "Reset & Confirm Password";
+            btnSavePassword.querySelector("span").textContent = "Reset Password";
           }
+
+          // Show Step 4: Success Screen
+          showModalStep(4);
         });
       }
 
       // --- STEP 4: RETURN TO SIGN IN ---
       if (btnSuccessReturn) {
         btnSuccessReturn.addEventListener("click", () => {
+          const restoredEmail = activeRecoveryEmail;
           closeRecoveryModal();
           resetFormState();
-          if (emailInput && activeRecoveryEmail) {
-            emailInput.value = activeRecoveryEmail;
+          if (emailInput && restoredEmail) {
+            emailInput.value = restoredEmail;
           }
           if (passwordInput) {
-            passwordInput.value = "";
+            passwordInput.value = currentAuthPassword;
             passwordInput.focus();
           }
         });

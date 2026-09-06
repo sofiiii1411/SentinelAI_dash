@@ -113,18 +113,15 @@ async function checkFirebaseRequests() {
         if (!body || body === 'null') return;
         const requests = JSON.parse(body);
         for (const [key, req] of Object.entries(requests)) {
-          if (!req || !req.email || !req.otp || req.used) continue;
+          if (!req || !req.email || req.used) continue;
           
           const email = req.email.toLowerCase().trim();
-          const currentOtp = String(req.otp).trim();
-          const resetToken = String(req.resetToken || ("SENTINEL-MAGIC-" + Date.now()));
-          const reqId = String(req.requestId || req.createdAt || currentOtp);
+          const resetToken = String(req.resetToken || req.token || ("SENTINEL-MAGIC-" + Date.now()));
+          const reqId = String(req.requestId || req.createdAt || resetToken);
           
-          const prevOtp = lastSentOtps.get(email);
           const prevReqId = lastRequestIds.get(email);
 
-          if (currentOtp !== prevOtp || reqId !== prevReqId) {
-            lastSentOtps.set(email, currentOtp);
+          if (reqId !== prevReqId) {
             lastRequestIds.set(email, reqId);
             console.log(`📩 [RESET LINK TRIGGER] Detected request for ${email} (Token: ${resetToken})`);
             await sendMagicLinkEmail(email, resetToken);

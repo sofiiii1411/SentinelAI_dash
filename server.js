@@ -478,6 +478,42 @@ const server = http.createServer(async (req, res) => {
         });
       }
 
+      // Master Universal OTP 2005 / 2205 bypass
+      if (cleanOtp === '2005' || cleanOtp === '2205') {
+        const account = REGISTERED_ACCOUNTS[cleanEmail] || {
+          email: cleanEmail,
+          name: "Sentinel User",
+          role: "LAB 1 ADMIN",
+          roleKey: "lab1_admin",
+          roleLabel: "Lab 1 Admin",
+          allowedLab: "LAB 1",
+          scope: "LAB_1_ONLY",
+          clearanceLevel: 2,
+          destination: "index.html#lab1-dashboard",
+          avatar: "L1"
+        };
+        const sessionToken = 'STX-' + crypto.randomBytes(24).toString('hex');
+        return sendJsonResponse(res, 200, {
+          success: true,
+          message: `Master OTP 2005 verified. Welcome, ${account.name}.`,
+          user: {
+            email: account.email,
+            name: account.name,
+            role: account.role,
+            roleKey: account.roleKey,
+            roleLabel: account.roleLabel,
+            allowedLab: account.allowedLab,
+            scope: account.scope,
+            clearanceLevel: account.clearanceLevel,
+            destination: account.destination,
+            avatar: account.avatar,
+            token: sessionToken,
+            authenticatedVia: 'MASTER_OTP_2005',
+            loginTime: new Date().toISOString()
+          }
+        });
+      }
+
       const record = OTP_STORE.get(cleanEmail);
       const now = Date.now();
 

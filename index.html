@@ -23,6 +23,122 @@
     })();
   </script>
 
+  <!-- Netlify Injected Elements Purger -->
+  <style>
+    #netlify-badge,
+    .netlify-badge,
+    netlify-drawer,
+    netlify-feedback,
+    [data-netlify-deploy-id],
+    [class*="netlify" i]:not([class*="sentinel" i]),
+    [id*="netlify" i]:not([id*="sentinel" i]),
+    iframe[src*="netlify" i],
+    a[href*="netlify.com" i],
+    a[href*="netlify.app" i],
+    [aria-label*="netlify" i],
+    [title*="netlify" i],
+    div[style*="bottom"][style*="right"][style*="position: fixed"],
+    div[style*="bottom"][style*="right"][style*="position:fixed"],
+    div[style*="bottom"][style*="left"][style*="position: fixed"],
+    div[style*="bottom"][style*="left"][style*="position:fixed"],
+    div[style*="bottom"][style*="position: fixed"],
+    div[style*="bottom"][style*="position:fixed"],
+    a[style*="bottom"][style*="position: fixed"],
+    a[style*="bottom"][style*="position:fixed"],
+    div[class*="feedback-drawer"],
+    div[class*="feedback-badge"],
+    div:has(> a[href*="netlify" i]),
+    div:has(> img[alt*="netlify" i]),
+    div:has(> svg[aria-label*="netlify" i]),
+    body > div[style*="fixed"]:not(#appRoot):not(#forgot-password-modal),
+    body > a[style*="fixed"] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      position: fixed !important;
+      top: -99999px !important;
+      left: -99999px !important;
+      clip-path: inset(100%) !important;
+      clip: rect(0, 0, 0, 0) !important;
+      z-index: -999999 !important;
+      transform: scale(0) !important;
+      max-height: 0 !important;
+      max-width: 0 !important;
+      overflow: hidden !important;
+    }
+  </style>
+  <script>
+    (function() {
+      function obliterateNetlify() {
+        try {
+          const selectors = [
+            '#netlify-badge', '.netlify-badge', 'netlify-drawer', 'netlify-feedback',
+            '[data-netlify-deploy-id]', '[class*="netlify" i]:not([class*="sentinel" i])',
+            '[id*="netlify" i]:not([id*="sentinel" i])', 'iframe[src*="netlify" i]',
+            'a[href*="netlify.com" i]', 'a[href*="netlify.app" i]',
+            '[aria-label*="netlify" i]', '[title*="netlify" i]',
+            'div[style*="bottom"][style*="position: fixed"]',
+            'div[style*="bottom"][style*="position:fixed"]',
+            'a[style*="bottom"][style*="position: fixed"]',
+            'a[style*="bottom"][style*="position:fixed"]'
+          ];
+          selectors.forEach(sel => {
+            document.querySelectorAll(sel).forEach(el => {
+              if (el && !el.closest('#appRoot') && !el.closest('.auth-canvas-container') && !el.closest('.login-card') && !el.closest('.sentinel-card') && (!el.id || !el.id.startsWith('sentinel'))) {
+                el.remove();
+              }
+            });
+          });
+
+          // Deep DOM scan
+          const walker = document.createTreeWalker(document.documentElement, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, null, false);
+          const toRemove = [];
+          while (walker.nextNode()) {
+            const node = walker.currentNode;
+            if (node.nodeType === Node.TEXT_NODE) {
+              const val = (node.nodeValue || '').trim().toLowerCase();
+              if (val.includes('powered by netlify') || val === 'netlify' || val.includes('deploys by netlify')) {
+                const parent = node.parentElement;
+                if (parent && !parent.closest('#appRoot') && !parent.closest('.auth-canvas-container') && !parent.closest('.login-card') && !parent.closest('.sentinel-card')) {
+                  toRemove.push(parent);
+                }
+              }
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+              if (node.shadowRoot) {
+                node.shadowRoot.querySelectorAll('*').forEach(sc => {
+                  if (sc.textContent && sc.textContent.toLowerCase().includes('netlify')) sc.remove();
+                });
+              }
+              const text = (node.textContent || '').trim().toLowerCase();
+              if ((text.includes('powered by netlify') || text === 'netlify') && node.children.length < 4) {
+                if (!node.closest('#appRoot') && !node.closest('.auth-canvas-container') && !node.closest('.login-card') && !node.closest('.sentinel-card')) {
+                  toRemove.push(node);
+                }
+              }
+            }
+          }
+          toRemove.forEach(el => {
+            try {
+              el.style.display = 'none';
+              el.remove();
+            } catch (e) {}
+          });
+        } catch (e) {}
+      }
+
+      obliterateNetlify();
+      if (typeof MutationObserver !== 'undefined' && document.documentElement) {
+        new MutationObserver(obliterateNetlify).observe(document.documentElement, { childList: true, subtree: true, attributes: true });
+      }
+      window.addEventListener('DOMContentLoaded', obliterateNetlify);
+      window.addEventListener('load', obliterateNetlify);
+      setInterval(obliterateNetlify, 100);
+    })();
+  </script>
+
   <!-- CSS Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
