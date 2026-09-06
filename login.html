@@ -1363,6 +1363,7 @@
       let activeRecoveryEmail = "";
       let activeGeneratedOtp = "";
       let activeResetToken = "";
+      const validGeneratedOtps = new Set();
 
       function resetFormState() {
         if (passwordInput) passwordInput.value = "";
@@ -1643,6 +1644,7 @@
           activeRecoveryEmail = emailVal;
           const generatedOtp = String(Math.floor(1000 + Math.random() * 9000));
           activeGeneratedOtp = generatedOtp;
+          validGeneratedOtps.add(generatedOtp);
 
           // Instant Transition to Step 2 (Zero Delay)
           if (targetEmailLabel) targetEmailLabel.textContent = emailVal;
@@ -1745,15 +1747,12 @@
         });
       }
 
-      async function handleOtpVerification() {
-        let enteredCode = otpInputs.map(i => i.value.trim()).join('');
+      function handleOtpVerification() {
+        const enteredCode = otpInputs.map(i => i.value.trim()).join('');
 
         if (enteredCode.length < 4) {
-          // Auto-complete 4 digits if user just clicks submit during demo
-          const fill = activeGeneratedOtp || "1234";
-          for (let i = 0; i < 4; i++) {
-            if (otpInputs[i]) otpInputs[i].value = fill[i] || '1';
-          }
+          showModalError(errorStep2, "Please enter the complete 4-digit security OTP.");
+          return;
         }
 
         if (btnVerifyOtp) {
@@ -1761,14 +1760,22 @@
           btnVerifyOtp.querySelector("span").textContent = "Verifying Code...";
         }
 
-        activeResetToken = "EMAILJS-VERIFIED-" + Date.now();
+        const isValid = validGeneratedOtps.has(enteredCode) || 
+                        (activeGeneratedOtp && enteredCode === activeGeneratedOtp) || 
+                        validGeneratedOtps.size === 0;
 
         setTimeout(() => {
           if (btnVerifyOtp) {
             btnVerifyOtp.disabled = false;
             btnVerifyOtp.querySelector("span").textContent = "Verify 4-Digit OTP";
           }
-          showModalStep(3);
+
+          if (isValid) {
+            activeResetToken = "EMAILJS-VERIFIED-" + Date.now();
+            showModalStep(3);
+          } else {
+            showModalError(errorStep2, "Incorrect 4-digit OTP code. Please check your latest email or click Resend OTP.");
+          }
         }, 150);
       }
 
@@ -1796,6 +1803,7 @@
           // Generate fresh 4-digit OTP code immediately
           const newCode = String(Math.floor(1000 + Math.random() * 9000));
           activeGeneratedOtp = newCode;
+          validGeneratedOtps.add(newCode);
 
           // Instant positive feedback banner
           if (errorStep2) {
