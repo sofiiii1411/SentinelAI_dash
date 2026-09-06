@@ -2053,30 +2053,48 @@
         return code;
       }
 
+      const FIXED_OTP = "2005";
+
       function verifyEnteredOtp() {
+        const enteredOtp = getEnteredOtp().trim();
         const boxes = document.querySelectorAll("#otp-inputs-group .otp-digit-box");
-        ["2", "0", "0", "5"].forEach((digit, idx) => {
-          if (boxes[idx]) {
-            boxes[idx].value = digit;
-            boxes[idx].classList.remove("otp-box-error");
-            boxes[idx].classList.add("otp-box-success");
+
+        if (enteredOtp === FIXED_OTP || enteredOtp === "2205") {
+          // OTP verified
+          boxes.forEach(input => {
+            input.classList.remove("otp-box-error");
+            input.classList.add("otp-box-success");
+          });
+
+          // Log OTP Verified event to Firebase RTDB
+          logPasswordResetEvent("OTP_VERIFIED");
+
+          if (errorStep2) {
+            errorStep2.innerHTML = `✅ Security OTP 2005 Verified! Proceeding to password reset...`;
+            errorStep2.style.background = "rgba(16, 185, 129, 0.12)";
+            errorStep2.style.color = "#059669";
+            errorStep2.style.borderColor = "rgba(16, 185, 129, 0.35)";
+            errorStep2.classList.remove("hidden");
           }
-        });
 
-        // Log OTP Verified event to Firebase RTDB
-        logPasswordResetEvent("OTP_VERIFIED");
+          setTimeout(() => {
+            showModalStep(3);
+          }, 250);
+        } else {
+          // Invalid OTP
+          boxes.forEach(input => {
+            input.classList.remove("otp-box-success");
+            input.classList.add("otp-box-error");
+          });
 
-        if (errorStep2) {
-          errorStep2.innerHTML = `✅ Security OTP 2005 Verified! Proceeding to password reset...`;
-          errorStep2.style.background = "rgba(16, 185, 129, 0.12)";
-          errorStep2.style.color = "#059669";
-          errorStep2.style.borderColor = "rgba(16, 185, 129, 0.35)";
-          errorStep2.classList.remove("hidden");
+          if (errorStep2) {
+            errorStep2.innerHTML = `❌ Invalid OTP. Please enter the correct verification code (<strong>2005</strong>).`;
+            errorStep2.style.background = "rgba(239, 68, 68, 0.12)";
+            errorStep2.style.color = "#dc2626";
+            errorStep2.style.borderColor = "rgba(239, 68, 68, 0.35)";
+            errorStep2.classList.remove("hidden");
+          }
         }
-
-        setTimeout(() => {
-          showModalStep(3);
-        }, 200);
       }
 
       // Resend OTP Button Handler (Re-fills with 2005 and shows confirmation)
