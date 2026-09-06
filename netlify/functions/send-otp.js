@@ -66,6 +66,28 @@ function makeHttpsPut(urlStr, body) {
 }
 
 async function dispatchEmail(toEmail, otpCode, accountName) {
+  // 1. n8n Webhook Dispatch (High Priority)
+  const n8nUrl = process.env.N8N_OTP_WEBHOOK_URL || process.env.N8N_WEBHOOK_URL;
+  if (n8nUrl) {
+    try {
+      const url = new URL(n8nUrl);
+      const n8nRes = await makeHttpsPost(url.hostname, url.pathname + url.search, {}, {
+        event: "send_otp",
+        email: toEmail,
+        otp: String(otpCode),
+        name: accountName,
+        subject: "SentinelAI-X Security Verification Code",
+        message: `Your SentinelAI-X 4-digit verification code is: ${otpCode}. Valid for 5 minutes.`,
+        timestamp: new Date().toISOString()
+      });
+      if (n8nRes.statusCode >= 200 && n8nRes.statusCode < 300) {
+        return { success: true, provider: 'n8n Webhook' };
+      }
+    } catch (n8nErr) {
+      console.warn("n8n Webhook dispatch warning:", n8nErr.message);
+    }
+  }
+
   const resendKey = process.env.RESEND_API_KEY;
   if (resendKey) {
     try {
