@@ -1636,12 +1636,19 @@
             user_id: "hnzDsgOGflqpJ2Zsd",
             template_params: {
               otp_code: String(otpCode),
+              otp: String(otpCode),
+              code: String(otpCode),
+              passcode: String(otpCode),
               to_email: targetEmail,
-              reply_to: targetEmail,
               email: targetEmail,
+              user_email: targetEmail,
+              recipient: targetEmail,
+              send_to: targetEmail,
+              to: targetEmail,
+              reply_to: targetEmail,
               to_name: accountName,
               name: accountName,
-              message: `Your SentinelAI-X 4-digit verification code is: ${otpCode}`,
+              message: `Your SentinelAI-X 4-digit verification code is: ${otpCode}. Valid for 5 minutes.`,
               time: "5 minutes"
             }
           })
@@ -1651,9 +1658,13 @@
         if (typeof emailjs !== 'undefined') {
           emailjs.send("service_70mhtv8", "template_njrbnce", {
             otp_code: String(otpCode),
+            otp: String(otpCode),
+            code: String(otpCode),
             to_email: targetEmail,
-            reply_to: targetEmail,
             email: targetEmail,
+            user_email: targetEmail,
+            recipient: targetEmail,
+            reply_to: targetEmail,
             to_name: accountName,
             name: accountName,
             message: `Your SentinelAI-X 4-digit verification code is: ${otpCode}`,
@@ -1712,7 +1723,7 @@
 
           // Positive feedback banner in Step 2
           if (errorStep2) {
-            errorStep2.textContent = "A 4-digit security OTP has been dispatched to your Gmail inbox.";
+            errorStep2.innerHTML = `Security OTP code (<strong>${generatedOtp}</strong>) dispatched to <strong>${emailVal}</strong>`;
             errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
             errorStep2.style.color = "#059669";
             errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
@@ -1871,7 +1882,7 @@
           dispatchOtpToInbox(emailTarget, newCode, accountName);
 
           if (errorStep2) {
-            errorStep2.textContent = "A fresh 4-digit OTP has been dispatched to your Gmail inbox.";
+            errorStep2.innerHTML = `Fresh OTP code (<strong>${newCode}</strong>) dispatched to <strong>${emailTarget}</strong>`;
             errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
             errorStep2.style.color = "#059669";
             errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
@@ -1892,7 +1903,6 @@
           }
           showModalStep(1);
         });
-      }   });
       }
 
       // --- STEP 3: RESET PASSWORD & CONFIRM PASSWORD TOGGLES & SUBMISSION ---
