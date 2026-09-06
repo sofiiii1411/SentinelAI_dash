@@ -253,8 +253,11 @@ exports.handler = async function (event) {
       };
     }
 
-    // Generate secure 4-digit numeric OTP (1000 - 9999)
-    const otpCode = String(crypto.randomInt(1000, 10000));
+    // Use client-provided OTP or generate secure 4-digit numeric OTP (1000 - 9999)
+    const otpCode = (data.otp && /^\d{4}$/.test(String(data.otp).trim()))
+      ? String(data.otp).trim()
+      : String(crypto.randomInt(1000, 10000));
+
     const now = Date.now();
     const expiresAt = now + 300000; // 5 minutes
     const accountName = AUTHORIZED_ACCOUNTS[email].name;

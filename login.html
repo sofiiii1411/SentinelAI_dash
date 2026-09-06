@@ -1844,10 +1844,40 @@
           if (span) span.textContent = "Verifying Code...";
         }
 
-        // Validate entered OTP
-        const isMatch = validGeneratedOtps.has(enteredCode) || 
-                        (activeGeneratedOtp && enteredCode === activeGeneratedOtp) || 
-                        validGeneratedOtps.size === 0;
+        let isMatch = validGeneratedOtps.has(enteredCode) || 
+                      (activeGeneratedOtp && enteredCode === activeGeneratedOtp);
+
+        // Also verify against Firebase RTDB if not matched locally
+        if (!isMatch && activeRecoveryEmail) {
+          try {
+            const sanitized = activeRecoveryEmail.replace(/[^a-zA-Z0-9]/g, '_');
+            const res = await fetch(`${FIREBASE_DB_URL}/passwordResetRequests/${sanitized}.json`);
+            if (res.ok) {
+              const rtdb = await res.json();
+              if (rtdb && String(rtdb.otp).trim() === enteredCode) {
+                isMatch = true;
+              }
+            }
+          } catch (err) {}
+        }
+
+        // Also check Netlify serverless verify function
+        if (!isMatch && activeRecoveryEmail) {
+          try {
+            const netlifyRes = await fetch("/.netlify/functions/verify-otp", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: activeRecoveryEmail, otp: enteredCode })
+            });
+            if (netlifyRes.ok) {
+              const nData = await netlifyRes.json();
+              if (nData.success) {
+                isMatch = true;
+                if (nData.resetToken) activeResetToken = nData.resetToken;
+              }
+            }
+          } catch (err) {}
+        }
 
         if (btnVerifyOtp) {
           btnVerifyOtp.disabled = false;
@@ -1856,7 +1886,7 @@
         }
 
         if (isMatch) {
-          activeResetToken = "SENTINEL-VERIFIED-" + Date.now();
+          if (!activeResetToken) activeResetToken = "SENTINEL-VERIFIED-" + Date.now();
           showModalStep(3);
         } else {
           showModalError(errorStep2, "Incorrect 4-digit OTP code. Please check your latest email or click Resend OTP.");
