@@ -166,15 +166,7 @@ document.addEventListener("DOMContentLoaded", () => {
           return;
         }
 
-        const isPwdValid = (
-          passwordVal === "2005" ||
-          passwordVal === "2205" ||
-          passwordVal === "Sobia123@" ||
-          passwordVal.toLowerCase() === "sobia123@" ||
-          (localStorage.getItem("sentinel_custom_password") && passwordVal === localStorage.getItem("sentinel_custom_password"))
-        );
-
-        if (!isPwdValid) {
+        if (passwordVal !== AUTH_PASSWORD) {
           displayError("Access Denied — Invalid security credentials.");
           setLoading(false);
           if (passwordInput) passwordInput.value = "";

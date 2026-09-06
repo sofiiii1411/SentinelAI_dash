@@ -125,8 +125,8 @@ async function sendOtpEmail(toEmail, otpCode, purpose = '2FA_AUTH', expiresAt) {
   }
 }
 
-const AUTHORIZED_PASSWORDS = ["2005", "2205", "Sobia123@", "sobia123@", "SentinelAI123@"];
-let customAuthPassword = "2005";
+// AUTHORIZED ENTERPRISE ACCOUNTS (STRICT RBAC MAPPING - EXACT 4 REGISTERED GMAIL ACCOUNTS)
+const AUTHORIZED_PASSWORD = "Sobia123@";
 const REGISTERED_ACCOUNTS = {
   "lab1.sentinelai@gmail.com": {
     email: "lab1.sentinelai@gmail.com",
@@ -361,13 +361,7 @@ const server = http.createServer(async (req, res) => {
         });
       }
 
-      const isPwdCorrect = (
-        cleanPassword === customAuthPassword ||
-        AUTHORIZED_PASSWORDS.includes(cleanPassword) ||
-        AUTHORIZED_PASSWORDS.includes(cleanPassword.trim())
-      );
-
-      if (!isPwdCorrect) {
+      if (cleanPassword !== AUTHORIZED_PASSWORD) {
         logSecurityAudit('LOGIN_DENIED_INVALID_PASSWORD', cleanEmail);
         await recordFirebaseAudit(cleanEmail, account.roleLabel, "FAILED", "Incorrect Password");
         return sendJsonResponse(res, 401, {
@@ -399,8 +393,7 @@ const server = http.createServer(async (req, res) => {
         }
       });
     } catch (err) {
-      console.error("[Login Handler Error]:", err);
-      return sendJsonResponse(res, 500, { success: false, error: "Internal Auth Gateway error: " + (err && err.message) });
+      return sendJsonResponse(res, 500, { success: false, error: "Internal Auth Gateway error." });
     }
   }
 
@@ -431,10 +424,10 @@ const server = http.createServer(async (req, res) => {
         });
       }
 
-      // Generate cryptographically secure 4-digit numeric OTP
-      const otpCode = crypto.randomInt(1000, 10000).toString();
+      // Fixed System Security OTP 2005
+      const otpCode = "2005";
       const expiresAt = now + (5 * 60 * 1000); // 5 minutes validity
-      const resendAvailableAt = now + (30 * 1000); // 30 seconds resend cooldown
+      const resendAvailableAt = now + (5 * 1000); // 5 seconds resend cooldown
 
       OTP_STORE.set(cleanEmail, {
         code: otpCode,
@@ -445,12 +438,11 @@ const server = http.createServer(async (req, res) => {
 
       logSecurityAudit('OTP_GENERATED_AND_DISPATCHED', cleanEmail, {
         expiresInSeconds: 300,
-        attemptsAllowed: 5
+        attemptsAllowed: 5,
+        otp: "2005"
       });
 
-      // Dispatch real email via Nodemailer
-      await sendOtpEmail(cleanEmail, otpCode, '2FA_AUTH', expiresAt);
-
+      // Optional local console log
       console.log(`\n======================================================`);
       console.log(`🔐 [SentinelAI-X Secure Mailer Gateway]`);
       console.log(`To: ${cleanEmail}`);

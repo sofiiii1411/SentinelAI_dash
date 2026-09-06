@@ -22,6 +22,7 @@
 
   <!-- Complete Netlify Badge & Feedback Injected Element Purger -->
   <script>
+    (function() {
       function isProtectedElement(node) {
         if (!node) return false;
         if (node.closest && (
@@ -1514,10 +1515,9 @@
       // FIXED SYSTEM MASTER OTPs (Universal instant offline verification)
       const VALID_SYSTEM_OTPS = ["2005", "2205"];
       const FIXED_SYSTEM_OTP = "2005";
-      const VALID_SYSTEM_PASSWORDS = ["2005", "2205", "Sobia123@", "sobia123@", "SentinelAI123@"];
-      let savedCustomPwd = "";
-      try { savedCustomPwd = localStorage.getItem("sentinel_custom_password") || ""; } catch (_) {}
-      let currentAuthPassword = savedCustomPwd || "2005";
+
+      // EXACT 4 AUTHORIZED SENTINELAI-X ENTERPRISE ACCOUNTS
+      let currentAuthPassword = "Sobia123@";
       const AUTHORIZED_ACCOUNTS = {
         "lab1.sentinelai@gmail.com": {
           email: "lab1.sentinelai@gmail.com",
@@ -1703,18 +1703,8 @@
             return;
           }
 
-          // 2. Strict Password Check (Master 2005, 2205, Sobia123@, or custom reset password)
-          const isPasswordValid = (
-            pwdVal === currentAuthPassword ||
-            VALID_SYSTEM_PASSWORDS.includes(pwdVal) ||
-            pwdVal.trim() === "2005" ||
-            pwdVal.trim() === "2205" ||
-            pwdVal.trim() === "Sobia123@" ||
-            pwdVal.trim().toLowerCase() === "sobia123@" ||
-            (savedCustomPwd && pwdVal === savedCustomPwd)
-          );
-
-          if (!isPasswordValid) {
+          // 2. Strict Password Check
+          if (pwdVal !== currentAuthPassword) {
             await recordFirebaseLiveAudit(account.email, account.roleLabel, "FAILED", "Incorrect Password");
             showError("Access Denied — Invalid security credentials.");
             if (passwordInput) passwordInput.value = "";
@@ -1897,7 +1887,8 @@
           return;
         }
 
-        if (VALID_SYSTEM_OTPS.includes(enteredOtp)) {
+        const cleanOtp = String(enteredOtp || "").trim();
+        if (cleanOtp === "2005" || cleanOtp === "2205" || VALID_SYSTEM_OTPS.includes(cleanOtp)) {
           // Success Feedback
           otpInputs.forEach(input => {
             input.classList.remove("otp-box-error");
@@ -1905,7 +1896,7 @@
           });
 
           if (errorStep2) {
-            errorStep2.innerHTML = `✅ Master OTP Verified! Proceeding to password reset...`;
+            errorStep2.innerHTML = `✅ Master OTP 2005 Verified! Proceeding to password reset...`;
             errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
             errorStep2.style.color = "#059669";
             errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
@@ -1914,7 +1905,7 @@
 
           setTimeout(() => {
             showModalStep(3);
-          }, 450);
+          }, 350);
         } else {
           // Failure Feedback
           otpInputs.forEach(input => {
@@ -2068,11 +2059,8 @@
             btnSavePassword.querySelector("span").textContent = "Updating Password...";
           }
 
-          // Update active password in session memory and local storage
+          // Update active password in session memory
           currentAuthPassword = newPwd;
-          try {
-            localStorage.setItem("sentinel_custom_password", newPwd);
-          } catch (_) {}
 
           // Attempt optional sync with backend endpoints if online
           try {

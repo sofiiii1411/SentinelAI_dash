@@ -1,10 +1,2 @@
 / /login.html 200
-/login /login/index.html 200
-/login/ /login/index.html 200
-/login.html /login.html 200
-/dashboard /dashboard/index.html 200
-/dashboard/ /dashboard/index.html 200
-/dashboard/lab1 /dashboard/lab1/index.html 200
-/dashboard/lab1/ /dashboard/lab1/index.html 200
-/dashboard/lab2 /dashboard/lab2/index.html 200
-/dashboard/lab2/ /dashboard/lab2/index.html 200
+/* /index.html 200
