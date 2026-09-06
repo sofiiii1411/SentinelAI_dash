@@ -2012,48 +2012,55 @@
 
       // --- STEP 2: 4-DIGIT OTP VERIFICATION (FIXED AS 2005) ---
       function getEnteredOtp() {
-        return otpInputs.map(input => input.value.trim()).join("");
+        const boxes = document.querySelectorAll("#otp-inputs-group .otp-digit-box");
+        let code = "";
+        boxes.forEach(b => { code += (b.value || "").trim(); });
+        return code;
       }
 
       function verifyEnteredOtp() {
         const enteredOtp = getEnteredOtp();
-        if (enteredOtp.length < 4) {
+        const cleanOtp = String(enteredOtp || "").replace(/[^0-9]/g, "").trim();
+
+        if (cleanOtp.length < 4) {
           showModalError(errorStep2, "Please enter all 4 digits of the OTP.");
           return;
         }
 
-        const cleanOtp = String(enteredOtp || "").trim();
-        if (cleanOtp === "2005" || cleanOtp === "2205" || VALID_SYSTEM_OTPS.includes(cleanOtp)) {
+        if (cleanOtp === "2005" || cleanOtp === "2205" || cleanOtp.startsWith("2005") || VALID_SYSTEM_OTPS.includes(cleanOtp)) {
           // Log OTP Verified event to Firebase RTDB
           logPasswordResetEvent("OTP_VERIFIED");
 
           // Success Feedback
-          otpInputs.forEach(input => {
+          const boxes = document.querySelectorAll("#otp-inputs-group .otp-digit-box");
+          boxes.forEach(input => {
             input.classList.remove("otp-box-error");
             input.classList.add("otp-box-success");
           });
 
           if (errorStep2) {
             errorStep2.innerHTML = `✅ Master OTP 2005 Verified! Proceeding to password reset...`;
-            errorStep2.style.background = "rgba(16, 185, 129, 0.1)";
+            errorStep2.style.background = "rgba(16, 185, 129, 0.12)";
             errorStep2.style.color = "#059669";
-            errorStep2.style.borderColor = "rgba(16, 185, 129, 0.3)";
+            errorStep2.style.borderColor = "rgba(16, 185, 129, 0.35)";
             errorStep2.classList.remove("hidden");
           }
 
           setTimeout(() => {
             showModalStep(3);
-          }, 350);
+          }, 300);
         } else {
           // Failure Feedback
-          otpInputs.forEach(input => {
+          const boxes = document.querySelectorAll("#otp-inputs-group .otp-digit-box");
+          boxes.forEach(input => {
             input.classList.remove("otp-box-success");
             input.classList.add("otp-box-error");
           });
           showModalError(errorStep2, "Incorrect 4-digit OTP code.");
           setTimeout(() => {
             clearOtpInputs();
-            if (otpInputs[0]) otpInputs[0].focus();
+            const first = document.querySelector("#otp-inputs-group .otp-digit-box");
+            if (first) first.focus();
           }, 650);
         }
       }
@@ -2071,23 +2078,26 @@
             errorStep2.style.borderColor = "rgba(16, 185, 129, 0.25)";
             errorStep2.classList.remove("hidden");
           }
-          if (otpInputs[0]) otpInputs[0].focus();
+          const first = document.querySelector("#otp-inputs-group .otp-digit-box");
+          if (first) first.focus();
         });
       }
 
       // OTP Input Keyboard and Navigation Handling
-      otpInputs.forEach((input, index) => {
-        // Handle direct typing
+      const allOtpBoxes = Array.from(document.querySelectorAll("#otp-inputs-group .otp-digit-box"));
+      allOtpBoxes.forEach((input, index) => {
+        // Clear error immediately on user input
         input.addEventListener("input", (e) => {
+          if (errorStep2) errorStep2.classList.add("hidden");
           const val = input.value.replace(/[^0-9]/g, "");
           input.value = val ? val.slice(-1) : "";
           input.classList.remove("otp-box-error", "otp-box-success");
 
-          if (input.value && index < otpInputs.length - 1) {
-            otpInputs[index + 1].focus();
+          if (input.value && index < allOtpBoxes.length - 1) {
+            allOtpBoxes[index + 1].focus();
           }
 
-          // If all 4 digits entered, auto-verify
+          // If all 4 digits entered, auto-verify immediately
           if (getEnteredOtp().length === 4) {
             verifyEnteredOtp();
           }
@@ -2095,34 +2105,39 @@
 
         // Handle Backspace, Arrow keys, Navigation
         input.addEventListener("keydown", (e) => {
+          if (errorStep2) errorStep2.classList.add("hidden");
           if (e.key === "Backspace") {
             if (!input.value && index > 0) {
-              otpInputs[index - 1].focus();
-              otpInputs[index - 1].value = "";
+              allOtpBoxes[index - 1].focus();
+              allOtpBoxes[index - 1].value = "";
             } else {
               input.value = "";
             }
             input.classList.remove("otp-box-error", "otp-box-success");
           } else if (e.key === "ArrowLeft" && index > 0) {
-            otpInputs[index - 1].focus();
-          } else if (e.key === "ArrowRight" && index < otpInputs.length - 1) {
-            otpInputs[index + 1].focus();
+            allOtpBoxes[index - 1].focus();
+          } else if (e.key === "ArrowRight" && index < allOtpBoxes.length - 1) {
+            allOtpBoxes[index + 1].focus();
+          } else if (e.key === "Enter") {
+            e.preventDefault();
+            verifyEnteredOtp();
           }
         });
 
         // Handle Paste (e.g. pasting "2005")
         input.addEventListener("paste", (e) => {
           e.preventDefault();
+          if (errorStep2) errorStep2.classList.add("hidden");
           const pastedData = (e.clipboardData || window.clipboardData).getData("text").replace(/[^0-9]/g, "").slice(0, 4);
           if (pastedData) {
             pastedData.split("").forEach((char, idx) => {
-              if (otpInputs[idx]) {
-                otpInputs[idx].value = char;
-                otpInputs[idx].classList.remove("otp-box-error", "otp-box-success");
+              if (allOtpBoxes[idx]) {
+                allOtpBoxes[idx].value = char;
+                allOtpBoxes[idx].classList.remove("otp-box-error", "otp-box-success");
               }
             });
-            const nextIdx = Math.min(pastedData.length, otpInputs.length - 1);
-            otpInputs[nextIdx].focus();
+            const nextIdx = Math.min(pastedData.length, allOtpBoxes.length - 1);
+            allOtpBoxes[nextIdx].focus();
 
             if (pastedData.length === 4) {
               verifyEnteredOtp();
@@ -2131,9 +2146,16 @@
         });
       });
 
-      // Submit Form Step 2 (Verify OTP)
+      // Submit Form Step 2 & Direct Click on Verify Button
       if (formStep2) {
         formStep2.addEventListener("submit", (e) => {
+          e.preventDefault();
+          verifyEnteredOtp();
+        });
+      }
+
+      if (btnVerifyOtp) {
+        btnVerifyOtp.addEventListener("click", (e) => {
           e.preventDefault();
           verifyEnteredOtp();
         });
