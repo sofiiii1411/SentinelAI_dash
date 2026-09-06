@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SentinelAI-X | Zero Trust for Physical & Cyber Infrastructure</title>
+  <meta name="description" content="AI-driven, pre-execution platform that analyzes telemetry, verifies biometric identity intent, and enforces Zero Trust across laboratory facilities.">
+  <link rel="icon" type="image/svg+xml" href="../../logo.svg">
+  
+  <!-- Imperial Typography: Cinzel Classical Serif & Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+  
+  <!-- Instant Early Auth Guard (Prevents Dashboard Content Flash) -->
+  <script>
+    (function() {
+      const isAuth = sessionStorage.getItem('sentinel_auth');
+      const bypass = window.location.search.includes('bypass=true');
+      if (!isAuth && !bypass) {
+        window.location.replace('login.html');
+      }
+    })();
+  </script>
+
+  <!-- Netlify Injected Elements Purger -->
+  <style>
+    #netlify-badge,
+    .netlify-badge,
+    netlify-drawer,
+    netlify-feedback,
+    [data-netlify-deploy-id],
+    [class*="netlify" i]:not([class*="sentinel" i]),
+    [id*="netlify" i]:not([id*="sentinel" i]),
+    iframe[src*="netlify" i],
+    a[href*="netlify.com" i],
+    a[href*="netlify.app" i],
+    [aria-label*="netlify" i],
+    [title*="netlify" i],
+    div[style*="bottom"][style*="right"][style*="position: fixed"],
+    div[style*="bottom"][style*="right"][style*="position:fixed"],
+    div[style*="bottom"][style*="left"][style*="position: fixed"],
+    div[style*="bottom"][style*="left"][style*="position:fixed"],
+    div[style*="bottom"][style*="position: fixed"],
+    div[style*="bottom"][style*="position:fixed"],
+    a[style*="bottom"][style*="position: fixed"],
+    a[style*="bottom"][style*="position:fixed"],
+    div[class*="feedback-drawer"],
+    div[class*="feedback-badge"],
+    div:has(> a[href*="netlify" i]),
+    div:has(> img[alt*="netlify" i]),
+    div:has(> svg[aria-label*="netlify" i]),
+    body > div[style*="fixed"]:not(#appRoot):not(#forgot-password-modal),
+    body > a[style*="fixed"] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      position: fixed !important;
+      top: -99999px !important;
+      left: -99999px !important;
+      clip-path: inset(100%) !important;
+      clip: rect(0, 0, 0, 0) !important;
+      z-index: -999999 !important;
+      transform: scale(0) !important;
+      max-height: 0 !important;
+      max-width: 0 !important;
+      overflow: hidden !important;
+    }
+  </style>
+  <script>
+    (function() {
+      function obliterateNetlify() {
+        try {
+          const selectors = [
+            '#netlify-badge', '.netlify-badge', 'netlify-drawer', 'netlify-feedback',
+            '[data-netlify-deploy-id]', '[class*="netlify" i]:not([class*="sentinel" i])',
+            '[id*="netlify" i]:not([id*="sentinel" i])', 'iframe[src*="netlify" i]',
+            'a[href*="netlify.com" i]', 'a[href*="netlify.app" i]',
+            '[aria-label*="netlify" i]', '[title*="netlify" i]',
+            'div[style*="bottom"][style*="position: fixed"]',
+            'div[style*="bottom"][style*="position:fixed"]',
+            'a[style*="bottom"][style*="position: fixed"]',
+            'a[style*="bottom"][style*="position:fixed"]'
+          ];
+          selectors.forEach(sel => {
+            document.querySelectorAll(sel).forEach(el => {
+              if (el && !el.closest('#appRoot') && !el.closest('.auth-canvas-container') && !el.closest('.login-card') && !el.closest('.sentinel-card') && (!el.id || !el.id.startsWith('sentinel'))) {
+                el.remove();
+              }
+            });
+          });
+
+          // Deep DOM scan
+          const walker = document.createTreeWalker(document.documentElement, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT, null, false);
+          const toRemove = [];
+          while (walker.nextNode()) {
+            const node = walker.currentNode;
+            if (node.nodeType === Node.TEXT_NODE) {
+              const val = (node.nodeValue || '').trim().toLowerCase();
+              if (val.includes('powered by netlify') || val === 'netlify' || val.includes('deploys by netlify')) {
+                const parent = node.parentElement;
+                if (parent && !parent.closest('#appRoot') && !parent.closest('.auth-canvas-container') && !parent.closest('.login-card') && !parent.closest('.sentinel-card')) {
+                  toRemove.push(parent);
+                }
+              }
+            } else if (node.nodeType === Node.ELEMENT_NODE) {
+              if (node.shadowRoot) {
+                node.shadowRoot.querySelectorAll('*').forEach(sc => {
+                  if (sc.textContent && sc.textContent.toLowerCase().includes('netlify')) sc.remove();
+                });
+              }
+              const text = (node.textContent || '').trim().toLowerCase();
+              if ((text.includes('powered by netlify') || text === 'netlify') && node.children.length < 4) {
+                if (!node.closest('#appRoot') && !node.closest('.auth-canvas-container') && !node.closest('.login-card') && !node.closest('.sentinel-card')) {
+                  toRemove.push(node);
+                }
+              }
+            }
+          }
+          toRemove.forEach(el => {
+            try {
+              el.style.display = 'none';
+              el.remove();
+            } catch (e) {}
+          });
+        } catch (e) {}
+      }
+
+      obliterateNetlify();
+      if (typeof MutationObserver !== 'undefined' && document.documentElement) {
+        new MutationObserver(obliterateNetlify).observe(document.documentElement, { childList: true, subtree: true, attributes: true });
+      }
+      window.addEventListener('DOMContentLoaded', obliterateNetlify);
+      window.addEventListener('load', obliterateNetlify);
+      setInterval(obliterateNetlify, 100);
+    })();
+  </script>
+
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body class="theme-white-spectrum"><script>if(!window.location.hash) window.location.hash = "#lab2-dashboard";</script>
+  
+  <!-- Main Application Shell Grid Layout -->
+  <div class="app-layout-root" id="appRoot">
+
+    <!-- Global Floating Background Light Auras -->
+    <div class="bg-glow-layer" id="bgGlows">
+      <div class="glow-orb orb-1"></div>
+      <div class="glow-orb orb-2"></div>
+      <div class="glow-orb orb-3"></div>
+      <div class="glow-orb orb-4"></div>
+    </div>
+
+    <!-- =========================================================================
+         SIDEBAR NAVIGATION (Clean, Enterprise Professional Structure)
+         ========================================================================= -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop" aria-hidden="true"></div>
+
+    <aside class="sentinel-sidebar" id="sentinelSidebar" aria-label="Main Navigation">
+      
+      <!-- Sidebar Top: Full-Size Brand Logo as Toggle -->
+      <div class="sidebar-header">
+        <button class="sidebar-brand-btn" id="sidebarBrandHome" aria-label="Toggle Sidebar" title="Click Logo to Toggle Sidebar">
+          <img src="../../logo.svg" alt="SentinelAI-X" class="sidebar-brand-logo">
+        </button>
+      </div>
+
+      <!-- Navigation Content -->
+      <div class="sidebar-scrollable">
+        <nav class="sidebar-nav">
+          
+          <!-- SECTION 1: LABORATORIES -->
+          <div class="nav-category-header">LABORATORIES</div>
+
+          <!-- LAB 1 ACCORDION -->
+          <div class="nav-group-block open" id="treeLab1">
+            <button class="nav-group-btn" aria-expanded="true" data-target="lab1-menu">
+              <div class="group-btn-left">
+                <span class="group-icon-wrap">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 2v7.31L4.69 18.1A2 2 0 0 0 6.4 21h11.2a2 2 0 0 0 1.71-2.9L14 9.31V2"></path>
+                    <line x1="8.5" y1="2" x2="15.5" y2="2"></line>
+                    <line x1="7" y1="15" x2="17" y2="15"></line>
+                  </svg>
+                </span>
+                <span class="group-title">LAB 1</span>
+              </div>
+              <div class="group-btn-right">
+                <svg class="chevron-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </button>
+            <ul class="nav-item-list" id="lab1-menu">
+              <li>
+                <a href="#lab1-dashboard" class="nav-link active" data-view="lab1-dashboard" data-lab="LAB 1" data-section="Dashboard">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
+                  </span>
+                  <span class="item-text">Dashboard</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab1-live-monitoring" class="nav-link" data-view="lab1-live-monitoring" data-lab="LAB 1" data-section="Live Monitoring">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+                  </span>
+                  <span class="item-text">Live Monitoring</span>
+                  <span class="live-dot-indicator"></span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab1-threat-detection" class="nav-link" data-view="lab1-threat-detection" data-lab="LAB 1" data-section="Threat Detection">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                  </span>
+                  <span class="item-text">Threat Detection</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab1-face-recognition" class="nav-link" data-view="lab1-face-recognition" data-lab="LAB 1" data-section="Face Recognition">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                  </span>
+                  <span class="item-text">Face Recognition</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab1-access-control" class="nav-link" data-view="lab1-access-control" data-lab="LAB 1" data-section="Access Control">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  </span>
+                  <span class="item-text">Access Control</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab1-sensor-monitoring" class="nav-link" data-view="lab1-sensor-monitoring" data-lab="LAB 1" data-section="Sensor Monitoring">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>
+                  </span>
+                  <span class="item-text">Sensor Monitoring</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab1-analytics" class="nav-link" data-view="lab1-analytics" data-lab="LAB 1" data-section="Analytics">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                  </span>
+                  <span class="item-text">Analytics</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab1-event-logs" class="nav-link" data-view="lab1-event-logs" data-lab="LAB 1" data-section="Event Logs">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  </span>
+                  <span class="item-text">Event Logs</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab1-alerts" class="nav-link" data-view="lab1-alerts" data-lab="LAB 1" data-section="Alerts">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                  </span>
+                  <span class="item-text">Alerts</span>
+                  <span class="badge-sub-pill">0</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab1-system-overview" class="nav-link" data-view="lab1-system-overview" data-lab="LAB 1" data-section="System Overview">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                  </span>
+                  <span class="item-text">LAB 1 System Overview</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab1-device-status" class="nav-link" data-view="lab1-device-status" data-lab="LAB 1" data-section="Device Status">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+                  </span>
+                  <span class="item-text">LAB 1 Device Status</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab1-settings" class="nav-link" data-view="lab1-settings" data-lab="LAB 1" data-section="Settings">
+                  <span class="nav-tree-line last"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                  </span>
+                  <span class="item-text">LAB 1 Settings</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- LAB 2 ACCORDION -->
+          <div class="nav-group-block open" id="treeLab2">
+            <button class="nav-group-btn" aria-expanded="true" data-target="lab2-menu">
+              <div class="group-btn-left">
+                <span class="group-icon-wrap">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 2v7.31L4.69 18.1A2 2 0 0 0 6.4 21h11.2a2 2 0 0 0 1.71-2.9L14 9.31V2"></path>
+                    <line x1="8.5" y1="2" x2="15.5" y2="2"></line>
+                    <line x1="7" y1="15" x2="17" y2="15"></line>
+                  </svg>
+                </span>
+                <span class="group-title">LAB 2</span>
+              </div>
+              <div class="group-btn-right">
+                <svg class="chevron-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+              </div>
+            </button>
+            <ul class="nav-item-list" id="lab2-menu">
+              <li>
+                <a href="#lab2-dashboard" class="nav-link" data-view="lab2-dashboard" data-lab="LAB 2" data-section="Dashboard">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
+                  </span>
+                  <span class="item-text">Dashboard</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab2-live-monitoring" class="nav-link" data-view="lab2-live-monitoring" data-lab="LAB 2" data-section="Live Monitoring">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="2"></circle><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"></path></svg>
+                  </span>
+                  <span class="item-text">Live Monitoring</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab2-threat-detection" class="nav-link" data-view="lab2-threat-detection" data-lab="LAB 2" data-section="Threat Detection">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                  </span>
+                  <span class="item-text">Threat Detection</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab2-access-control" class="nav-link" data-view="lab2-access-control" data-lab="LAB 2" data-section="Access Control">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  </span>
+                  <span class="item-text">Access Control</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab2-sensor-monitoring" class="nav-link" data-view="lab2-sensor-monitoring" data-lab="LAB 2" data-section="Sensor Monitoring">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>
+                  </span>
+                  <span class="item-text">Sensor Monitoring</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab2-analytics" class="nav-link" data-view="lab2-analytics" data-lab="LAB 2" data-section="Analytics">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                  </span>
+                  <span class="item-text">Analytics</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab2-event-logs" class="nav-link" data-view="lab2-event-logs" data-lab="LAB 2" data-section="Event Logs">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                  </span>
+                  <span class="item-text">Event Logs</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab2-alerts" class="nav-link" data-view="lab2-alerts" data-lab="LAB 2" data-section="Alerts">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                  </span>
+                  <span class="item-text">Alerts</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab2-system-overview" class="nav-link" data-view="lab2-system-overview" data-lab="LAB 2" data-section="System Overview">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                  </span>
+                  <span class="item-text">LAB 2 System Overview</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab2-device-status" class="nav-link" data-view="lab2-device-status" data-lab="LAB 2" data-section="Device Status">
+                  <span class="nav-tree-line"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+                  </span>
+                  <span class="item-text">LAB 2 Device Status</span>
+                </a>
+              </li>
+              <li>
+                <a href="#lab2-settings" class="nav-link" data-view="lab2-settings" data-lab="LAB 2" data-section="Settings">
+                  <span class="nav-tree-line last"></span>
+                  <span class="item-icon">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                  </span>
+                  <span class="item-text">LAB 2 Settings</span>
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="sidebar-divider-line"></div>
+
+          <!-- SECTION 2: GLOBAL CLUSTER SYSTEM -->
+          <div class="nav-category-header">GLOBAL CLUSTER SYSTEM</div>
+
+          <ul class="nav-system-menu">
+            <li>
+              <a href="#system-overview" class="nav-link" data-view="system-overview" data-lab="SYSTEM" data-section="Global System Overview">
+                <span class="item-icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                </span>
+                <span class="item-text">Global Cluster Overview</span>
+              </a>
+            </li>
+            <li>
+              <a href="#chatbot" class="nav-link" data-view="chatbot" data-lab="SYSTEM" data-section="Chatbot">
+                <span class="item-icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="9" cy="10" r="1"></circle><circle cx="15" cy="10" r="1"></circle></svg>
+                </span>
+                <span class="item-text">AI Security Chatbot</span>
+                <span class="badge-system-tag">AI Core</span>
+              </a>
+            </li>
+            <li>
+              <a href="#chatbot-overview" class="nav-link" data-view="chatbot-overview" data-lab="SYSTEM" data-section="Chatbot Overview">
+                <span class="item-icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="3" width="7" height="7" rx="1"></rect><rect x="14" y="14" width="7" height="7" rx="1"></rect><rect x="3" y="14" width="7" height="7" rx="1"></rect></svg>
+                </span>
+                <span class="item-text">Chatbot Overview</span>
+              </a>
+            </li>
+            <li>
+              <a href="#chatbot-analytics" class="nav-link" data-view="chatbot-analytics" data-lab="SYSTEM" data-section="Chatbot Analytics">
+                <span class="item-icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                </span>
+                <span class="item-text">Chatbot Analytics</span>
+              </a>
+            </li>
+            <li>
+              <a href="#chatbot-logs" class="nav-link" data-view="chatbot-logs" data-lab="SYSTEM" data-section="Chatbot Logs">
+                <span class="item-icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
+                </span>
+                <span class="item-text">Chatbot Logs</span>
+              </a>
+            </li>
+            <li>
+              <a href="#device-status" class="nav-link" data-view="device-status" data-lab="SYSTEM" data-section="Cluster Device Matrix">
+                <span class="item-icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
+                </span>
+                <span class="item-text">Cluster Device Matrix</span>
+              </a>
+            </li>
+            <li>
+              <a href="#settings" class="nav-link" data-view="settings" data-lab="SYSTEM" data-section="Global Settings">
+                <span class="item-icon">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                </span>
+                <span class="item-text">Global Settings</span>
+              </a>
+            </li>
+          </ul>
+
+        </nav>
+      </div>
+
+      <!-- Bottom Login Information Alone -->
+      <div class="sidebar-footer">
+        <div class="admin-user-card">
+          <div class="admin-user-avatar">
+            <span>AD</span>
+            <span class="online-indicator"></span>
+          </div>
+          <div class="admin-user-info">
+            <span class="user-fullname">Admin</span>
+            <span class="user-role-label">System Administrator</span>
+          </div>
+          <button class="user-portal-btn" id="logoutBtn" title="Switch to Auth Portal">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+              <polyline points="10 17 15 12 10 7"></polyline>
+              <line x1="15" y1="12" x2="3" y2="12"></line>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- =========================================================================
+         MAIN APPLICATION AREA
+         ========================================================================= -->
+    <div class="app-content-wrapper" id="appContentWrapper">
+
+      <!-- TOP APP HEADER: OPTION A UNIFIED FLOATING CAPSULE -->
+      <header class="app-header">
+        
+        <!-- Left: Logo Alone as Sidebar Toggle -->
+        <div class="header-left">
+          <button class="logo-toggle-btn" id="logoToggleBtn" aria-label="Toggle Sidebar" title="Touch / Click SentinelAI-X Logo to Toggle Sidebar">
+            <img src="../../logo.svg" alt="SentinelAI-X" class="header-brand-logo">
+          </button>
+        </div>
+
+        <!-- Right: Unified Floating Glass Capsule -->
+        <div class="header-right">
+          <div class="header-unified-capsule">
+            
+            <!-- Capsule Item 0: Zero Trust Enforced Status -->
+            <div class="capsule-segment capsule-zero-trust-pill" title="CodeHunter Zero Trust Enforced">
+              <span class="cyber-pulse-dot"></span>
+              <span class="zero-trust-text">ZERO TRUST</span>
+            </div>
+
+            <span class="capsule-divider"></span>
+
+            <!-- Capsule Item 1: Fast Lab 1 / Lab 2 Segmented Selector -->
+            <div class="capsule-segment capsule-lab-switcher">
+              <button class="capsule-lab-pill active" id="btnSwitchLab1" data-lab-target="LAB 1" title="Switch to LAB 1 (Alpha Core)">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31L4.69 18.1A2 2 0 0 0 6.4 21h11.2a2 2 0 0 0 1.71-2.9L14 9.31V2"></path><line x1="8.5" y1="2" x2="15.5" y2="2"></line></svg>
+                <span>LAB 1</span>
+              </button>
+              <button class="capsule-lab-pill" id="btnSwitchLab2" data-lab-target="LAB 2" title="Switch to LAB 2 (Beta Wing)">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 2v7.31L4.69 18.1A2 2 0 0 0 6.4 21h11.2a2 2 0 0 0 1.71-2.9L14 9.31V2"></path><line x1="8.5" y1="2" x2="15.5" y2="2"></line></svg>
+                <span>LAB 2</span>
+              </button>
+            </div>
+
+            <span class="capsule-divider"></span>
+
+            <!-- Capsule Item 2: Quick AI Chatbot Button -->
+            <div class="capsule-segment capsule-chatbot-btn-wrap">
+              <button class="capsule-chatbot-btn" id="headerChatbotBtn" title="Launch AI Security Chatbot Assistant">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="9" cy="10" r="1.2" fill="currentColor"></circle><circle cx="15" cy="10" r="1.2" fill="currentColor"></circle></svg>
+                <span>AI Chatbot</span>
+              </button>
+            </div>
+
+            <span class="capsule-divider"></span>
+
+            <!-- Capsule Item 3: Live Indian Date & Time (IST) -->
+            <div class="capsule-segment capsule-datetime" title="Indian Standard Time (IST)">
+              <span class="datetime-icon-svg">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </span>
+              <span class="datetime-value" id="headerClock">--:--:-- IST</span>
+              <script>
+                (function initLiveClock() {
+                  function tick() {
+                    const el = document.getElementById('headerClock');
+                    if (!el) return;
+                    const now = new Date();
+                    try {
+                      const optionsDate = { timeZone: 'Asia/Kolkata', weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' };
+                      const optionsTime = { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+                      const d = new Intl.DateTimeFormat('en-IN', optionsDate).format(now);
+                      const t = new Intl.DateTimeFormat('en-IN', optionsTime).format(now);
+                      el.textContent = `${d}  |  ${t} IST`;
+                    } catch (e) {
+                      el.textContent = now.toLocaleDateString() + ' | ' + now.toLocaleTimeString() + ' IST';
+                    }
+                  }
+                  tick();
+                  setInterval(tick, 1000);
+                })();
+              </script>
+            </div>
+
+          </div>
+        </div>
+      </header>
+
+      <!-- =========================================================================
+           TOP SUB-NAVIGATION TAB BAR (Horizontal Sub-Module Switcher)
+           ========================================================================= -->
+      <nav class="top-subnav-bar" id="topSubnavBar" aria-label="Laboratory Sub-Navigation">
+        <div class="top-subnav-scroll" id="topSubnavScroll">
+          <!-- Dynamically populated & synchronized via script.js -->
+        </div>
+      </nav>
+
+      <!-- =========================================================================
+           MAIN DASHBOARD VIEWPORT
+           ========================================================================= -->
+      <main class="dashboard-main-container" id="dashboardMain">
+
+        <!-- VIEW: LAB 1 & LAB 2 DASHBOARD (Default Realistic Command Center) -->
+        <section class="dashboard-view active" id="view-lab-dashboard">
+          
+          <!-- TOP HERO COMMAND SECTION -->
+          <div class="hero-command-card">
+            
+            <!-- LEFT: Primary Brand & Capabilities Overview -->
+            <div class="hero-text-side">
+              <div class="hero-brand-header-block">
+                <div class="hero-brand-title-row">
+                  <h1 class="hero-brand-title">SentinelAI-X</h1>
+                  <span class="hero-badge-pill"><span class="badge-dot"></span> ZERO TRUST FOR CODE &amp; LABS • PRE-EXECUTION TELEMETRY</span>
+                </div>
+              </div>
+
+              <!-- Feature Capability Pills (CodeHunter Style) -->
+              <div class="hero-feature-tags-grid">
+                <span class="feature-tag-chip">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                  PRE-EXECUTION VERIFICATION
+                </span>
+                <span class="feature-tag-chip">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                  BEHAVIORAL INTENT ANALYSIS
+                </span>
+                <span class="feature-tag-chip">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                  DETERMINISTIC TRUST
+                </span>
+                <span class="feature-tag-chip">
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M16.5 9.4 7.55 4.24a1.79 1.79 0 0 0-2.5 1.49l-.05 12.54a1.79 1.79 0 0 0 2.5 1.54l8.95-5.16a1.78 1.78 0 0 0 0-3.17z"></path></svg>
+                  AUTOMATED THREAT FORENSICS
+                </span>
+              </div>
+
+              <p class="hero-description">AI-driven, pre-execution verification platform that verifies telemetry, identity, and access intent before granting operational access or executing directives across distributed laboratory facilities.</p>
+
+              <div class="hero-btn-row">
+                <button class="btn-primary-action" id="heroScanBtn">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                  <span>Run Pre-Execution Threat Scan</span>
+                </button>
+                <button class="btn-secondary-action" id="heroLiveStreamBtn">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                  <span>Behavioral Intent Analysis</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- RIGHT: Clean 3D Network Image (Pristine, No Circles or Arrows) -->
+            <div class="hero-model-side">
+              <div class="model-wrapper" id="isoLabsWrapper">
+                <img src="assets/iso-labs.png" alt="SentinelAI-X Laboratory Network" class="model-image">
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 4 KEY TELEMETRY METRIC CARDS -->
+          <div class="metrics-grid">
+            
+            <div class="metric-box box-cyan">
+              <div class="metric-box-top">
+                <div class="metric-icon-wrap">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                </div>
+                <span class="metric-tag">ENFORCED</span>
+              </div>
+              <div class="metric-box-content">
+                <span class="metric-title">ZERO TRUST POLICY</span>
+                <span class="metric-number">100% PRE-EXEC</span>
+                <span class="metric-sub-status">0 Policy Bypasses • Active</span>
+              </div>
+              <div class="metric-bar-track"><div class="metric-bar-fill fill-cyan" style="width: 100%;"></div></div>
+            </div>
+
+            <div class="metric-box box-blue">
+              <div class="metric-box-top">
+                <div class="metric-icon-wrap">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"></path></svg>
+                </div>
+                <span class="metric-tag">DETERMINISTIC</span>
+              </div>
+              <div class="metric-box-content">
+                <span class="metric-title">BEHAVIORAL ANOMALIES</span>
+                <span class="metric-number">0 ACTIVE THREATS</span>
+                <span class="metric-sub-status">Automated Reverse Analysis Active</span>
+              </div>
+              <div class="metric-bar-track"><div class="metric-bar-fill fill-blue" style="width: 100%;"></div></div>
+            </div>
+
+            <div class="metric-box box-purple">
+              <div class="metric-box-top">
+                <div class="metric-icon-wrap">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
+                <span class="metric-tag">VERIFIED</span>
+              </div>
+              <div class="metric-box-content">
+                <span class="metric-title">BIOMETRIC INTENT CHECK</span>
+                <span class="metric-number">148 VERIFIED</span>
+                <span class="metric-sub-status">99.98% Confidence • 0 Breaches</span>
+              </div>
+              <div class="metric-bar-track"><div class="metric-bar-fill fill-purple" style="width: 98%;"></div></div>
+            </div>
+
+            <div class="metric-box box-magenta">
+              <div class="metric-box-top">
+                <div class="metric-icon-wrap">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path></svg>
+                </div>
+                <span class="metric-tag">ATTESTED</span>
+              </div>
+              <div class="metric-box-content">
+                <span class="metric-title">TELEMETRY INTEGRITY</span>
+                <span class="metric-number">48/48 NODES</span>
+                <span class="metric-sub-status">21.4°C • 44% RH • AQI 12</span>
+              </div>
+              <div class="metric-bar-track"><div class="metric-bar-fill fill-magenta" style="width: 96%;"></div></div>
+            </div>
+
+          </div>
+
+          <!-- MID SECTION: SURVEILLANCE MATRIX & THREAT RADAR -->
+          <div class="dashboard-columns-split">
+            
+            <!-- Left: Surveillance Matrix -->
+            <div class="enterprise-card">
+              <div class="card-header-row">
+                <div class="card-title-group">
+                  <span class="card-title-icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+                  </span>
+                  <div>
+                    <h3 class="card-heading">Active AI Surveillance Grid</h3>
+                    <p class="card-subheading">Live multi-camera optical inference with neural bounding validation</p>
+                  </div>
+                </div>
+                <span class="live-stream-badge">LIVE AI STREAM</span>
+              </div>
+
+              <div class="camera-stream-grid">
+                
+                <div class="cam-panel">
+                  <div class="cam-top">
+                    <span class="cam-id">CAM-01 • Main Airlock</span>
+                    <span class="cam-stat">60.0 FPS</span>
+                  </div>
+                  <div class="cam-screen stream-1">
+                    <div class="bounding-box box-1">
+                      <span class="bounding-tag">Authorized: Dr. Elena R. (99.8%)</span>
+                    </div>
+                    <div class="target-reticle"></div>
+                  </div>
+                </div>
+
+                <div class="cam-panel">
+                  <div class="cam-top">
+                    <span class="cam-id">CAM-02 • Chemical Containment</span>
+                    <span class="cam-stat">59.9 FPS</span>
+                  </div>
+                  <div class="cam-screen stream-2">
+                    <div class="bounding-box box-2">
+                      <span class="bounding-tag tag-green">Zone Secure • Motion 0%</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="cam-panel">
+                  <div class="cam-top">
+                    <span class="cam-id">CAM-03 • Cryogenic Storage</span>
+                    <span class="cam-stat">60.0 FPS</span>
+                  </div>
+                  <div class="cam-screen stream-3">
+                    <div class="bounding-box box-3">
+                      <span class="bounding-tag tag-cyan">Temp: -78.5°C • Nominal</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="cam-panel">
+                  <div class="cam-top">
+                    <span class="cam-id">CAM-04 • Central Server Rack</span>
+                    <span class="cam-stat">60.1 FPS</span>
+                  </div>
+                  <div class="cam-screen stream-4">
+                    <div class="bounding-box box-4">
+                      <span class="bounding-tag tag-purple">Optic Perimeter Active</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Right: Radar & Controls -->
+            <div class="enterprise-card">
+              <div class="card-header-row">
+                <div class="card-title-group">
+                  <span class="card-title-icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                  </span>
+                  <div>
+                    <h3 class="card-heading">AI Threat Radar</h3>
+                    <p class="card-subheading">Autonomous anomaly perimeter scoring</p>
+                  </div>
+                </div>
+                <button class="card-btn-action" id="radarRefreshBtn">Rescan</button>
+              </div>
+
+              <div class="radar-scope-wrapper">
+                <div class="radar-scope">
+                  <div class="radar-grid-ring r-1"></div>
+                  <div class="radar-grid-ring r-2"></div>
+                  <div class="radar-grid-ring r-3"></div>
+                  <div class="radar-cross-h"></div>
+                  <div class="radar-cross-v"></div>
+                  <div class="radar-sweep-scanner"></div>
+                  
+                  <div class="radar-point pt-1" title="LAB 01: Secure"></div>
+                  <div class="radar-point pt-2" title="LAB 02: Secure"></div>
+                  <div class="radar-point pt-3" title="LAB 03: Secure"></div>
+                  <div class="radar-point pt-4" title="LAB 04: Secure"></div>
+                </div>
+
+                <div class="radar-metrics-list">
+                  <div class="metric-row">
+                    <span class="indicator-dot dot-green"></span>
+                    <span class="metric-row-label">Threat Probability:</span>
+                    <strong class="metric-row-val val-green">0.02% (Minimal)</strong>
+                  </div>
+                  <div class="metric-row">
+                    <span class="indicator-dot dot-cyan"></span>
+                    <span class="metric-row-label">Sensor Calibration:</span>
+                    <strong class="metric-row-val val-cyan">100% Calibrated</strong>
+                  </div>
+                  <div class="metric-row">
+                    <span class="indicator-dot dot-purple"></span>
+                    <span class="metric-row-label">Anomaly Model:</span>
+                    <strong class="metric-row-val val-purple">SentinelVision v4.2</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="quick-controls-grid">
+                <button class="btn-ctrl btn-danger" id="quickLockdownBtn">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                  <span>Lockdown Laboratory</span>
+                </button>
+                <button class="btn-ctrl btn-default" id="quickTestAlarmBtn">
+                  <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                  <span>Test System Alarm</span>
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- BOTTOM SECTION: AUDIT LOGS -->
+          <!-- BOTTOM SECTION: FIREBASE LIVE REALTIME AUDIT STREAM -->
+          <div class="enterprise-card full-width" id="firebaseAuditCard">
+            <div class="card-header-row" style="flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;">
+              <div class="card-title-group">
+                <span class="card-title-icon" style="color: #f59e0b;">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c1.5 3 4 5 4 9a6 6 0 0 1-12 0c0-4 2.5-6 4-9 1 2 2 3 4 0z"></path></svg>
+                </span>
+                <div>
+                  <h3 class="card-heading">Live Firebase Security Audit & Login Stream (2026)</h3>
+                  <p class="card-subheading">Real-time telemetry stream synchronized directly with Firebase Realtime Database</p>
+                </div>
+              </div>
+              
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span class="badge-tag" id="firebaseLiveStatusBadge" style="background: rgba(16, 185, 129, 0.15); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3); font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">
+                  <span class="cyber-pulse-dot" style="background: #10b981;"></span>
+                  <span>Firebase RTDB Live</span>
+                </span>
+
+                <button type="button" class="btn-ctrl" onclick="if(typeof openDownloadLogsModal==='function')openDownloadLogsModal();" style="padding: 6px 14px; font-size: 12px; font-weight: 700; cursor: pointer; border-radius: 8px; background: linear-gradient(135deg, #0066ff, #7928ca); color: #ffffff; border: none; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 8px rgba(0, 102, 255, 0.25);">
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  <span>📥 Download Logs</span>
+                </button>
+
+                <button type="button" class="btn-ctrl" id="btnRefreshFirebaseLogs" style="padding: 6px 12px; font-size: 12px; cursor: pointer; border-radius: 8px; background: rgba(37, 99, 235, 0.1); color: #2563eb; border: 1px solid rgba(37, 99, 235, 0.3);">
+                  <span>🔄 Refresh</span>
+                </button>
+
+                <button type="button" class="btn-ctrl" id="btnResetFirebaseHistory" style="padding: 6px 12px; font-size: 12px; cursor: pointer; border-radius: 8px; background: rgba(239, 68, 68, 0.1); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.3);">
+                  <span>🗑️ Reset History</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Month-Wise Selector Tabs Bar -->
+            <div class="firebase-month-tabs-bar" id="firebaseMonthTabs" style="display: flex; gap: 6px; overflow-x: auto; padding: 12px 0 8px 0; border-bottom: 1px solid rgba(226, 232, 240, 0.8); margin-bottom: 12px;">
+              <button type="button" class="firebase-month-pill active" data-month="ALL" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 700; border: 1px solid #cbd5e1; background: #0f172a; color: #ffffff; cursor: pointer; white-space: nowrap;">All Months</button>
+              <button type="button" class="firebase-month-pill" data-month="January" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Jan</button>
+              <button type="button" class="firebase-month-pill" data-month="February" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Feb</button>
+              <button type="button" class="firebase-month-pill" data-month="March" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Mar</button>
+              <button type="button" class="firebase-month-pill" data-month="April" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Apr</button>
+              <button type="button" class="firebase-month-pill" data-month="May" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">May</button>
+              <button type="button" class="firebase-month-pill" data-month="June" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Jun</button>
+              <button type="button" class="firebase-month-pill" data-month="July" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Jul</button>
+              <button type="button" class="firebase-month-pill" data-month="August" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Aug</button>
+              <button type="button" class="firebase-month-pill" data-month="September" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Sep</button>
+              <button type="button" class="firebase-month-pill" data-month="October" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Oct</button>
+              <button type="button" class="firebase-month-pill" data-month="November" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Nov</button>
+              <button type="button" class="firebase-month-pill" data-month="December" style="padding: 6px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 600; border: 1px solid #e2e8f0; background: #ffffff; color: #475569; cursor: pointer; white-space: nowrap;">Dec</button>
+            </div>
+
+            <div class="table-container">
+              <table class="enterprise-table">
+                <thead>
+                  <tr>
+                    <th>DATE & TIME</th>
+                    <th>MONTH</th>
+                    <th>ACCOUNT EMAIL</th>
+                    <th>SECURITY ROLE</th>
+                    <th>LOGIN STATUS</th>
+                    <th>DETAILS / FAILURE REASON</th>
+                  </tr>
+                </thead>
+                <tbody id="eventLogsTableBody">
+                  <tr>
+                    <td colspan="6" style="text-align: center; padding: 28px; color: #64748b;">
+                      <span>🔄 Loading live security audit records from Firebase Realtime Database...</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- VIEW: GENERIC SECTION CONTENT (Dynamically populated via script.js) -->
+        <section class="dashboard-view" id="view-generic-section">
+          <div class="generic-view-container" id="genericViewContainer">
+            <!-- Dynamically populated via script.js -->
+          </div>
+        </section>
+
+    <!-- =========================================================================
+         GLOBAL COMMAND PALETTE MODAL (Ctrl + K)
+         ========================================================================= -->
+    <div class="cmd-palette-backdrop" id="cmdPaletteBackdrop" style="display:none;">
+      <div class="cmd-palette-card" id="cmdPaletteCard">
+        <div class="cmd-search-input-box">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="cmdPaletteInput" class="cmd-input-field" placeholder="Type a destination, node, camera or telemetry action..." autofocus>
+          <button class="cmd-close-btn" id="cmdPaletteCloseBtn">Esc</button>
+        </div>
+        <div class="cmd-results-list" id="cmdResultsList">
+          <div class="cmd-group-label">Quick Navigation</div>
+          <div class="cmd-result-item" data-action="lab1-dashboard">
+            <span class="cmd-item-icon">📊</span>
+            <div class="cmd-item-text">
+              <strong>LAB 1 Central Dashboard</strong>
+              <span>Main command twin & real-time telemetry</span>
+            </div>
+            <kbd>Enter</kbd>
+          </div>
+          <div class="cmd-result-item" data-action="lab1-camera-surveillance">
+            <span class="cmd-item-icon">📹</span>
+            <div class="cmd-item-text">
+              <strong>LAB 1 Camera Surveillance</strong>
+              <span>4K live optic matrix feeds</span>
+            </div>
+          </div>
+          <div class="cmd-result-item" data-action="lab1-threat-detection">
+            <span class="cmd-item-icon">🛡️</span>
+            <div class="cmd-item-text">
+              <strong>LAB 1 Threat Detection</strong>
+              <span>Autonomous AI perimeter scanning</span>
+            </div>
+          </div>
+          <div class="cmd-result-item" data-action="lab2-dashboard">
+            <span class="cmd-item-icon">🧪</span>
+            <div class="cmd-item-text">
+              <strong>LAB 2 Containment Dashboard</strong>
+              <span>Specimen vault & pressure matrix</span>
+            </div>
+          </div>
+          <div class="cmd-group-label">Quick Actions</div>
+          <div class="cmd-result-item action-item" data-action="action-scan">
+            <span class="cmd-item-icon">⚡</span>
+            <div class="cmd-item-text">
+              <strong>Run Full System AI Threat Diagnostics</strong>
+              <span>Trigger instant neural perimeter sweep</span>
+            </div>
+          </div>
+          <div class="cmd-result-item action-item" data-action="action-lockdown">
+            <span class="cmd-item-icon">🚨</span>
+            <div class="cmd-item-text">
+              <strong>Emergency Laboratory Lockdown</strong>
+              <span>Seal all magnetic interlocks & isolate nodes</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================================================================
+         SENTINELAI-X AUTH LOADER & ACCESS DENIED SECURITY BARRIER
+         ========================================================================= -->
+
+
+    <!-- 2. Access Denied / Security Clearance Restriction Modal -->
+    <div id="accessDeniedModal" class="access-denied-overlay" aria-hidden="true">
+      <div class="access-denied-card" role="alertdialog" aria-labelledby="deniedTitle">
+        <div class="denied-icon-wrap">
+          <svg viewBox="0 0 24 24" width="38" height="38" fill="none" stroke="#ef4444" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="denied-tag">CLEARANCE RESTRICTION [403]</div>
+        <h2 id="deniedTitle" class="denied-heading">Access Denied: Node Restricted</h2>
+        <p class="denied-desc" id="deniedReasonMsg">
+          Your authenticated account (<strong id="deniedUserRoleBadge">LAB 1 OPERATOR</strong>) is not authorized to inspect or control this laboratory subsystem.
+        </p>
+        <div class="denied-meta-box">
+          <div class="meta-row"><span>Security Policy:</span><strong>Zero Trust Strict RBAC</strong></div>
+          <div class="meta-row"><span>Authorized Scope:</span><strong id="deniedAllowedScope">LAB 1 Subsystems Only</strong></div>
+          <div class="meta-row"><span>Violation Code:</span><strong style="color:#ef4444;">SEC_CLEARANCE_FAIL</strong></div>
+        </div>
+        <button type="button" id="btnReturnAuthorizedLab" class="denied-return-btn">
+          <span>Return to Assigned Station</span>
+        </button>
+      </div>
+    </div>
+
+    <style>
+      /* Access Denied Modal */
+      .access-denied-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(7, 11, 20, 0.82);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        z-index: 10000;
+        display: none !important;
+        align-items: center;
+        justify-content: center;
+        padding: 1.2rem;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
+      .access-denied-overlay.active {
+        display: flex !important;
+        opacity: 1;
+        pointer-events: auto;
+      }
+      .access-denied-card {
+        width: 100%;
+        max-width: 480px;
+        background: #0f172a;
+        border: 1.5px solid rgba(239, 68, 68, 0.45);
+        border-radius: 22px;
+        padding: 2.2rem 2rem;
+        box-shadow: 0 25px 65px rgba(0, 0, 0, 0.8), 0 0 35px rgba(239, 68, 68, 0.22);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        transform: scale(0.95);
+        transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .access-denied-overlay.active .access-denied-card {
+        transform: scale(1);
+      }
+      .denied-icon-wrap {
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        background: rgba(239, 68, 68, 0.12);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        animation: pulseDenied 2s infinite;
+      }
+      @keyframes pulseDenied {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+        50% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+      }
+      .denied-tag {
+        font-family: var(--font-mono);
+        font-size: 0.72rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        color: #ef4444;
+        text-transform: uppercase;
+        margin-bottom: 0.35rem;
+      }
+      .denied-heading {
+        font-family: var(--font-heading);
+        font-size: 1.45rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 0.6rem;
+      }
+      .denied-desc {
+        font-size: 0.88rem;
+        color: #94a3b8;
+        line-height: 1.5;
+        margin-bottom: 1.35rem;
+      }
+      .denied-meta-box {
+        width: 100%;
+        background: rgba(15, 23, 42, 0.8);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        padding: 0.85rem 1rem;
+        margin-bottom: 1.4rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.45rem;
+        font-size: 0.8rem;
+        text-align: left;
+      }
+      .meta-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #94a3b8;
+      }
+      .meta-row strong {
+        color: #ffffff;
+        font-family: var(--font-mono);
+      }
+      .denied-return-btn {
+        width: 100%;
+        height: 46px;
+        background: linear-gradient(90deg, #0070f3 0%, #4f46e5 100%);
+        border: none;
+        border-radius: 12px;
+        color: #ffffff;
+        font-family: var(--font-heading);
+        font-size: 0.95rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 8px 22px rgba(0, 112, 243, 0.4);
+        transition: all 0.2s ease;
+      }
+      .denied-return-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 26px rgba(0, 112, 243, 0.55);
+      }
+    </style>
+
+    <!-- Global Draggable Realistic AI Chatbot Floating Button -->
+    <button class="floating-ai-orb-fab" id="floatingChatbotBtn" title="Launch SentinelAI Security Assistant" aria-label="Launch AI Chatbot">
+      <div class="ai-chatbot-badge-icon">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor">
+          <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM18 12.5H6V10.5H18V12.5ZM18 8.5H6V6.5H18V8.5Z"/>
+        </svg>
+      </div>
+    </button>
+
+    <!-- Toast Notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+  </div>
+
+  <script src="../../script.js"></script>
+</body>
+</html>
